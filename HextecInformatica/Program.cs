@@ -48,10 +48,10 @@ namespace HextecInformatica
             const int ESTOQUE_PRODUTO_6 = 0;
             const int ESTOQUE_PRODUTO_7 = 1;
             //variáveis usadas no escopo principal e funções
-            double totalPagamento = 0;
-            string impressaoItensNota = "";
+            double totalPagamento = 0, valorFrete = 0, valorDesconto = 0;
+            string impressaoItensNota = "", descFormaPagamento = "";
             int codItemRemovido, codItemAdicionadoNota1, codItemAdicionadoNota2, codItemAdicionadoNota3,
-                codItemAdicionadoNota4, codItemAdicionadoNota5, codItemAdicionadoNota6, codItemAdicionadoNota7;
+                codItemAdicionadoNota4, codItemAdicionadoNota5, codItemAdicionadoNota6, codItemAdicionadoNota7, pontosFidelidade;
 
             //Métodos/funções
             void AdicionaItemNotaFiscal(int produtoSelecionado)
@@ -98,7 +98,7 @@ namespace HextecInformatica
             void RemoveItemNotaFiscal (int produtoSelecionado)
             {
                 //fazer semelhante ao romaneio com uma linha de devolução
-                if ((produtoSelecionado == CODIGO_PRODUTO_1) && (codItemAdicionadoNota1 == CODIGO_PRODUTO_1))
+                if (produtoSelecionado == CODIGO_PRODUTO_1)
                 {
                     impressaoItensNota += $"(Devolvido) {NOME_PRODUTO_1}.....R$ {VALOR_PRODUTO_1:F2}";
                     totalPagamento -= VALOR_PRODUTO_1;
@@ -137,20 +137,65 @@ namespace HextecInformatica
                     Console.WriteLine("Código de produto inexistente, não será removido no valor a ser pago!");
             }
 
+            void CupomDesconto(double valDescontoCupom)
+            {
+                totalPagamento -= valDescontoCupom;
+                Console.WriteLine($"Valor de R$ {valDescontoCupom} do cupom desconto foi adicionado com sucesso!");
+            }
+
             void FormaEntrega (string FormaEntregaSelecionada)
             {
-
+                valorFrete = 0;
+                if (FormaEntregaSelecionada == "1") 
+                    totalPagamento += valorFrete;
+                else if (FormaEntregaSelecionada == "2")
+                {
+                    if (totalPagamento > 300.00)
+                        totalPagamento += valorFrete;
+                    else
+                    {
+                        valorFrete = 20.00;
+                        totalPagamento += valorFrete;
+                    }
+                }else if (FormaEntregaSelecionada == "3")
+                {
+                    if (totalPagamento > 500.00)
+                        totalPagamento += valorFrete;
+                    else
+                    {
+                        valorFrete = 40.00;
+                        totalPagamento += valorFrete;
+                    }
+                }else
+                {
+                    Console.WriteLine("Valor informado incorretamente, será considerado a forma de entrega de retirada na loja");
+                    totalPagamento += valorFrete;
+                }
+                    
             }
 
-            void ImprimeMensagemSucesso(int formaPagamentoSelecionada)
+            void AdicionaFormaPagamento(int formaPagamentoSelecionada, double valorFormaPagamentoSelecionada)
             {
                 if (formaPagamentoSelecionada == 1)
-                    Console.WriteLine($"\nCompra no valor de R$ {totalPagamento:F2} no cartão foi concluída com sucesso!");
-                else if (formaPagamentoSelecionada == 2)
-                    Console.WriteLine($"\nCompra no valor de R$ {totalPagamento:F2} em dinheiro foi concluída com sucesso!");
-                else
-                    Console.WriteLine("\nCondição de pagamento inválida, programa sendo encerrado...");
+                    descFormaPagamento += $"Dinheiro - R$ {valorFormaPagamentoSelecionada}";
+                else if(formaPagamentoSelecionada == 2)
+                    descFormaPagamento += $"Cartão de Crédito - R$ {valorFormaPagamentoSelecionada}";
+                else if(formaPagamentoSelecionada == 3)
+                    descFormaPagamento += $"Cartão de Débito - R$ {valorFormaPagamentoSelecionada}";
+                else if(formaPagamentoSelecionada==4)
+                    descFormaPagamento += $"Boleto - R$ {valorFormaPagamentoSelecionada}";
             }
+
+            void PontosFidelidade(double totalPagamentoNota)
+            {
+                if (totalPagamentoNota > 100.00)
+                {
+                    pontosFidelidade = 10;
+                    Console.WriteLine($"{pontosFidelidade} pontos"+
+                                       "\nCada ponto de fidelidade é convertido em 0,5% de desconto na próxima compra!");
+                }
+            }
+           
 
             //Boas vindas à loja
             Console.WriteLine("-----------------------------------------");
@@ -267,25 +312,61 @@ namespace HextecInformatica
                 Console.WriteLine("\n1 - Retirada na loja - Grátis");
                 Console.WriteLine("\n2 - Entrega padrão - R$ 20,00, acima de R$ 300,00 é gratis ");
                 Console.WriteLine("\n3 - Entrega expressa - R$ 40,00, acima de R$ 500,00 é grátis: ");
+                Console.Write("Qual a forma de entrega desejada (informe de 1 a 3)? ");
                 string respFormaEntrega = Console.ReadLine();
                 FormaEntrega(respFormaEntrega);
 
-
                 //opção para colocar um cupom de desconto no final da venda
-
-
+                Console.WriteLine("Possui cupom de desconto (S/N)? ");
+                string respPossuiDesconto = Console.ReadLine();
+                if (respPossuiDesconto == "S" || respPossuiDesconto == "s")
+                {
+                    Console.WriteLine("Qual o valor de desconto do seu cupom?");
+                    valorDesconto = Convert.ToDouble(Console.ReadLine());
+                    CupomDesconto(valorDesconto);
+                }
+                
                 //opção para ele pagar com mais de uma forma, colocando o valor em cada uma das formas.
                 //Pode escolher entre pagar em dinheiro e cartão
                 Console.WriteLine("\nSelecione a forma de pagamento conforme listado abaixo:");
-                Console.WriteLine("1 - Cartão");
-                Console.WriteLine("2 - Dinheiro");
-                Console.Write("\nSelecione a forma de pagamento: ");
+                Console.WriteLine("1 - Dinheiro");
+                Console.WriteLine("2 - Cartão de Crédito");
+                Console.WriteLine("3 - Cartão de Débito");
+                Console.WriteLine("4 - Boleto");
+                Console.Write("\nQuantas formas de pagamento deseja utilizar (de 1 a 4): ");
                 int formaPagamento = Convert.ToInt32(Console.ReadLine());
 
-                //Se ele gastar mais de 100 reais ele ganha 10 pontos de fidelidade, cada ponto de fidelidade da a ele 0,5% de desconto na próxima compra.
+                if (formaPagamento >= 1) 
+                {
+                    Console.Write("Digite o valor da primeira forma de pagamento selecionada: ");
+                    double valorFormaPagamento1 = Convert.ToDouble(Console.ReadLine());
+                    AdicionaFormaPagamento(formaPagamento, valorFormaPagamento1);
+                }
+                if (formaPagamento >= 2)
+                {
+                    Console.Write("Digite o valor da segunda forma de pagamento selecionada: ");
+                    double valorFormaPagamento2 = Convert.ToDouble(Console.ReadLine());
+                    AdicionaFormaPagamento(formaPagamento, valorFormaPagamento2);
+                }
+                if (formaPagamento >= 3)
+                {
+                    Console.Write("Digite o valor da terceira forma de pagamento selecionada: ");
+                    double valorFormaPagamento3 = Convert.ToDouble(Console.ReadLine());
+                    AdicionaFormaPagamento(formaPagamento, valorFormaPagamento3);
+                }
+                if (formaPagamento >= 4)
+                {
+                    Console.Write("Digite o valor da quarta forma de pagamento selecionada: ");
+                    double valorFormaPagamento4 = Convert.ToDouble(Console.ReadLine());
+                    AdicionaFormaPagamento(formaPagamento, valorFormaPagamento4);
+                }
 
-                //Após selecionar dar uma mensagem de sucesso.
-                ImprimeMensagemSucesso(formaPagamento);
+                //Se ele gastar mais de 100 reais ele ganha 10 pontos de fidelidade, cada ponto de fidelidade da a ele 0,5% de desconto na próxima compra.
+                Console.Write("Pontos de fidelidade adquiridos com esta compra: ");
+                PontosFidelidade(totalPagamento);
+
+                
+
 
                 //Simular uma nota fiscal simples - em texto no terminal.
             }
