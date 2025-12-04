@@ -215,7 +215,7 @@ namespace HextecInformatica
                               $"\n {CODIGO_PRODUTO_6} - {NOME_PRODUTO_6} - R$ {VALOR_PRODUTO_6:F2} | {ESTOQUE_PRODUTO_1}"+
                               $"\n {CODIGO_PRODUTO_7} - {NOME_PRODUTO_7} - R$ {VALOR_PRODUTO_7:F2} | {ESTOQUE_PRODUTO_1}");
             //opção para selecionar a quantidade de itens.
-            Console.WriteLine("\nQual a quantidade de itens que deseja comprar (de 1 a 7 itens)? ");
+            Console.Write("\nQual a quantidade de itens que deseja comprar (de 1 a 7 itens)? ");
             int qtdItensSelecionados = Convert.ToInt32(Console.ReadLine());
 
             //Seleção de produtos e soma do valor total de pagamento
@@ -281,7 +281,7 @@ namespace HextecInformatica
 
                 if (retornoSeRemoveItem == "S" || retornoSeRemoveItem == "s")
                 {
-                    Console.Write("Quantos itens deseja remover?");
+                    Console.Write("Quantos itens deseja remover? ");
                     int qtdItensRemovidos = Convert.ToInt32(Console.ReadLine());
 
                     if (qtdItensRemovidos >= 1)
@@ -304,24 +304,23 @@ namespace HextecInformatica
                         RemoveItemNotaFiscal(codItemRemovido);
                     }
                 }
-                else if (retornoSeRemoveItem != "N" || retornoSeRemoveItem != "n")
-                    Console.WriteLine("Valor informado incorreto, nenhum item foi removido!");
+                
 
                 //opção para ele selecionar a forma de entrega
                 Console.WriteLine("\nFormas de entrega disponíveis com seus respectivos valores: ");
-                Console.WriteLine("\n1 - Retirada na loja - Grátis");
-                Console.WriteLine("\n2 - Entrega padrão - R$ 20,00, acima de R$ 300,00 é gratis ");
-                Console.WriteLine("\n3 - Entrega expressa - R$ 40,00, acima de R$ 500,00 é grátis: ");
-                Console.Write("Qual a forma de entrega desejada (informe de 1 a 3)? ");
+                Console.WriteLine("1 - Retirada na loja - Grátis");
+                Console.WriteLine("2 - Entrega padrão - R$ 20,00, acima de R$ 300,00 é gratis ");
+                Console.WriteLine("3 - Entrega expressa - R$ 40,00, acima de R$ 500,00 é grátis: ");
+                Console.Write("\nQual a forma de entrega desejada (informe de 1 a 3)? ");
                 string respFormaEntrega = Console.ReadLine();
                 FormaEntrega(respFormaEntrega);
 
                 //opção para colocar um cupom de desconto no final da venda
-                Console.WriteLine("Possui cupom de desconto (S/N)? ");
+                Console.Write("\nPossui cupom de desconto (S/N)? ");
                 string respPossuiDesconto = Console.ReadLine();
                 if (respPossuiDesconto == "S" || respPossuiDesconto == "s")
                 {
-                    Console.WriteLine("Qual o valor de desconto do seu cupom?");
+                    Console.Write("Qual o valor de desconto do seu cupom?");
                     valorDesconto = Convert.ToDouble(Console.ReadLine());
                     CupomDesconto(valorDesconto);
                 }
@@ -362,7 +361,7 @@ namespace HextecInformatica
                 }
 
                 //Se ele gastar mais de 100 reais ele ganha 10 pontos de fidelidade, cada ponto de fidelidade da a ele 0,5% de desconto na próxima compra.
-                Console.Write("Pontos de fidelidade adquiridos com esta compra: ");
+                Console.Write("\nPontos de fidelidade adquiridos com esta compra: ");
                 PontosFidelidade(totalPagamento);
 
                 
