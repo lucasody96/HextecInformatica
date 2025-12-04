@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Microsoft.SqlServer.Server;
+using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -36,46 +38,108 @@ namespace HextecInformatica
             const double VALOR_PRODUTO_5 = 749.99;
             const double VALOR_PRODUTO_6 = 231.89;
             const double VALOR_PRODUTO_7 = 2100.99;
+            //Estoque dos produtos previamente cadastrados
+            //Simular o estoque, pelo menos dois dos produtos da loja tem que estar estogado.
+            const int ESTOQUE_PRODUTO_1 = 32;
+            const int ESTOQUE_PRODUTO_2 = 25;
+            const int ESTOQUE_PRODUTO_3 = 10;
+            const int ESTOQUE_PRODUTO_4 = 0;
+            const int ESTOQUE_PRODUTO_5 = 15;
+            const int ESTOQUE_PRODUTO_6 = 0;
+            const int ESTOQUE_PRODUTO_7 = 1;
             //variáveis usadas no escopo principal e funções
             double totalPagamento = 0;
-            
+            string impressaoItensNota = "";
+            int codItemRemovido, codItemAdicionadoNota1, codItemAdicionadoNota2, codItemAdicionadoNota3,
+                codItemAdicionadoNota4, codItemAdicionadoNota5, codItemAdicionadoNota6, codItemAdicionadoNota7;
+
             //Métodos/funções
-            void ImpressaoCompras(int produtoSelecionado)
+            void AdicionaItemNotaFiscal(int produtoSelecionado)
             {
                 if (produtoSelecionado == CODIGO_PRODUTO_1)
-                    Console.WriteLine($"{NOME_PRODUTO_1} - R$ {VALOR_PRODUTO_1:F2}");
+                {
+                    impressaoItensNota += $"{NOME_PRODUTO_1}.....R$ {VALOR_PRODUTO_1:F2}";
+                    totalPagamento += VALOR_PRODUTO_1;                    
+                }
                 else if (produtoSelecionado == CODIGO_PRODUTO_2)
-                    Console.WriteLine($"{NOME_PRODUTO_2} - R$ {VALOR_PRODUTO_2:F2}");
+                {
+                    impressaoItensNota += $"{NOME_PRODUTO_2}.....R$ {VALOR_PRODUTO_2:F2}";
+                    totalPagamento += VALOR_PRODUTO_2;
+                }
                 else if (produtoSelecionado == CODIGO_PRODUTO_3)
-                    Console.WriteLine($"{NOME_PRODUTO_3} - R$ {VALOR_PRODUTO_3:F2}");
+                {
+                    impressaoItensNota += $"{NOME_PRODUTO_3}.....R$ {VALOR_PRODUTO_3:F2}";
+                    totalPagamento += VALOR_PRODUTO_3;
+                }
                 else if (produtoSelecionado == CODIGO_PRODUTO_4)
-                    Console.WriteLine($"{NOME_PRODUTO_1} - R$ {VALOR_PRODUTO_1:F2}");
+                {
+                    impressaoItensNota += $"{NOME_PRODUTO_4}.....R$ {VALOR_PRODUTO_4:F2}";
+                    totalPagamento += VALOR_PRODUTO_4;
+                }
                 else if (produtoSelecionado == CODIGO_PRODUTO_5)
-                    Console.WriteLine($"{NOME_PRODUTO_5} - R$ {VALOR_PRODUTO_5:F2}");
+                {
+                    impressaoItensNota += $"{NOME_PRODUTO_5}.....R$ {VALOR_PRODUTO_5:F2}";
+                    totalPagamento += VALOR_PRODUTO_5;
+                }
                 else if (produtoSelecionado == CODIGO_PRODUTO_6)
-                    Console.WriteLine($"{NOME_PRODUTO_6} - R$ {VALOR_PRODUTO_6:F2}");
+                {
+                    impressaoItensNota += $"{NOME_PRODUTO_6}.....R$ {VALOR_PRODUTO_6:F2}";
+                    totalPagamento += VALOR_PRODUTO_6;
+                }
                 else if (produtoSelecionado == CODIGO_PRODUTO_7)
-                    Console.WriteLine($"{NOME_PRODUTO_7} - R$ {VALOR_PRODUTO_7:F2}");
+                {
+                    impressaoItensNota += $"{NOME_PRODUTO_7}.....R$ {VALOR_PRODUTO_7:F2}";
+                    totalPagamento += VALOR_PRODUTO_6;
+                }
                 else
                     Console.WriteLine("Código de produto inexistente, não será somado no valor a ser pago!");
             }
 
-            void ValorTotalCompras(int produtoSelecionado)
+            void RemoveItemNotaFiscal (int produtoSelecionado)
             {
-                if (produtoSelecionado == CODIGO_PRODUTO_1)
-                    totalPagamento += VALOR_PRODUTO_1;
+                //fazer semelhante ao romaneio com uma linha de devolução
+                if ((produtoSelecionado == CODIGO_PRODUTO_1) && (codItemAdicionadoNota1 == CODIGO_PRODUTO_1))
+                {
+                    impressaoItensNota += $"(Devolvido) {NOME_PRODUTO_1}.....R$ {VALOR_PRODUTO_1:F2}";
+                    totalPagamento -= VALOR_PRODUTO_1;
+                }
                 else if (produtoSelecionado == CODIGO_PRODUTO_2)
-                    totalPagamento += VALOR_PRODUTO_2;
+                {
+                    impressaoItensNota += $"(Devolvido) {NOME_PRODUTO_2}.....R$ {VALOR_PRODUTO_2:F2}";
+                    totalPagamento -= VALOR_PRODUTO_2;
+                }
                 else if (produtoSelecionado == CODIGO_PRODUTO_3)
-                    totalPagamento += VALOR_PRODUTO_3;
+                {
+                    impressaoItensNota += $"(Devolvido) {NOME_PRODUTO_3}.....R$ {VALOR_PRODUTO_3:F2}";
+                    totalPagamento -= VALOR_PRODUTO_3;
+                }
                 else if (produtoSelecionado == CODIGO_PRODUTO_4)
-                    totalPagamento += VALOR_PRODUTO_4;
+                {
+                    impressaoItensNota += $"(Devolvido) {NOME_PRODUTO_4}.....R$ {VALOR_PRODUTO_4:F2}";
+                    totalPagamento -= VALOR_PRODUTO_4;
+                }
                 else if (produtoSelecionado == CODIGO_PRODUTO_5)
-                    totalPagamento += VALOR_PRODUTO_5;
+                {
+                    impressaoItensNota += $"(Devolvido) {NOME_PRODUTO_5}.....R$ {VALOR_PRODUTO_5:F2}";
+                    totalPagamento -= VALOR_PRODUTO_5;
+                }
                 else if (produtoSelecionado == CODIGO_PRODUTO_6)
-                    totalPagamento += VALOR_PRODUTO_6;
+                {
+                    impressaoItensNota += $"(Devolvido) {NOME_PRODUTO_6}.....R$ {VALOR_PRODUTO_6:F2}";
+                    totalPagamento -= VALOR_PRODUTO_6;
+                }
                 else if (produtoSelecionado == CODIGO_PRODUTO_7)
-                    totalPagamento += VALOR_PRODUTO_7;
+                {
+                    impressaoItensNota += $"(Devolvido) {NOME_PRODUTO_7}.....R$ {VALOR_PRODUTO_7:F2}";
+                    totalPagamento -= VALOR_PRODUTO_6;
+                }
+                else
+                    Console.WriteLine("Código de produto inexistente, não será removido no valor a ser pago!");
+            }
+
+            void FormaEntrega (string FormaEntregaSelecionada)
+            {
+
             }
 
             void ImprimeMensagemSucesso(int formaPagamentoSelecionada)
@@ -89,67 +153,143 @@ namespace HextecInformatica
             }
 
             //Boas vindas à loja
-            Console.WriteLine($"Bem vindo a loja {NOME_LOJA}");
-            Console.WriteLine("=============================");
+            Console.WriteLine("-----------------------------------------");
+            Console.WriteLine($"   Bem vindo a {NOME_LOJA}");
+            Console.WriteLine("-----------------------------------------");
             Console.Write("\nDigite seu nome: ");
             string nomeUsuario = Console.ReadLine();
 
             //Listar os produtos da loja e permitir que ele escolha - ele só pode escolher 5 produtos
             Console.WriteLine($"\nSeja bem vindo {nomeUsuario}! Lista dos produtos disponíveis no nosso estoque para compra:");
-            Console.WriteLine("\nCódigo - Nome do produto - Valor ");
-            Console.WriteLine($" {CODIGO_PRODUTO_1} - {NOME_PRODUTO_1} - R$ {VALOR_PRODUTO_1:F2}"+
-                              $"\n {CODIGO_PRODUTO_2} - {NOME_PRODUTO_2} - R$ {VALOR_PRODUTO_2:F2}"+
-                              $"\n {CODIGO_PRODUTO_3} - {NOME_PRODUTO_3} - R$ {VALOR_PRODUTO_3:F2}"+
-                              $"\n {CODIGO_PRODUTO_4} - {NOME_PRODUTO_4} - R$ {VALOR_PRODUTO_4:F2}"+
-                              $"\n {CODIGO_PRODUTO_5} - {NOME_PRODUTO_5} - R$ {VALOR_PRODUTO_5:F2}"+
-                              $"\n {CODIGO_PRODUTO_6} - {NOME_PRODUTO_6} - R$ {VALOR_PRODUTO_6:F2}"+
-                              $"\n {CODIGO_PRODUTO_7} - {NOME_PRODUTO_7} - R$ {VALOR_PRODUTO_7:F2}");
-            Console.WriteLine("\nVocê somente pode escolher 5 produtos dos listados acima.");
-            Console.WriteLine("Caso não deseje escolher algum produto em uma determinada posição, digite 0");
+            Console.WriteLine("\nCódigo - Nome do produto - Valor - Quantidade disponível");
+            Console.WriteLine($" {CODIGO_PRODUTO_1} - {NOME_PRODUTO_1} - R$ {VALOR_PRODUTO_1:F2} |"+
+                              $"\n {CODIGO_PRODUTO_2} - {NOME_PRODUTO_2} - R$ {VALOR_PRODUTO_2:F2} | {ESTOQUE_PRODUTO_1}"+
+                              $"\n {CODIGO_PRODUTO_3} - {NOME_PRODUTO_3} - R$ {VALOR_PRODUTO_3:F2} | {ESTOQUE_PRODUTO_1}" +
+                              $"\n {CODIGO_PRODUTO_4} - {NOME_PRODUTO_4} - R$ {VALOR_PRODUTO_4:F2} | {ESTOQUE_PRODUTO_1}" +
+                              $"\n {CODIGO_PRODUTO_5} - {NOME_PRODUTO_5} - R$ {VALOR_PRODUTO_5:F2} | {ESTOQUE_PRODUTO_1}" +
+                              $"\n {CODIGO_PRODUTO_6} - {NOME_PRODUTO_6} - R$ {VALOR_PRODUTO_6:F2} | {ESTOQUE_PRODUTO_1}"+
+                              $"\n {CODIGO_PRODUTO_7} - {NOME_PRODUTO_7} - R$ {VALOR_PRODUTO_7:F2} | {ESTOQUE_PRODUTO_1}");
+            //opção para selecionar a quantidade de itens.
+            Console.WriteLine("\nQual a quantidade de itens que deseja comprar (de 1 a 7 itens)? ");
+            int qtdItensSelecionados = Convert.ToInt32(Console.ReadLine());
 
             //Seleção de produtos e soma do valor total de pagamento
-            //Produto selecionado 1
-            Console.Write("\nDigite o código do primeiro produto a ser selecionado: ");
-            int produtoSelecionado1 = Convert.ToInt32(Console.ReadLine());
-            ValorTotalCompras(produtoSelecionado1);
-            //Produto selecionado 2
-            Console.Write("\nDigite o código do segundo produto a ser selecionado: ");
-            int produtoSelecionado2 = Convert.ToInt32(Console.ReadLine());
-            ValorTotalCompras(produtoSelecionado2);
-            //Produto selecionado 3
-            Console.Write("\nDigite o código do terceiro produto a ser selecionado: ");
-            int produtoSelecionado3 = Convert.ToInt32(Console.ReadLine());
-            ValorTotalCompras(produtoSelecionado3);
-            //Produto selecionado 4
-            Console.Write("\nDigite o código do quarto produto a ser selecionado: ");
-            int produtoSelecionado4 = Convert.ToInt32(Console.ReadLine());
-            ValorTotalCompras(produtoSelecionado4);
-            //Produto selecionado 5
-            Console.Write("\nDigite o código do quinto produto a ser selecionado: ");
-            int produtoSelecionado5 = Convert.ToInt32(Console.ReadLine());
-            ValorTotalCompras(produtoSelecionado5);
+            if (qtdItensSelecionados < 1)
+                Console.WriteLine("Quantidade de itens informada menor que 1, programa sendo encerrado...");
+            else if (qtdItensSelecionados > 7)
+                Console.WriteLine("Quantidade de itens informada menor que 1, programa sendo encerrado...");
+            else
+            {
+                if (qtdItensSelecionados >= 1) 
+                {
+                    //Produto selecionado 1
+                    Console.Write("\nDigite o código do primeiro produto a ser selecionado: ");
+                    codItemAdicionadoNota1 = Convert.ToInt32(Console.ReadLine());
+                    AdicionaItemNotaFiscal(codItemAdicionadoNota1);
+                }
+                if (qtdItensSelecionados >= 2)
+                {
+                    //Produto selecionado 2
+                    Console.Write("\nDigite o código do segundo produto a ser selecionado: ");
+                    codItemAdicionadoNota2 = Convert.ToInt32(Console.ReadLine());
+                    AdicionaItemNotaFiscal(codItemAdicionadoNota2);
+                }
+                if (qtdItensSelecionados >= 3)
+                {
+                    //Produto selecionado 3
+                    Console.Write("\nDigite o código do terceiro produto a ser selecionado: ");
+                    codItemAdicionadoNota3 = Convert.ToInt32(Console.ReadLine());
+                    AdicionaItemNotaFiscal(codItemAdicionadoNota3);
+                }
+                if (qtdItensSelecionados >= 4)
+                {
+                    //Produto selecionado 4
+                    Console.Write("\nDigite o código do quarto produto a ser selecionado: ");
+                    codItemAdicionadoNota4 = Convert.ToInt32(Console.ReadLine());
+                    AdicionaItemNotaFiscal(codItemAdicionadoNota4);
+                }
+                if (qtdItensSelecionados >= 5)
+                {
+                    //Produto selecionado 5
+                    Console.Write("\nDigite o código do quinto produto a ser selecionado: ");
+                    codItemAdicionadoNota5 = Convert.ToInt32(Console.ReadLine());
+                    AdicionaItemNotaFiscal(codItemAdicionadoNota5);
+                }
+                if (qtdItensSelecionados >= 6)
+                {
+                    //Produto selecionado 6
+                    Console.Write("\nDigite o código do sexto produto a ser selecionado: ");
+                    codItemAdicionadoNota6 = Convert.ToInt32(Console.ReadLine());
+                    AdicionaItemNotaFiscal(codItemAdicionadoNota6);
+                }
+                if (qtdItensSelecionados >= 7)
+                {
+                    //Produto selecionado 7
+                    Console.Write("\nDigite o código do sétimo produto a ser selecionado: ");
+                    codItemAdicionadoNota7 = Convert.ToInt32(Console.ReadLine());
+                    AdicionaItemNotaFiscal(codItemAdicionadoNota7);
+                }
 
-            Console.WriteLine("\nLista de produtos comprados:");
-            //Produto selecionado 1
-            ImpressaoCompras(produtoSelecionado1);
-            //Produto selecionado 2
-            ImpressaoCompras(produtoSelecionado2);
-            //Produto selecionado 3
-            ImpressaoCompras(produtoSelecionado3);
-            //Produto selecionado 4
-            ImpressaoCompras(produtoSelecionado4);
-            //Produto selecionado 5
-            ImpressaoCompras(produtoSelecionado5);
+                //opção para retirar ate 3 itens se ele quiser.
+                Console.Write("Deseja retirar algum item (S - sim ou N - não)? ");
+                string retornoSeRemoveItem = Console.ReadLine();
 
-            //Pode escolher entre pagar em dinheiro e cartão
-            Console.WriteLine("\nSelecione a forma de pagamento conforme listado abaixo:");
-            Console.WriteLine("1 - Cartão");
-            Console.WriteLine("2 - Dinheiro");
-            Console.Write("\nSelecione a forma de pagamento: ");
-            int formaPagamento = Convert.ToInt32(Console.ReadLine());
+                if (retornoSeRemoveItem == "S" || retornoSeRemoveItem == "s")
+                {
+                    Console.Write("Quantos itens deseja remover?");
+                    int qtdItensRemovidos = Convert.ToInt32(Console.ReadLine());
 
-            //Após selecionar dar uma mensagem de sucesso.
-            ImprimeMensagemSucesso(formaPagamento);
+                    if (qtdItensRemovidos >= 1)
+                    {
+                        Console.Write("Digite o código do produto a remover: ");
+                        codItemRemovido = Convert.ToInt32(Console.ReadLine());
+                        RemoveItemNotaFiscal(codItemRemovido);
+                    }
+                    if (qtdItensRemovidos >= 2)
+                    {
+                        Console.Write("Digite o código do produto a remover: ");
+                        codItemRemovido = Convert.ToInt32(Console.ReadLine());
+                        RemoveItemNotaFiscal(codItemRemovido);
+
+                    }
+                    if (qtdItensRemovidos >= 3)
+                    {
+                        Console.Write("Digite o código do produto a remover: ");
+                        codItemRemovido = Convert.ToInt32(Console.ReadLine());
+                        RemoveItemNotaFiscal(codItemRemovido);
+                    }
+                }
+                else if (retornoSeRemoveItem != "N" || retornoSeRemoveItem != "n")
+                    Console.WriteLine("Valor informado incorreto, nenhum item foi removido!");
+
+                //opção para ele selecionar a forma de entrega
+                Console.WriteLine("\nFormas de entrega disponíveis com seus respectivos valores: ");
+                Console.WriteLine("\n1 - Retirada na loja - Grátis");
+                Console.WriteLine("\n2 - Entrega padrão - R$ 20,00, acima de R$ 300,00 é gratis ");
+                Console.WriteLine("\n3 - Entrega expressa - R$ 40,00, acima de R$ 500,00 é grátis: ");
+                string respFormaEntrega = Console.ReadLine();
+                FormaEntrega(respFormaEntrega);
+
+
+                //opção para colocar um cupom de desconto no final da venda
+
+
+                //opção para ele pagar com mais de uma forma, colocando o valor em cada uma das formas.
+                //Pode escolher entre pagar em dinheiro e cartão
+                Console.WriteLine("\nSelecione a forma de pagamento conforme listado abaixo:");
+                Console.WriteLine("1 - Cartão");
+                Console.WriteLine("2 - Dinheiro");
+                Console.Write("\nSelecione a forma de pagamento: ");
+                int formaPagamento = Convert.ToInt32(Console.ReadLine());
+
+                //Se ele gastar mais de 100 reais ele ganha 10 pontos de fidelidade, cada ponto de fidelidade da a ele 0,5% de desconto na próxima compra.
+
+                //Após selecionar dar uma mensagem de sucesso.
+                ImprimeMensagemSucesso(formaPagamento);
+
+                //Simular uma nota fiscal simples - em texto no terminal.
+            }
+
 
             Console.ReadKey();
         }
