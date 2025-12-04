@@ -48,7 +48,7 @@ namespace HextecInformatica
             const int ESTOQUE_PRODUTO_6 = 0;
             const int ESTOQUE_PRODUTO_7 = 1;
             //variáveis usadas no escopo principal e funções
-            double totalPagamento = 0, valorFrete = 0, valorDesconto = 0;
+            double totalPagamento = 0.00, valorFrete = 0.0, valorDesconto = 0.0;
             string impressaoItensNota = "", descFormaPagamento = "";
             int codItemRemovido, codItemAdicionadoNota1, codItemAdicionadoNota2, codItemAdicionadoNota3,
                 codItemAdicionadoNota4, codItemAdicionadoNota5, codItemAdicionadoNota6, codItemAdicionadoNota7, pontosFidelidade;
@@ -58,38 +58,38 @@ namespace HextecInformatica
             {
                 if (produtoSelecionado == CODIGO_PRODUTO_1)
                 {
-                    impressaoItensNota += $"{NOME_PRODUTO_1}.....R$ {VALOR_PRODUTO_1:F2}";
+                    impressaoItensNota += $"\n{NOME_PRODUTO_1}.....R$ {VALOR_PRODUTO_1:F2}";
                     totalPagamento += VALOR_PRODUTO_1;                    
                 }
                 else if (produtoSelecionado == CODIGO_PRODUTO_2)
                 {
-                    impressaoItensNota += $"{NOME_PRODUTO_2}.....R$ {VALOR_PRODUTO_2:F2}";
+                    impressaoItensNota += $"\n{NOME_PRODUTO_2}.....R$ {VALOR_PRODUTO_2:F2}";
                     totalPagamento += VALOR_PRODUTO_2;
                 }
                 else if (produtoSelecionado == CODIGO_PRODUTO_3)
                 {
-                    impressaoItensNota += $"{NOME_PRODUTO_3}.....R$ {VALOR_PRODUTO_3:F2}";
+                    impressaoItensNota += $"\n{NOME_PRODUTO_3}.....R$ {VALOR_PRODUTO_3:F2}";
                     totalPagamento += VALOR_PRODUTO_3;
                 }
                 else if (produtoSelecionado == CODIGO_PRODUTO_4)
                 {
-                    impressaoItensNota += $"{NOME_PRODUTO_4}.....R$ {VALOR_PRODUTO_4:F2}";
+                    impressaoItensNota += $"\n{NOME_PRODUTO_4}.....R$ {VALOR_PRODUTO_4:F2}";
                     totalPagamento += VALOR_PRODUTO_4;
                 }
                 else if (produtoSelecionado == CODIGO_PRODUTO_5)
                 {
-                    impressaoItensNota += $"{NOME_PRODUTO_5}.....R$ {VALOR_PRODUTO_5:F2}";
+                    impressaoItensNota += $"\n{NOME_PRODUTO_5}.....R$ {VALOR_PRODUTO_5:F2}";
                     totalPagamento += VALOR_PRODUTO_5;
                 }
                 else if (produtoSelecionado == CODIGO_PRODUTO_6)
                 {
-                    impressaoItensNota += $"{NOME_PRODUTO_6}.....R$ {VALOR_PRODUTO_6:F2}";
+                    impressaoItensNota += $"\n{NOME_PRODUTO_6}.....R$ {VALOR_PRODUTO_6:F2}";
                     totalPagamento += VALOR_PRODUTO_6;
                 }
                 else if (produtoSelecionado == CODIGO_PRODUTO_7)
                 {
-                    impressaoItensNota += $"{NOME_PRODUTO_7}.....R$ {VALOR_PRODUTO_7:F2}";
-                    totalPagamento += VALOR_PRODUTO_6;
+                    impressaoItensNota += $"\n{NOME_PRODUTO_7}.....R$ {VALOR_PRODUTO_7:F2}";
+                    totalPagamento += VALOR_PRODUTO_7;
                 }
                 else
                     Console.WriteLine("Código de produto inexistente, não será somado no valor a ser pago!");
@@ -100,38 +100,38 @@ namespace HextecInformatica
                 //fazer semelhante ao romaneio com uma linha de devolução
                 if (produtoSelecionado == CODIGO_PRODUTO_1)
                 {
-                    impressaoItensNota += $"(Devolvido) {NOME_PRODUTO_1}.....R$ {VALOR_PRODUTO_1:F2}";
+                    impressaoItensNota += $"\n(Devolvido) {NOME_PRODUTO_1}.....R$ -{VALOR_PRODUTO_1:F2}";
                     totalPagamento -= VALOR_PRODUTO_1;
                 }
                 else if (produtoSelecionado == CODIGO_PRODUTO_2)
                 {
-                    impressaoItensNota += $"(Devolvido) {NOME_PRODUTO_2}.....R$ {VALOR_PRODUTO_2:F2}";
+                    impressaoItensNota += $"\n(Devolvido) {NOME_PRODUTO_2}.....R$ -{VALOR_PRODUTO_2:F2}";
                     totalPagamento -= VALOR_PRODUTO_2;
                 }
                 else if (produtoSelecionado == CODIGO_PRODUTO_3)
                 {
-                    impressaoItensNota += $"(Devolvido) {NOME_PRODUTO_3}.....R$ {VALOR_PRODUTO_3:F2}";
+                    impressaoItensNota += $"\n(Devolvido) {NOME_PRODUTO_3}.....R$ -{VALOR_PRODUTO_3:F2}";
                     totalPagamento -= VALOR_PRODUTO_3;
                 }
                 else if (produtoSelecionado == CODIGO_PRODUTO_4)
                 {
-                    impressaoItensNota += $"(Devolvido) {NOME_PRODUTO_4}.....R$ {VALOR_PRODUTO_4:F2}";
+                    impressaoItensNota += $"\n(Devolvido) {NOME_PRODUTO_4}.....R$ -{VALOR_PRODUTO_4:F2}";
                     totalPagamento -= VALOR_PRODUTO_4;
                 }
                 else if (produtoSelecionado == CODIGO_PRODUTO_5)
                 {
-                    impressaoItensNota += $"(Devolvido) {NOME_PRODUTO_5}.....R$ {VALOR_PRODUTO_5:F2}";
+                    impressaoItensNota += $"\n(Devolvido) {NOME_PRODUTO_5}.....R$ -{VALOR_PRODUTO_5:F2}";
                     totalPagamento -= VALOR_PRODUTO_5;
                 }
                 else if (produtoSelecionado == CODIGO_PRODUTO_6)
                 {
-                    impressaoItensNota += $"(Devolvido) {NOME_PRODUTO_6}.....R$ {VALOR_PRODUTO_6:F2}";
+                    impressaoItensNota += $"\n(Devolvido) {NOME_PRODUTO_6}.....R$ -{VALOR_PRODUTO_6:F2}";
                     totalPagamento -= VALOR_PRODUTO_6;
                 }
                 else if (produtoSelecionado == CODIGO_PRODUTO_7)
                 {
-                    impressaoItensNota += $"(Devolvido) {NOME_PRODUTO_7}.....R$ {VALOR_PRODUTO_7:F2}";
-                    totalPagamento -= VALOR_PRODUTO_6;
+                    impressaoItensNota += $"\n(Devolvido) {NOME_PRODUTO_7}.....R$ -{VALOR_PRODUTO_7:F2}";
+                    totalPagamento -= VALOR_PRODUTO_7;
                 }
                 else
                     Console.WriteLine("Código de produto inexistente, não será removido no valor a ser pago!");
@@ -140,7 +140,7 @@ namespace HextecInformatica
             void CupomDesconto(double valDescontoCupom)
             {
                 totalPagamento -= valDescontoCupom;
-                Console.WriteLine($"Valor de R$ {valDescontoCupom} do cupom desconto foi adicionado com sucesso!");
+                Console.WriteLine($"Valor de R$ {valDescontoCupom:F2} do cupom desconto foi adicionado com sucesso!");
             }
 
             void FormaEntrega (string FormaEntregaSelecionada)
@@ -177,13 +177,13 @@ namespace HextecInformatica
             void AdicionaFormaPagamento(int formaPagamentoSelecionada, double valorFormaPagamentoSelecionada)
             {
                 if (formaPagamentoSelecionada == 1)
-                    descFormaPagamento += $"Dinheiro - R$ {valorFormaPagamentoSelecionada}";
+                    descFormaPagamento += $"\nDinheiro: R$ {valorFormaPagamentoSelecionada:F2}";
                 else if(formaPagamentoSelecionada == 2)
-                    descFormaPagamento += $"Cartão de Crédito - R$ {valorFormaPagamentoSelecionada}";
+                    descFormaPagamento += $"\nCartão de Crédito: R$ {valorFormaPagamentoSelecionada:F2}";
                 else if(formaPagamentoSelecionada == 3)
-                    descFormaPagamento += $"Cartão de Débito - R$ {valorFormaPagamentoSelecionada}";
+                    descFormaPagamento += $"\nCartão de Débito: R$ {valorFormaPagamentoSelecionada:F2}";
                 else if(formaPagamentoSelecionada==4)
-                    descFormaPagamento += $"Boleto - R$ {valorFormaPagamentoSelecionada}";
+                    descFormaPagamento += $"\nBoleto: R$ {valorFormaPagamentoSelecionada:F2}";
             }
 
             void PontosFidelidade(double totalPagamentoNota)
@@ -207,13 +207,13 @@ namespace HextecInformatica
             //Listar os produtos da loja e permitir que ele escolha - ele só pode escolher 5 produtos
             Console.WriteLine($"\nSeja bem vindo {nomeUsuario}! Lista dos produtos disponíveis no nosso estoque para compra:");
             Console.WriteLine("\nCódigo - Nome do produto - Valor - Quantidade disponível");
-            Console.WriteLine($" {CODIGO_PRODUTO_1} - {NOME_PRODUTO_1} - R$ {VALOR_PRODUTO_1:F2} |"+
-                              $"\n {CODIGO_PRODUTO_2} - {NOME_PRODUTO_2} - R$ {VALOR_PRODUTO_2:F2} | {ESTOQUE_PRODUTO_1}"+
-                              $"\n {CODIGO_PRODUTO_3} - {NOME_PRODUTO_3} - R$ {VALOR_PRODUTO_3:F2} | {ESTOQUE_PRODUTO_1}" +
-                              $"\n {CODIGO_PRODUTO_4} - {NOME_PRODUTO_4} - R$ {VALOR_PRODUTO_4:F2} | {ESTOQUE_PRODUTO_1}" +
-                              $"\n {CODIGO_PRODUTO_5} - {NOME_PRODUTO_5} - R$ {VALOR_PRODUTO_5:F2} | {ESTOQUE_PRODUTO_1}" +
-                              $"\n {CODIGO_PRODUTO_6} - {NOME_PRODUTO_6} - R$ {VALOR_PRODUTO_6:F2} | {ESTOQUE_PRODUTO_1}"+
-                              $"\n {CODIGO_PRODUTO_7} - {NOME_PRODUTO_7} - R$ {VALOR_PRODUTO_7:F2} | {ESTOQUE_PRODUTO_1}");
+            Console.WriteLine($"\n {CODIGO_PRODUTO_1} - {NOME_PRODUTO_1} - R$ {VALOR_PRODUTO_1:F2} | {ESTOQUE_PRODUTO_1}" +
+                              $"\n {CODIGO_PRODUTO_2} - {NOME_PRODUTO_2} - R$ {VALOR_PRODUTO_2:F2} | {ESTOQUE_PRODUTO_2}"+
+                              $"\n {CODIGO_PRODUTO_3} - {NOME_PRODUTO_3} - R$ {VALOR_PRODUTO_3:F2} | {ESTOQUE_PRODUTO_3}" +
+                              $"\n {CODIGO_PRODUTO_4} - {NOME_PRODUTO_4} - R$ {VALOR_PRODUTO_4:F2} | {ESTOQUE_PRODUTO_4}" +
+                              $"\n {CODIGO_PRODUTO_5} - {NOME_PRODUTO_5} - R$ {VALOR_PRODUTO_5:F2} | {ESTOQUE_PRODUTO_5}" +
+                              $"\n {CODIGO_PRODUTO_6} - {NOME_PRODUTO_6} - R$ {VALOR_PRODUTO_6:F2} | {ESTOQUE_PRODUTO_6}"+
+                              $"\n {CODIGO_PRODUTO_7} - {NOME_PRODUTO_7} - R$ {VALOR_PRODUTO_7:F2} | {ESTOQUE_PRODUTO_7}");
             //opção para selecionar a quantidade de itens.
             Console.Write("\nQual a quantidade de itens que deseja comprar (de 1 a 7 itens)? ");
             int qtdItensSelecionados = Convert.ToInt32(Console.ReadLine());
@@ -320,54 +320,82 @@ namespace HextecInformatica
                 string respPossuiDesconto = Console.ReadLine();
                 if (respPossuiDesconto == "S" || respPossuiDesconto == "s")
                 {
-                    Console.Write("Qual o valor de desconto do seu cupom?");
+                    Console.Write("Qual o valor de desconto do seu cupom? R$ ");
                     valorDesconto = Convert.ToDouble(Console.ReadLine());
                     CupomDesconto(valorDesconto);
                 }
-                
+
                 //opção para ele pagar com mais de uma forma, colocando o valor em cada uma das formas.
                 //Pode escolher entre pagar em dinheiro e cartão
-                Console.WriteLine("\nSelecione a forma de pagamento conforme listado abaixo:");
+                Console.WriteLine($"\nTotal a ser pago: R$ {totalPagamento}");
+                Console.WriteLine("Selecione a forma de pagamento conforme listado abaixo:");
                 Console.WriteLine("1 - Dinheiro");
                 Console.WriteLine("2 - Cartão de Crédito");
                 Console.WriteLine("3 - Cartão de Débito");
                 Console.WriteLine("4 - Boleto");
                 Console.Write("\nQuantas formas de pagamento deseja utilizar (de 1 a 4): ");
-                int formaPagamento = Convert.ToInt32(Console.ReadLine());
+                int qtdFormasPagamento = Convert.ToInt32(Console.ReadLine());
+                
 
-                if (formaPagamento >= 1) 
+                if (qtdFormasPagamento >= 1) 
                 {
+                    Console.Write("Digite o código da primeira condição a ser utilizada (1 a 4): ");
+                    int formaPagamento = Convert.ToInt32(Console.ReadLine());
                     Console.Write("Digite o valor da primeira forma de pagamento selecionada: ");
                     double valorFormaPagamento1 = Convert.ToDouble(Console.ReadLine());
                     AdicionaFormaPagamento(formaPagamento, valorFormaPagamento1);
                 }
-                if (formaPagamento >= 2)
+                if (qtdFormasPagamento >= 2)
                 {
+                    Console.Write("\nDigite o código da segunda condição a ser utilizada (1 a 4): ");
+                    int formaPagamento = Convert.ToInt32(Console.ReadLine());
                     Console.Write("Digite o valor da segunda forma de pagamento selecionada: ");
                     double valorFormaPagamento2 = Convert.ToDouble(Console.ReadLine());
                     AdicionaFormaPagamento(formaPagamento, valorFormaPagamento2);
                 }
-                if (formaPagamento >= 3)
+                if (qtdFormasPagamento >= 3)
                 {
+                    Console.Write("\nDigite o código da terceira condição a ser utilizada (1 a 4): ");
+                    int formaPagamento = Convert.ToInt32(Console.ReadLine());
                     Console.Write("Digite o valor da terceira forma de pagamento selecionada: ");
                     double valorFormaPagamento3 = Convert.ToDouble(Console.ReadLine());
                     AdicionaFormaPagamento(formaPagamento, valorFormaPagamento3);
                 }
-                if (formaPagamento >= 4)
+                if (qtdFormasPagamento >= 4)
                 {
+                    Console.Write("\nDigite o código da quarta condição a ser utilizada (1 a 4): ");
+                    int formaPagamento = Convert.ToInt32(Console.ReadLine());
                     Console.Write("Digite o valor da quarta forma de pagamento selecionada: ");
                     double valorFormaPagamento4 = Convert.ToDouble(Console.ReadLine());
                     AdicionaFormaPagamento(formaPagamento, valorFormaPagamento4);
                 }
 
+                //Simular uma nota fiscal simples - em texto no terminal.
+                //campos disponíveis, nome da loja, nome usuario/cliente, lista de produtos, valor frete e desconto e total de pagamento
+
+                Console.WriteLine("\n\n========================================");
+                Console.WriteLine("              NOTA FISCAL              ");
+                Console.WriteLine("========================================");
+                Console.WriteLine($"Nome do cliente: {nomeUsuario}");
+                Console.WriteLine("++++++++++++++++++++++++++++++++++++++++");
+                Console.Write("Lista de itens:");
+                Console.WriteLine($"{impressaoItensNota}");
+                Console.WriteLine("++++++++++++++++++++++++++++++++++++++++");
+                Console.WriteLine($"Valor do frete: R$ {valorFrete:F2}"+
+                                  $"\nValor desconto: R$ {valorDesconto:F2}");
+                Console.WriteLine("++++++++++++++++++++++++++++++++++++++++");
+                Console.WriteLine($"Total Pagamento: {totalPagamento:F2}");
+                Console.WriteLine("++++++++++++++++++++++++++++++++++++++++");
+                Console.WriteLine($"Formas de pagamento: {descFormaPagamento}");
+                Console.WriteLine("========================================");
+
+
                 //Se ele gastar mais de 100 reais ele ganha 10 pontos de fidelidade, cada ponto de fidelidade da a ele 0,5% de desconto na próxima compra.
                 Console.Write("\nPontos de fidelidade adquiridos com esta compra: ");
                 PontosFidelidade(totalPagamento);
 
-                
+                Console.WriteLine("\nObrigado pela preferência e volte sempre!");
 
-
-                //Simular uma nota fiscal simples - em texto no terminal.
             }
 
 
