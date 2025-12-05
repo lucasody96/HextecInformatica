@@ -184,18 +184,7 @@ namespace HextecInformatica
                     descFormaPagamento += $"\nCartão de Débito: R$ {valorFormaPagamentoSelecionada:F2}";
                 else if(formaPagamentoSelecionada==4)
                     descFormaPagamento += $"\nBoleto: R$ {valorFormaPagamentoSelecionada:F2}";
-            }
-
-            void PontosFidelidade(double totalPagamentoNota)
-            {
-                if (totalPagamentoNota > 100.00)
-                {
-                    pontosFidelidade = 10;
-                    Console.WriteLine($"{pontosFidelidade} pontos"+
-                                       "\nCada ponto de fidelidade é convertido em 0,5% de desconto na próxima compra!");
-                }
-            }
-           
+            }       
 
             //Boas vindas à loja
             Console.WriteLine("-----------------------------------------");
@@ -305,7 +294,6 @@ namespace HextecInformatica
                     }
                 }
                 
-
                 //opção para ele selecionar a forma de entrega
                 Console.WriteLine("\nFormas de entrega disponíveis com seus respectivos valores: ");
                 Console.WriteLine("1 - Retirada na loja - Grátis");
@@ -336,7 +324,6 @@ namespace HextecInformatica
                 Console.Write("\nQuantas formas de pagamento deseja utilizar (de 1 a 4): ");
                 int qtdFormasPagamento = Convert.ToInt32(Console.ReadLine());
                 
-
                 if (qtdFormasPagamento >= 1) 
                 {
                     Console.Write("Digite o código da primeira condição a ser utilizada (1 a 4): ");
@@ -389,13 +376,16 @@ namespace HextecInformatica
                 Console.WriteLine($"Formas de pagamento: {descFormaPagamento}");
                 Console.WriteLine("========================================");
 
-
                 //Se ele gastar mais de 100 reais ele ganha 10 pontos de fidelidade, cada ponto de fidelidade da a ele 0,5% de desconto na próxima compra.
-                Console.Write("\nPontos de fidelidade adquiridos com esta compra: ");
-                PontosFidelidade(totalPagamento);
+                if (totalPagamento > 100.00)
+                {
+                    Console.Write("\nPontos de fidelidade adquiridos com esta compra: ");
+                    pontosFidelidade = 10;
+                    Console.WriteLine($"{pontosFidelidade} pontos" +
+                                       "\nCada ponto de fidelidade é convertido em 0,5% de desconto na próxima compra!");
+                }
 
                 Console.WriteLine("\nObrigado pela preferência e volte sempre!");
-
             }
 
 
