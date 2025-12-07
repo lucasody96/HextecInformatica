@@ -32,6 +32,7 @@ namespace HextecInformatica
                 {
                     if (produtoSelecionado == codProduto[i])
                     {
+                        //
                         impressaoItensNota += $"\n{nomeProduto[i]}.....R$ {valorProduto[i]:F2}";
                         totalPagamento += valorProduto[i];
                         estoqueProduto[i]--;
