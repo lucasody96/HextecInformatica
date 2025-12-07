@@ -1,10 +1,4 @@
-﻿using Microsoft.SqlServer.Server;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
 
 namespace HextecInformatica
 {
@@ -15,126 +9,48 @@ namespace HextecInformatica
             //Nome da loja
             const string NOME_LOJA = "Hextec Informática";
             //Código dos produtos previamente cadastrados
-            const int CODIGO_PRODUTO_1 = 1;
-            const int CODIGO_PRODUTO_2 = 2;
-            const int CODIGO_PRODUTO_3 = 3;
-            const int CODIGO_PRODUTO_4 = 4;
-            const int CODIGO_PRODUTO_5 = 5;
-            const int CODIGO_PRODUTO_6 = 6;
-            const int CODIGO_PRODUTO_7 = 7;
+            int[] codProduto = { 1, 2, 3, 4, 5, 6, 7 };
             //Nome dos produtos previamente cadastrados
-            const string NOME_PRODUTO_1 = "Mouse sem fio";
-            const string NOME_PRODUTO_2 = "Pen Drive";
-            const string NOME_PRODUTO_3 = "SSD";
-            const string NOME_PRODUTO_4 = "Memória Ram";
-            const string NOME_PRODUTO_5 = "Monitor";
-            const string NOME_PRODUTO_6 = "Headset Gamer";
-            const string NOME_PRODUTO_7 = "Placa de vídeo"; 
+            string[] nomeProduto = { "Mouse sem fio", "Pen Drive", "SSD" , "Memória Ram", "Monitor", "Headset Gamer", "Placa de vídeo" };
             //Valor dos produtos previamente cadastrados
-            const double VALOR_PRODUTO_1 = 65.90;
-            const double VALOR_PRODUTO_2 = 44.90;
-            const double VALOR_PRODUTO_3 = 390.49;
-            const double VALOR_PRODUTO_4 = 280.89; 
-            const double VALOR_PRODUTO_5 = 749.99;
-            const double VALOR_PRODUTO_6 = 231.89;
-            const double VALOR_PRODUTO_7 = 2100.99;
+            double[] valorProduto = { 65.90, 44.90, 390.49, 280.89, 749.99, 231.89, 2100.99 };
             //Estoque dos produtos previamente cadastrados
             //Simular o estoque, pelo menos dois dos produtos da loja tem que estar estogado.
-            const int ESTOQUE_PRODUTO_1 = 32;
-            const int ESTOQUE_PRODUTO_2 = 25;
-            const int ESTOQUE_PRODUTO_3 = 10;
-            const int ESTOQUE_PRODUTO_4 = 0;
-            const int ESTOQUE_PRODUTO_5 = 15;
-            const int ESTOQUE_PRODUTO_6 = 0;
-            const int ESTOQUE_PRODUTO_7 = 1;
+            int[] estoqueProduto = { 32, 25, 10, 0, 15, 0, 1 };
+
             //variáveis usadas no escopo principal e funções
-            double totalPagamento = 0.00, valorFrete = 0.0, valorDesconto = 0.0;
+            double totalPagamento = 0, valorFrete = 0, valorDesconto = 0;
             string impressaoItensNota = "", descFormaPagamento = "";
-            int codItemRemovido, codItemAdicionadoNota1, codItemAdicionadoNota2, codItemAdicionadoNota3,
-                codItemAdicionadoNota4, codItemAdicionadoNota5, codItemAdicionadoNota6, codItemAdicionadoNota7, pontosFidelidade;
+
+            int codItemRemovido, pontosFidelidade;
 
             //Métodos/funções
             void AdicionaItemNotaFiscal(int produtoSelecionado)
             {
-                if (produtoSelecionado == CODIGO_PRODUTO_1)
+
+                for (int i = 0; i < codProduto.Length; i++)
                 {
-                    impressaoItensNota += $"\n{NOME_PRODUTO_1}.....R$ {VALOR_PRODUTO_1:F2}";
-                    totalPagamento += VALOR_PRODUTO_1;                    
-                }
-                else if (produtoSelecionado == CODIGO_PRODUTO_2)
-                {
-                    impressaoItensNota += $"\n{NOME_PRODUTO_2}.....R$ {VALOR_PRODUTO_2:F2}";
-                    totalPagamento += VALOR_PRODUTO_2;
-                }
-                else if (produtoSelecionado == CODIGO_PRODUTO_3)
-                {
-                    impressaoItensNota += $"\n{NOME_PRODUTO_3}.....R$ {VALOR_PRODUTO_3:F2}";
-                    totalPagamento += VALOR_PRODUTO_3;
-                }
-                else if (produtoSelecionado == CODIGO_PRODUTO_4)
-                {
-                    impressaoItensNota += $"\n{NOME_PRODUTO_4}.....R$ {VALOR_PRODUTO_4:F2}";
-                    totalPagamento += VALOR_PRODUTO_4;
-                }
-                else if (produtoSelecionado == CODIGO_PRODUTO_5)
-                {
-                    impressaoItensNota += $"\n{NOME_PRODUTO_5}.....R$ {VALOR_PRODUTO_5:F2}";
-                    totalPagamento += VALOR_PRODUTO_5;
-                }
-                else if (produtoSelecionado == CODIGO_PRODUTO_6)
-                {
-                    impressaoItensNota += $"\n{NOME_PRODUTO_6}.....R$ {VALOR_PRODUTO_6:F2}";
-                    totalPagamento += VALOR_PRODUTO_6;
-                }
-                else if (produtoSelecionado == CODIGO_PRODUTO_7)
-                {
-                    impressaoItensNota += $"\n{NOME_PRODUTO_7}.....R$ {VALOR_PRODUTO_7:F2}";
-                    totalPagamento += VALOR_PRODUTO_7;
-                }
-                else
-                    Console.WriteLine("Código de produto inexistente, não será somado no valor a ser pago!");
+                    if (produtoSelecionado == codProduto[i])
+                    {
+                        impressaoItensNota += $"\n{nomeProduto[i]}.....R$ {valorProduto[i]:F2}";
+                        totalPagamento += valorProduto[i];
+                        estoqueProduto[i]--;
+                        break;
+                    }  
+                }      
             }
 
             void RemoveItemNotaFiscal (int produtoSelecionado)
             {
                 //fazer semelhante ao romaneio com uma linha de devolução
-                if (produtoSelecionado == CODIGO_PRODUTO_1)
+                for(int i = 0; i < codProduto.Length; i++)
                 {
-                    impressaoItensNota += $"\n(Devolvido) {NOME_PRODUTO_1}.....R$ -{VALOR_PRODUTO_1:F2}";
-                    totalPagamento -= VALOR_PRODUTO_1;
-                }
-                else if (produtoSelecionado == CODIGO_PRODUTO_2)
-                {
-                    impressaoItensNota += $"\n(Devolvido) {NOME_PRODUTO_2}.....R$ -{VALOR_PRODUTO_2:F2}";
-                    totalPagamento -= VALOR_PRODUTO_2;
-                }
-                else if (produtoSelecionado == CODIGO_PRODUTO_3)
-                {
-                    impressaoItensNota += $"\n(Devolvido) {NOME_PRODUTO_3}.....R$ -{VALOR_PRODUTO_3:F2}";
-                    totalPagamento -= VALOR_PRODUTO_3;
-                }
-                else if (produtoSelecionado == CODIGO_PRODUTO_4)
-                {
-                    impressaoItensNota += $"\n(Devolvido) {NOME_PRODUTO_4}.....R$ -{VALOR_PRODUTO_4:F2}";
-                    totalPagamento -= VALOR_PRODUTO_4;
-                }
-                else if (produtoSelecionado == CODIGO_PRODUTO_5)
-                {
-                    impressaoItensNota += $"\n(Devolvido) {NOME_PRODUTO_5}.....R$ -{VALOR_PRODUTO_5:F2}";
-                    totalPagamento -= VALOR_PRODUTO_5;
-                }
-                else if (produtoSelecionado == CODIGO_PRODUTO_6)
-                {
-                    impressaoItensNota += $"\n(Devolvido) {NOME_PRODUTO_6}.....R$ -{VALOR_PRODUTO_6:F2}";
-                    totalPagamento -= VALOR_PRODUTO_6;
-                }
-                else if (produtoSelecionado == CODIGO_PRODUTO_7)
-                {
-                    impressaoItensNota += $"\n(Devolvido) {NOME_PRODUTO_7}.....R$ -{VALOR_PRODUTO_7:F2}";
-                    totalPagamento -= VALOR_PRODUTO_7;
-                }
-                else
-                    Console.WriteLine("Código de produto inexistente, não será removido no valor a ser pago!");
+                    if (produtoSelecionado == codProduto[i])
+                    {
+                        impressaoItensNota += $"\n(Devolvido) {nomeProduto[i]}.....R$ -{valorProduto[i]:F2}";
+                        totalPagamento -= valorProduto[i];
+                    }
+                }              
             }
 
             void CupomDesconto(double valDescontoCupom)
@@ -145,45 +61,54 @@ namespace HextecInformatica
 
             void FormaEntrega (string FormaEntregaSelecionada)
             {
-                valorFrete = 0;
-                if (FormaEntregaSelecionada == "1") 
-                    totalPagamento += valorFrete;
-                else if (FormaEntregaSelecionada == "2")
+                switch (FormaEntregaSelecionada)
                 {
-                    if (totalPagamento > 300.00)
+                    case "1":
                         totalPagamento += valorFrete;
-                    else
-                    {
-                        valorFrete = 20.00;
+                        break;
+                    case "2":
+                        if (totalPagamento > 300.00)
+                            totalPagamento += valorFrete;
+                        else
+                        {
+                            valorFrete = 20.00;
+                            totalPagamento += valorFrete;
+                        }
+                        break;
+                    case "3":
+                        if (totalPagamento > 500.00)
+                            totalPagamento += valorFrete;
+                        else
+                        {
+                            valorFrete = 40.00;
+                            totalPagamento += valorFrete;
+                        }
+                        break;
+                    default:
+                        Console.WriteLine("Valor informado incorretamente, será considerado a forma de entrega de retirada na loja");
                         totalPagamento += valorFrete;
-                    }
-                }else if (FormaEntregaSelecionada == "3")
-                {
-                    if (totalPagamento > 500.00)
-                        totalPagamento += valorFrete;
-                    else
-                    {
-                        valorFrete = 40.00;
-                        totalPagamento += valorFrete;
-                    }
-                }else
-                {
-                    Console.WriteLine("Valor informado incorretamente, será considerado a forma de entrega de retirada na loja");
-                    totalPagamento += valorFrete;
-                }
-                    
+                        break;
+                }                    
             }
 
             void AdicionaFormaPagamento(int formaPagamentoSelecionada, double valorFormaPagamentoSelecionada)
             {
-                if (formaPagamentoSelecionada == 1)
-                    descFormaPagamento += $"\nDinheiro: R$ {valorFormaPagamentoSelecionada:F2}";
-                else if(formaPagamentoSelecionada == 2)
-                    descFormaPagamento += $"\nCartão de Crédito: R$ {valorFormaPagamentoSelecionada:F2}";
-                else if(formaPagamentoSelecionada == 3)
-                    descFormaPagamento += $"\nCartão de Débito: R$ {valorFormaPagamentoSelecionada:F2}";
-                else if(formaPagamentoSelecionada==4)
-                    descFormaPagamento += $"\nBoleto: R$ {valorFormaPagamentoSelecionada:F2}";
+                //switch
+                switch (formaPagamentoSelecionada)
+                {
+                    case 1:
+                        descFormaPagamento += $"\nDinheiro: R$ {valorFormaPagamentoSelecionada:F2}";
+                        break;
+                    case 2:
+                        descFormaPagamento += $"\nCartão de Crédito: R$ {valorFormaPagamentoSelecionada:F2}";
+                        break;
+                    case 3:
+                        descFormaPagamento += $"\nCartão de Débito: R$ {valorFormaPagamentoSelecionada:F2}";
+                        break;
+                    case 4:
+                        descFormaPagamento += $"\nBoleto: R$ {valorFormaPagamentoSelecionada:F2}";
+                        break;
+                }
             }       
 
             //Boas vindas à loja
@@ -196,15 +121,13 @@ namespace HextecInformatica
             //Listar os produtos da loja e permitir que ele escolha - ele só pode escolher 5 produtos
             Console.WriteLine($"\nSeja bem vindo {nomeUsuario}! Lista dos produtos disponíveis no nosso estoque para compra:");
             Console.WriteLine("\nCódigo - Nome do produto - Valor - Quantidade disponível");
-            Console.WriteLine($"\n {CODIGO_PRODUTO_1} - {NOME_PRODUTO_1} - R$ {VALOR_PRODUTO_1:F2} | {ESTOQUE_PRODUTO_1}" +
-                              $"\n {CODIGO_PRODUTO_2} - {NOME_PRODUTO_2} - R$ {VALOR_PRODUTO_2:F2} | {ESTOQUE_PRODUTO_2}"+
-                              $"\n {CODIGO_PRODUTO_3} - {NOME_PRODUTO_3} - R$ {VALOR_PRODUTO_3:F2} | {ESTOQUE_PRODUTO_3}" +
-                              $"\n {CODIGO_PRODUTO_4} - {NOME_PRODUTO_4} - R$ {VALOR_PRODUTO_4:F2} | {ESTOQUE_PRODUTO_4}" +
-                              $"\n {CODIGO_PRODUTO_5} - {NOME_PRODUTO_5} - R$ {VALOR_PRODUTO_5:F2} | {ESTOQUE_PRODUTO_5}" +
-                              $"\n {CODIGO_PRODUTO_6} - {NOME_PRODUTO_6} - R$ {VALOR_PRODUTO_6:F2} | {ESTOQUE_PRODUTO_6}"+
-                              $"\n {CODIGO_PRODUTO_7} - {NOME_PRODUTO_7} - R$ {VALOR_PRODUTO_7:F2} | {ESTOQUE_PRODUTO_7}");
+            for (int i = 0; i < codProduto.Length; i++)
+            {
+                Console.Write($"\n {codProduto[i]} - {nomeProduto[i]} - R$ {valorProduto[i]:F2} | {estoqueProduto[i]}");
+            }
+            
             //opção para selecionar a quantidade de itens.
-            Console.Write("\nQual a quantidade de itens que deseja comprar (de 1 a 7 itens)? ");
+            Console.Write("\n\nQual a quantidade de itens que deseja comprar (de 1 a 7 itens)? ");
             int qtdItensSelecionados = Convert.ToInt32(Console.ReadLine());
 
             //Seleção de produtos e soma do valor total de pagamento
@@ -214,56 +137,14 @@ namespace HextecInformatica
                 Console.WriteLine("Quantidade de itens informada menor que 1, programa sendo encerrado...");
             else
             {
-                if (qtdItensSelecionados >= 1) 
-                {
-                    //Produto selecionado 1
-                    Console.Write("\nDigite o código do primeiro produto a ser selecionado: ");
-                    codItemAdicionadoNota1 = Convert.ToInt32(Console.ReadLine());
-                    AdicionaItemNotaFiscal(codItemAdicionadoNota1);
-                }
-                if (qtdItensSelecionados >= 2)
-                {
-                    //Produto selecionado 2
-                    Console.Write("\nDigite o código do segundo produto a ser selecionado: ");
-                    codItemAdicionadoNota2 = Convert.ToInt32(Console.ReadLine());
-                    AdicionaItemNotaFiscal(codItemAdicionadoNota2);
-                }
-                if (qtdItensSelecionados >= 3)
-                {
-                    //Produto selecionado 3
-                    Console.Write("\nDigite o código do terceiro produto a ser selecionado: ");
-                    codItemAdicionadoNota3 = Convert.ToInt32(Console.ReadLine());
-                    AdicionaItemNotaFiscal(codItemAdicionadoNota3);
-                }
-                if (qtdItensSelecionados >= 4)
-                {
-                    //Produto selecionado 4
-                    Console.Write("\nDigite o código do quarto produto a ser selecionado: ");
-                    codItemAdicionadoNota4 = Convert.ToInt32(Console.ReadLine());
-                    AdicionaItemNotaFiscal(codItemAdicionadoNota4);
-                }
-                if (qtdItensSelecionados >= 5)
-                {
-                    //Produto selecionado 5
-                    Console.Write("\nDigite o código do quinto produto a ser selecionado: ");
-                    codItemAdicionadoNota5 = Convert.ToInt32(Console.ReadLine());
-                    AdicionaItemNotaFiscal(codItemAdicionadoNota5);
-                }
-                if (qtdItensSelecionados >= 6)
-                {
-                    //Produto selecionado 6
-                    Console.Write("\nDigite o código do sexto produto a ser selecionado: ");
-                    codItemAdicionadoNota6 = Convert.ToInt32(Console.ReadLine());
-                    AdicionaItemNotaFiscal(codItemAdicionadoNota6);
-                }
-                if (qtdItensSelecionados >= 7)
-                {
-                    //Produto selecionado 7
-                    Console.Write("\nDigite o código do sétimo produto a ser selecionado: ");
-                    codItemAdicionadoNota7 = Convert.ToInt32(Console.ReadLine());
-                    AdicionaItemNotaFiscal(codItemAdicionadoNota7);
-                }
 
+                for (int i = 0; i < qtdItensSelecionados; i++)
+                {
+                    Console.Write($"\nDigite o código do produto {i+1} a ser selecionado: ");
+                    int codProdutoSelecionado = Convert.ToInt32(Console.ReadLine());
+                    AdicionaItemNotaFiscal(codProdutoSelecionado);
+                }
+               
                 //opção para retirar ate 3 itens se ele quiser.
                 Console.Write("Deseja retirar algum item (S - sim ou N - não)? ");
                 string retornoSeRemoveItem = Console.ReadLine();
@@ -273,20 +154,7 @@ namespace HextecInformatica
                     Console.Write("Quantos itens deseja remover? ");
                     int qtdItensRemovidos = Convert.ToInt32(Console.ReadLine());
 
-                    if (qtdItensRemovidos >= 1)
-                    {
-                        Console.Write("Digite o código do produto a remover: ");
-                        codItemRemovido = Convert.ToInt32(Console.ReadLine());
-                        RemoveItemNotaFiscal(codItemRemovido);
-                    }
-                    if (qtdItensRemovidos >= 2)
-                    {
-                        Console.Write("Digite o código do produto a remover: ");
-                        codItemRemovido = Convert.ToInt32(Console.ReadLine());
-                        RemoveItemNotaFiscal(codItemRemovido);
-
-                    }
-                    if (qtdItensRemovidos >= 3)
+                    for (int i = 0; i < qtdItensRemovidos; i++)
                     {
                         Console.Write("Digite o código do produto a remover: ");
                         codItemRemovido = Convert.ToInt32(Console.ReadLine());
@@ -323,43 +191,17 @@ namespace HextecInformatica
                 Console.WriteLine("4 - Boleto");
                 Console.Write("\nQuantas formas de pagamento deseja utilizar (de 1 a 4): ");
                 int qtdFormasPagamento = Convert.ToInt32(Console.ReadLine());
-                
-                if (qtdFormasPagamento >= 1) 
-                {
-                    Console.Write("Digite o código da primeira condição a ser utilizada (1 a 4): ");
-                    int formaPagamento = Convert.ToInt32(Console.ReadLine());
-                    Console.Write("Digite o valor da primeira forma de pagamento selecionada: ");
-                    double valorFormaPagamento1 = Convert.ToDouble(Console.ReadLine());
-                    AdicionaFormaPagamento(formaPagamento, valorFormaPagamento1);
-                }
-                if (qtdFormasPagamento >= 2)
-                {
-                    Console.Write("\nDigite o código da segunda condição a ser utilizada (1 a 4): ");
-                    int formaPagamento = Convert.ToInt32(Console.ReadLine());
-                    Console.Write("Digite o valor da segunda forma de pagamento selecionada: ");
-                    double valorFormaPagamento2 = Convert.ToDouble(Console.ReadLine());
-                    AdicionaFormaPagamento(formaPagamento, valorFormaPagamento2);
-                }
-                if (qtdFormasPagamento >= 3)
-                {
-                    Console.Write("\nDigite o código da terceira condição a ser utilizada (1 a 4): ");
-                    int formaPagamento = Convert.ToInt32(Console.ReadLine());
-                    Console.Write("Digite o valor da terceira forma de pagamento selecionada: ");
-                    double valorFormaPagamento3 = Convert.ToDouble(Console.ReadLine());
-                    AdicionaFormaPagamento(formaPagamento, valorFormaPagamento3);
-                }
-                if (qtdFormasPagamento >= 4)
-                {
-                    Console.Write("\nDigite o código da quarta condição a ser utilizada (1 a 4): ");
-                    int formaPagamento = Convert.ToInt32(Console.ReadLine());
-                    Console.Write("Digite o valor da quarta forma de pagamento selecionada: ");
-                    double valorFormaPagamento4 = Convert.ToDouble(Console.ReadLine());
-                    AdicionaFormaPagamento(formaPagamento, valorFormaPagamento4);
-                }
 
+                for (int i = 0; i < qtdFormasPagamento; i++)
+                {
+                    Console.Write($"\nDigite o código da condição de pagamento {i+1} (1 a 4): ");
+                    int formaPagamento = Convert.ToInt32(Console.ReadLine());
+                    Console.Write($"Digite o valor da condição de pagamento {i+1} a ser selecionada: ");
+                    double valorFormaPagamento = Convert.ToDouble(Console.ReadLine());
+                    AdicionaFormaPagamento(formaPagamento, valorFormaPagamento);
+                }
                 //Simular uma nota fiscal simples - em texto no terminal.
                 //campos disponíveis, nome da loja, nome usuario/cliente, lista de produtos, valor frete e desconto e total de pagamento
-
                 Console.WriteLine("\n\n========================================");
                 Console.WriteLine("              NOTA FISCAL              ");
                 Console.WriteLine("========================================");
@@ -387,8 +229,6 @@ namespace HextecInformatica
 
                 Console.WriteLine("\nObrigado pela preferência e volte sempre!");
             }
-
-
             Console.ReadKey();
         }
     }
