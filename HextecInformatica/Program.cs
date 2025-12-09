@@ -184,7 +184,7 @@ namespace HextecInformatica
                             AdicionaItemNotaFiscal(codProdutoSelecionado);
                         }
 
-                        //opção para retirar ate 3 itens se ele quiser.
+                        //opção para retirar itens se ele quiser
                         Console.Write("\nDeseja retirar algum item (S - sim ou N - não)? ");
                         string retornoSeRemoveItem = Console.ReadLine();
 
