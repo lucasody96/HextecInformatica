@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq; // Ajuda para somar valores
 
 namespace HextecInformatica
 {
@@ -18,9 +17,9 @@ namespace HextecInformatica
             //================================================================
             //2. STACKS E QUEUE
             //================================================================
-            //static Stack<int> pilhaCarrinho = new Stack<int>();
+            Stack<int> AdicionaCarrinho = new Stack<int>();
 
-            //static Queue<string> filaPagamentos = new Queue<string>();
+            Queue<string> filaPagamentos = new Queue<string>();
 
             //================================================================
             //3. VARIÁVEIS E CONSTANTES
@@ -58,7 +57,7 @@ namespace HextecInformatica
                         break;
                     case "2":
                         //Opção para visualizar o sistema como vendedor/colaborador da loja
-                        InciarComoUsuario();
+                        InciarComoColaborador();
                         execucaoPrograma = false;
                         break;
                     case "3":
@@ -268,7 +267,67 @@ namespace HextecInformatica
             }
             void SelecaoProdutosStack()
             {
+                int qtdItensSelecionados = EvitaQuebraCodInt("Qual a quantidade de itens que deseja comprar?");
 
+                for (int i = 0; i < qtdItensSelecionados; i++)
+                {
+                    int codProdutoSelecionado = EvitaQuebraCodInt($"\nDigite o código do produto {i + 1} a ser selecionado: ");
+                    do
+                    {
+                        if (nomeProduto.ContainsKey(codProdutoSelecionado))
+                        {
+                            if (estoqueProduto[codProdutoSelecionado] > 0)
+                            {
+                                //Empilha no carrinho (commit)
+                                AdicionaCarrinho.Push(codProdutoSelecionado);
+                                //Diminuir o estoque do item no dicionário
+                                estoqueProduto[codProdutoSelecionado]--;
+
+                                Console.WriteLine($"Item {nomeProduto[codProdutoSelecionado]} adicionado às suas compras.");
+
+                            }
+                            else
+                                Console.WriteLine("Item esgotado! Não será adicionado as suas compras");
+                        }
+                        else
+                            Console.WriteLine("Código de item inexistente no catálogo de itens!");
+
+                    } while (!nomeProduto.ContainsKey(codProdutoSelecionado));
+
+                    
+                }
+
+                //opção para retirar itens se ele quiser
+                Console.Write("\nDeseja retirar algum item (S - sim ou N - não)? ");
+                string retornoSeRemoveItem = Console.ReadLine();
+
+                if (retornoSeRemoveItem == "S" || retornoSeRemoveItem == "s")
+                {
+                    Console.Write("Quantos itens deseja remover? ");
+                    int qtdItensRemovidos = Convert.ToInt32(Console.ReadLine());
+
+                    for (int i = 0; i < qtdItensRemovidos; i++)
+                    {
+                        Console.Write("Digite o código do produto a remover: ");
+                        codItemRemovido = Convert.ToInt32(Console.ReadLine());
+                        RemoveItemNotaFiscal(codItemRemovido);
+                    }
+                }
+
+
+            }
+            void RemoveItemNotaFiscal(int produtoSelecionado)
+            {
+                //fazer semelhante ao romaneio com uma linha de devolução
+                for (int i = 0; i < codProduto.Length; i++)
+                {
+                    if (produtoSelecionado == codProduto[i])
+                    {
+                        impressaoItensNota += $"\n(Devolvido) {nomeProduto[i]}.....R$ -{valorProduto[i]:F2}";
+                        totalPagamento -= valorProduto[i];
+                        estoqueProduto[i]++;
+                    }
+                }
             }
 
             void AdicionaItemNotaFiscal(int produtoSelecionado)
@@ -292,19 +351,7 @@ namespace HextecInformatica
                 }      
             }
 
-            void RemoveItemNotaFiscal (int produtoSelecionado)
-            {
-                //fazer semelhante ao romaneio com uma linha de devolução
-                for(int i = 0; i < codProduto.Length; i++)
-                {
-                    if (produtoSelecionado == codProduto[i])
-                    {
-                        impressaoItensNota += $"\n(Devolvido) {nomeProduto[i]}.....R$ -{valorProduto[i]:F2}";
-                        totalPagamento -= valorProduto[i];
-                        estoqueProduto[i]++;
-                    }
-                }              
-            }
+            
 
             void CupomDesconto(double valDescontoCupom)
             {
@@ -389,23 +436,40 @@ namespace HextecInformatica
 
 
 
-            void InciarComoUsuario()
+            void InciarComoColaborador()
             {
                 Console.WriteLine("Em construção, saindo do programa...");
             }
 
             //Métodos para mensagens de exceção (até ser passado sobre isso)
-            void EvitaQuebraCodInt(string mensagem)
+            int EvitaQuebraCodInt(string mensagem)
             {
+                int numInteiro;
 
+                Console.WriteLine(mensagem);
+
+                while(!int.TryParse(Console.ReadLine(), out numInteiro))
+                {
+                    Console.Write("Erro: Valor inválido (Informe apenas números inteiros) ");
+                    Console.WriteLine(mensagem);
+                }
+                return numInteiro;  
             }
 
-            void EvitaQuebraCodFloat(string mensagem)
+            double EvitaQuebraCodFloat(string mensagem)
             {
+                double numFloat;
 
+                Console.WriteLine(mensagem);
+
+                while (!double.TryParse(Console.ReadLine(), out numFloat))
+                {
+                    Console.Write("Erro: Valor inválido , não é permitido informar letras e deve ser informado algum valor");
+                    Console.WriteLine(mensagem);
+                }
+
+                return numFloat;
             }
-
-
         }
     }
 }
