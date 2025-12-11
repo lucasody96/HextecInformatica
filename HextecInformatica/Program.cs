@@ -127,14 +127,11 @@ namespace HextecInformatica
                     //opção para ele pagar com mais de uma forma, colocando o valor em cada uma das formas.
                     //Pode escolher entre pagar em dinheiro e cartão
                     //Usada a funcionalidade queue
-
                     FormaPagamentoQueue();
 
                     //Simular uma nota fiscal simples - em texto no terminal.
                     //campos disponíveis, nome da loja, nome usuario/cliente, lista de produtos, valor frete e desconto e total de pagamento
                     ImprimeNotaFiscal();
-
-
 
                     //Se ele gastar mais de 100 reais ele ganha 10 pontos de fidelidade, cada ponto de fidelidade da a ele 0,5% de desconto na próxima compra.
                     PontosFidelidade();
@@ -142,7 +139,7 @@ namespace HextecInformatica
                     Console.WriteLine("\nObrigado pela preferência e volte sempre!");
 
                 }
-                Console.WriteLine("Pressione enter para seguir com a compra!");
+                Console.WriteLine("\nPressione enter para realizar uma nova compra!");
                 Console.ReadLine();               
             }
 
@@ -162,6 +159,7 @@ namespace HextecInformatica
                     Console.Write($"\n {codProduto} - {descricaoProduto} - R$ {PrecoProduto:F2} | {estoque}");
                 }
             }
+
             void AdicionaCarrinhoCompras()
             {
                 int qtdItensSelecionados = EvitaQuebraCodInt("\nQual a quantidade de itens que deseja comprar? ");
@@ -172,7 +170,6 @@ namespace HextecInformatica
 
                     do
                     {
-
                         if (nomeProduto.ContainsKey(codProdutoSelecionado))
                         {
                             if (estoqueProduto[codProdutoSelecionado] > 0)
@@ -190,15 +187,13 @@ namespace HextecInformatica
                         else
                             Console.WriteLine("Código de item inexistente no catálogo de itens!");
 
-                    } while (!nomeProduto.ContainsKey(codProdutoSelecionado));
-
-                    
+                    } while (!nomeProduto.ContainsKey(codProdutoSelecionado));   
                 }
             }
 
             void VisualizaçãoItensCarrinho()
             {
-                Console.WriteLine("===========================");
+                Console.WriteLine("\n===========================");
                 Console.WriteLine("     ITENS DO CARRINHO     ");
                 Console.WriteLine("===========================");
 
@@ -224,12 +219,12 @@ namespace HextecInformatica
                     int qtdItensRemovidos;
                     do
                     {
-                        qtdItensRemovidos = EvitaQuebraCodInt("Qual a quantidade de itens que deseja remover?");
+                        qtdItensRemovidos = EvitaQuebraCodInt("\nQual a quantidade de itens que deseja remover? ");
 
                         if (qtdItensRemovidos > listaCarrinho.Count)
                         {
                             Console.WriteLine($"Não é possível remover uma quantidade maior do que a listada no carrinho." +
-                                               "Quantidade de itens no carrinho: {listaCarrinho.Count}"                   );
+                                               $"Quantidade de itens no carrinho: {listaCarrinho.Count}"                   );
                         }
                         else if (qtdItensRemovidos <= 0)
                         {
@@ -237,7 +232,6 @@ namespace HextecInformatica
                         }
 
                     } while (qtdItensRemovidos > listaCarrinho.Count || qtdItensRemovidos <= 0);
-
 
                     for (int i = 0; i < qtdItensRemovidos; i++)
                     {
@@ -306,8 +300,7 @@ namespace HextecInformatica
                 if (valorFrete > 0)
                 {
                     Console.WriteLine($"\nValor de frete R$ {valorFrete:F2} adicionado ao valor a ser pago. Subtotal: {valRestante:F2}");
-                }
-                
+                }  
             }
 
             void CupomDesconto()
@@ -316,7 +309,7 @@ namespace HextecInformatica
                 string respPossuiDesconto = Console.ReadLine();
                 if (respPossuiDesconto == "S" || respPossuiDesconto == "s")
                 {
-                    valorDesconto = EvitaQuebraCodFloat("Qual o valor de desconto do seu cupom? R$ \"");
+                    valorDesconto = EvitaQuebraCodFloat("Qual o valor de desconto do seu cupom? R$ ");
                     if (valorDesconto > 0)
                     {
                         valRestante -= valorDesconto;
@@ -401,9 +394,7 @@ namespace HextecInformatica
                     }
 
                 } while (valRestante > 0);
-
-                
-                
+                              
             }
 
             void ImprimeNotaFiscal() 
@@ -445,11 +436,7 @@ namespace HextecInformatica
                     Console.WriteLine($"{pontosFidelidade} pontos" +
                                        "\nCada ponto de fidelidade é convertido em 0,5% de desconto na próxima compra!");
                 }
-
-
             }
-
-
 
             void InciarComoColaborador()
             {
@@ -466,7 +453,7 @@ namespace HextecInformatica
                 while(!int.TryParse(Console.ReadLine(), out numInteiro))
                 {
                     Console.Write("Erro: Valor inválido (Informe apenas números inteiros) ");
-                    Console.WriteLine(mensagem);
+                    Console.Write(mensagem);
                 }
                 return numInteiro;  
             }
@@ -475,12 +462,12 @@ namespace HextecInformatica
             {
                 double numFloat;
 
-                Console.WriteLine(mensagem);
+                Console.Write(mensagem);
 
                 while (!double.TryParse(Console.ReadLine(), out numFloat))
                 {
                     Console.Write("Erro: Valor inválido , não é permitido informar letras e deve ser informado algum valor");
-                    Console.WriteLine(mensagem);
+                    Console.Write(mensagem);
                 }
 
                 return numFloat;
