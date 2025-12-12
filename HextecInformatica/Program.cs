@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace HextecInformatica
 {
@@ -18,7 +19,8 @@ namespace HextecInformatica
             //================================================================
             //2. STACKS E QUEUE
             //================================================================
-            //Stack<int> AdicionaCarrinho = new Stack<int>();
+            Stack<double> descontoProximaCompra = new Stack<double>();
+            
             Queue<string> filaPagamentos = new Queue<string>();
 
             //================================================================
@@ -26,9 +28,9 @@ namespace HextecInformatica
             //================================================================
             const string NOME_LOJA = "Hextec Informática";
 
-            double totalPagamento = 0, valorFrete = 0, valorDesconto = 0, valRestante = 0;
-            string nomeCliente;
-            int pontosFidelidade;
+            double totalPagamento = 0, valorFrete = 0, valorDesconto = 0, valRestante = 0, totalMercadoria = 0, valDescPontosFidelidade = 0, descProxCompraAtual = 0, valDescontoFidelidade = 0;
+            string nomeCliente = "";
+            int pontosFidelidade =0;
 
             //================================================================
             //4. PROGRAMA PRINCIPAL
@@ -93,15 +95,33 @@ namespace HextecInformatica
                 estoqueProduto.Add(codProduto, estoque);
             }
 
+            void CarregaDescontoProxCompra()
+            {
+                
+                
+                foreach (var desconto in descontoProximaCompra)
+                {
+                    descProxCompraAtual += desconto;
+                }
+
+                if (descProxCompraAtual > 0)
+                {
+                    Console.WriteLine($"Total de desconto atual: R$ {descProxCompraAtual}");
+                }
+                
+            }
+
             void IniciarCompra() 
             {
                 listaCarrinho.Clear();
                 filaPagamentos.Clear();
                 valRestante = 0; //zerar o valor a ser pago, garantindo estar zerado ao iniciar uma nova compra
 
-                Console.Write("\nDigite seu nome: ");
-                nomeCliente = Console.ReadLine();
-
+                if (nomeCliente == "") {
+                    Console.Write("\nDigite seu nome: ");
+                    nomeCliente = Console.ReadLine();
+                }
+                
                 // método "Catálogo de Itens"
                 ListaItensCadastrados();
 
@@ -117,11 +137,14 @@ namespace HextecInformatica
                     //Permite ao cliente remover o item do carrinho, caso haja produtos
                     RemoveCarrinhoCompras();
 
+                    //Lógica para considerar somente o total de pagamento do momento 
+                    //Sem aplicar frete e outros descontos, ou seja, o total da mercadoria/ total bruto
+                    totalMercadoria = valRestante;
                     //opção para ele selecionar a forma de entrega                   
                     FormaEntrega();
 
                     //opção para colocar um cupom de desconto no final da venda
-                    CupomDesconto();
+                    ValorDesconto();
 
                     //Seleção de produtos e soma do valor total de pagamento
                     //opção para ele pagar com mais de uma forma, colocando o valor em cada uma das formas.
@@ -303,21 +326,48 @@ namespace HextecInformatica
                 }  
             }
 
-            void CupomDesconto()
+            void ValorDesconto()
             {
+                valorDesconto = 0;
+
                 Console.Write("\nPossui cupom de desconto (S/N)? ");
-                string respPossuiDesconto = Console.ReadLine();
-                if (respPossuiDesconto == "S" || respPossuiDesconto == "s")
+                string respPossuiCupomDesconto = Console.ReadLine();
+                if (respPossuiCupomDesconto == "S" || respPossuiCupomDesconto == "s")
                 {
-                    valorDesconto = EvitaQuebraCodFloat("Qual o valor de desconto do seu cupom? R$ ");
-                    if (valorDesconto > 0)
+                    double valorDescontoCupom = EvitaQuebraCodFloat("Qual o valor de desconto do seu cupom? R$ ");
+                    if (valorDescontoCupom > 0)
                     {
-                        valRestante -= valorDesconto;
-                        Console.WriteLine($"Valor de R$ {valorDesconto:F2} do cupom desconto foi adicionado com sucesso!");
+                        valRestante -= valorDescontoCupom;
+                        valorDesconto += valorDescontoCupom;
+                        Console.WriteLine($"Valor de R$ {valorDescontoCupom:F2} do cupom desconto foi adicionado com sucesso!");
                     }
                     else
                         Console.WriteLine("Valor não pode ser R$ 0,00 ou negativo. Tente novamente.");
-                }  
+                }
+
+                double valDescontoAnterior = 0;
+
+                foreach (var valDescCompraAnterior in descontoProximaCompra)
+                {
+                    valDescontoAnterior += valDescCompraAnterior;
+                }
+
+                if (valDescontoAnterior > 0)
+               {
+                    Console.WriteLine($"\nvocê possui R$ {valDescontoAnterior:F2} de desconto acumulado de compras anteriores.");
+                    Console.Write("Deseja usar o desconto (S/N)? ");
+                    string respUsaDescontoAnterior = Console.ReadLine();
+                    if (respUsaDescontoAnterior == "S" || respUsaDescontoAnterior == "s")
+                    {
+                        valRestante -= valDescontoAnterior;
+                        valorDesconto += valDescontoAnterior;
+                        Console.WriteLine($"Valor de R$ {valDescontoAnterior:F2} do cashback adquirido na compra anterior foi adicionado com sucesso!");
+
+                        descontoProximaCompra.Clear();
+                    }
+                }
+                
+
             }
 
             void FormaPagamentoQueue()
@@ -349,14 +399,28 @@ namespace HextecInformatica
                                 //Nova funcionalidade - lógica de troco
                                 double valorEmDinheiro = valorFormaPagamento;
 
-                                if (valorEmDinheiro > valRestante)
+                                if (valorFormaPagamento > valRestante)
                                 {
-                                    double troco = valorEmDinheiro - valorFormaPagamento;
+                                    double troco = valorEmDinheiro - valRestante;
                                     Console.WriteLine($"--> Troco a devolver: R$ {troco:F2}");
-                                    descFormaPagamento = $"Dinheiro: R$ {valRestante:F2} (Entregue: {valorEmDinheiro:F2}, Troco: {troco:F2})";
-                                    valRestante -= valorFormaPagamento;
-                                    // Força o arredondamento para 2 casas decimais
-                                    valRestante = Math.Round(valRestante, 2);
+
+                                    Console.Write("\nDeseja usar o troco na próxima compra como desconto? ");
+                                    string usaTrocoProxCompra = Console.ReadLine();
+
+                                    if (usaTrocoProxCompra == "S" || usaTrocoProxCompra == "s")
+                                    {
+                                        descontoProximaCompra.Push(troco);
+                                        Console.WriteLine($"Valor disponível para ser usado como desconto na próxima compra: R$ {descontoProximaCompra.Peek():F2}");
+                                        valRestante = 0;
+                                    }
+                                    else
+                                    {
+                                        descFormaPagamento = $"Dinheiro: R$ {valRestante:F2} (Entregue: {valorEmDinheiro:F2}, Troco: {troco:F2})";
+                                        valRestante -= valorFormaPagamento;
+                                        // Força o arredondamento para 2 casas decimais
+                                        valRestante = Math.Round(valRestante, 2);
+                                    }
+
                                 }
                                 else if (valorEmDinheiro <= valRestante)
                                 {
@@ -366,21 +430,39 @@ namespace HextecInformatica
                                 break;
                             case 2:
 
-                                descFormaPagamento = $"Cartão de Crédito: R$ {valorFormaPagamento:F2}";
-                                valRestante -= valorFormaPagamento;
-                                valRestante = Math.Round(valRestante, 2);
-                                break;
+                                if (valorFormaPagamento <= valRestante)
+                                {
+                                    descFormaPagamento = $"Cartão de Crédito: R$ {valorFormaPagamento:F2}";
+                                    valRestante -= valorFormaPagamento;
+                                    valRestante = Math.Round(valRestante, 2);
+                                }
+                                else
+                                    Console.WriteLine("Valor pago acima do subtotal não permitido para condição de pagamento cartão de crédito");
+
+
+                                    break;
                             case 3:
 
-                                descFormaPagamento = $"Cartão de Débito: R$ {valorFormaPagamento:F2}";
-                                valRestante -= valorFormaPagamento;
-                                valRestante = Math.Round(valRestante, 2);
+                                if (valorFormaPagamento <= valRestante)
+                                {
+                                    descFormaPagamento = $"Cartão de Débito: R$ {valorFormaPagamento:F2}";
+                                    valRestante -= valorFormaPagamento;
+                                    valRestante = Math.Round(valRestante, 2);
+                                }
+                                else
+                                    Console.WriteLine("Valor pago acima do subtotal não permitido para condição de pagamento cartão de débito");
                                 break;
                             case 4:
 
-                                descFormaPagamento = $"Boleto: R$ {valorFormaPagamento:F2}";
-                                valRestante -= valorFormaPagamento;
-                                valRestante = Math.Round(valRestante, 2);
+                                if (valorFormaPagamento <= valRestante)
+                                {
+                                    descFormaPagamento = $"Boleto: R$ {valorFormaPagamento:F2}";
+                                    valRestante -= valorFormaPagamento;
+                                    valRestante = Math.Round(valRestante, 2);
+                                }
+                                else
+                                    Console.WriteLine("Valor pago acima do subtotal não permitido para condição de pagamento boleto");
+                                
                                 break;
                         }
 
@@ -421,7 +503,10 @@ namespace HextecInformatica
                 while (filaPagamentos.Count > 0)
                 {
                     string descCondPagamento = filaPagamentos.Dequeue();
-                    Console.WriteLine($"-> {descCondPagamento}");
+                    if (descCondPagamento != "")
+                    {
+                        Console.WriteLine($"-> {descCondPagamento}");
+                    }
                 }
                 
                 Console.WriteLine("========================================");
@@ -431,10 +516,15 @@ namespace HextecInformatica
             {
                 if (totalPagamento > 100.00)
                 {
-                    Console.Write("\nPontos de fidelidade adquiridos com esta compra: ");
-                    pontosFidelidade = 10;
-                    Console.WriteLine($"{pontosFidelidade} pontos" +
-                                       "\nCada ponto de fidelidade é convertido em 0,5% de desconto na próxima compra!");
+
+                    valDescontoFidelidade = totalMercadoria * 0.05;
+                    descontoProximaCompra.Push(valDescontoFidelidade);
+
+                    Console.WriteLine("\n--- PARABÉNS! ---");
+                    Console.WriteLine($"Sua compra gerou um cashback!");
+                    Console.WriteLine($"Valor ganho: {descontoProximaCompra.Peek():F2} (5% do total)");
+                    Console.WriteLine("Este valor será descontado automaticamente na sua próxima compra.");
+                    Console.WriteLine("-----------------");
                 }
             }
 
@@ -452,7 +542,7 @@ namespace HextecInformatica
 
                 while(!int.TryParse(Console.ReadLine(), out numInteiro))
                 {
-                    Console.Write("Erro: Valor inválido (Informe apenas números inteiros) ");
+                    Console.Write("Erro: Valor inválido (Informe apenas números inteiros) \n\n");
                     Console.Write(mensagem);
                 }
                 return numInteiro;  
@@ -466,7 +556,7 @@ namespace HextecInformatica
 
                 while (!double.TryParse(Console.ReadLine(), out numFloat))
                 {
-                    Console.Write("Erro: Valor inválido , não é permitido informar letras e deve ser informado algum valor");
+                    Console.Write("Erro: Valor inválido , não é permitido informar letras e deve ser informado algum valor\n\n");
                     Console.Write(mensagem);
                 }
 
