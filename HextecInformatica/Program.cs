@@ -95,22 +95,6 @@ namespace HextecInformatica
                 estoqueProduto.Add(codProduto, estoque);
             }
 
-            void CarregaDescontoProxCompra()
-            {
-                
-                
-                foreach (var desconto in descontoProximaCompra)
-                {
-                    descProxCompraAtual += desconto;
-                }
-
-                if (descProxCompraAtual > 0)
-                {
-                    Console.WriteLine($"Total de desconto atual: R$ {descProxCompraAtual}");
-                }
-                
-            }
-
             void IniciarCompra() 
             {
                 listaCarrinho.Clear();
