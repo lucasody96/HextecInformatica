@@ -28,9 +28,8 @@ namespace HextecInformatica
             //================================================================
             const string NOME_LOJA = "Hextec Informática";
 
-            double totalPagamento = 0, valorFrete = 0, valorDesconto = 0, valRestante = 0, totalMercadoria = 0, valDescPontosFidelidade = 0, descProxCompraAtual = 0, valDescontoFidelidade = 0;
+            double totalPagamento = 0, valorFrete = 0, valorDesconto = 0, valRestante = 0, totalMercadoria = 0, valDescontoFidelidade = 0;
             string nomeCliente = "";
-            int pontosFidelidade =0;
 
             //================================================================
             //4. PROGRAMA PRINCIPAL
@@ -65,7 +64,7 @@ namespace HextecInformatica
                         execucaoPrograma = false;
                         break;
                     default:
-                        Console.WriteLine("Opção inválida! Programa sendo encerrado...");
+                        Console.WriteLine("Opção inválida!\n");
                         break;
                 }
 
@@ -112,7 +111,6 @@ namespace HextecInformatica
                 //opção para selecionar a quantidade de itens. Criar método
                 AdicionaCarrinhoCompras();
 
-                
                 if (listaCarrinho.Count > 0)
                 {
                     //visualização dos itens do carrinho + valor a ser pago, subtotal
@@ -121,6 +119,13 @@ namespace HextecInformatica
                     //Permite ao cliente remover o item do carrinho, caso haja produtos
                     RemoveCarrinhoCompras();
 
+                    // Verificação se todos os itens foram removidos.
+                    if (listaCarrinho.Count == 0)
+                    {
+                        Console.WriteLine("\nO carrinho ficou sem itens. A compra não pode prosseguir.\n");
+                        return;
+                    }
+
                     //Lógica para considerar somente o total de pagamento do momento 
                     //Sem aplicar frete e outros descontos, ou seja, o total da mercadoria/ total bruto
                     totalMercadoria = valRestante;
@@ -128,7 +133,10 @@ namespace HextecInformatica
                     FormaEntrega();
 
                     //opção para colocar um cupom de desconto no final da venda
-                    ValorDesconto();
+                    ValorDescontoCupom();
+
+                    //Opção de usar o desconto de cashback da compra anterior
+                    ValDescontoTroco();
 
                     //Seleção de produtos e soma do valor total de pagamento
                     //opção para ele pagar com mais de uma forma, colocando o valor em cada uma das formas.
@@ -217,7 +225,7 @@ namespace HextecInformatica
 
             void RemoveCarrinhoCompras()
             {
-                Console.WriteLine("Deseja remover algum item (S/N)? ");
+                Console.Write("Deseja remover algum item (S/N)? ");
                 string respRemoveItem = Console.ReadLine();
 
                 if (respRemoveItem == "S" || respRemoveItem == "s")
@@ -272,45 +280,55 @@ namespace HextecInformatica
 
             void FormaEntrega ()
             {
+                bool formaEntregaInvalida = false;
+
                 Console.WriteLine("\nFormas de entrega disponíveis com seus respectivos valores: ");
                 Console.WriteLine("1 - Retirada na loja - Grátis");
                 Console.WriteLine("2 - Entrega padrão - R$ 20,00, acima de R$ 300,00 é gratis ");
                 Console.WriteLine("3 - Entrega expressa - R$ 40,00, acima de R$ 500,00 é grátis: ");
-                Console.Write("\nQual a forma de entrega desejada (informe de 1 a 3)? ");
-                string respFormaEntrega = Console.ReadLine();
 
-                switch (respFormaEntrega)
+                while (!formaEntregaInvalida)
                 {
-                    case "1":
-                        valRestante += valorFrete;
-                        break;
-                    case "2":
-                        if (valRestante > 300.00)
+                    Console.Write("\nQual a forma de entrega desejada (informe de 1 a 3)? ");
+                    string respFormaEntrega = Console.ReadLine();
+
+                    switch (respFormaEntrega)
+                    {
+                        case "1":
                             valRestante += valorFrete;
-                        else
-                        {
-                            valorFrete = 20.00;
-                            valRestante += valorFrete;
-                        }
-                        break;
-                    case "3":
-                        if (valRestante > 500.00)
-                            valRestante += valorFrete;
-                        else
-                        {
-                            valorFrete = 40.00;
-                            valRestante += valorFrete;
-                        }
-                        break;
-                }  
+                            formaEntregaInvalida = true;
+                            break;
+                        case "2":
+                            if (valRestante > 300.00)
+                                valRestante += valorFrete;
+                            else
+                            {
+                                valorFrete = 20.00;
+                                valRestante += valorFrete;
+                            }
+                            formaEntregaInvalida = true;
+                            break;
+                        case "3":
+                            if (valRestante > 500.00)
+                                valRestante += valorFrete;
+                            else
+                            {
+                                valorFrete = 40.00;
+                                valRestante += valorFrete;
+                            }
+                            formaEntregaInvalida = true;
+                            break;
+                        default:
+                            Console.WriteLine("Forma de entrega selecionada inválida!");
+                            break;
+                    }
+                }
                 
                 if (valorFrete > 0)
-                {
                     Console.WriteLine($"\nValor de frete R$ {valorFrete:F2} adicionado ao valor a ser pago. Subtotal: {valRestante:F2}");
-                }  
             }
 
-            void ValorDesconto()
+            void ValorDescontoCupom()
             {
                 valorDesconto = 0;
 
@@ -318,17 +336,33 @@ namespace HextecInformatica
                 string respPossuiCupomDesconto = Console.ReadLine();
                 if (respPossuiCupomDesconto == "S" || respPossuiCupomDesconto == "s")
                 {
-                    double valorDescontoCupom = EvitaQuebraCodFloat("Qual o valor de desconto do seu cupom? R$ ");
-                    if (valorDescontoCupom > 0)
+                    bool valRestantePositivo = false;
+                    while (valRestantePositivo == false)
                     {
-                        valRestante -= valorDescontoCupom;
-                        valorDesconto += valorDescontoCupom;
-                        Console.WriteLine($"Valor de R$ {valorDescontoCupom:F2} do cupom desconto foi adicionado com sucesso!");
+                        double valorDescontoCupom = EvitaQuebraCodFloat("Qual o valor de desconto do seu cupom? R$ ");
+                        if (valorDescontoCupom > 0)
+                        {
+                            if (valRestante >= valorDescontoCupom)
+                            {
+                                valRestante -= valorDescontoCupom;
+                                valorDesconto += valorDescontoCupom;
+                                Console.WriteLine($"Valor de R$ {valorDescontoCupom:F2} do cupom desconto foi adicionado com sucesso!");
+                                valRestantePositivo = true;
+                            }
+                            else
+                            {
+                                Console.WriteLine("\nValor da compra não pode ser zero ou negativo, tente novamente");
+                            }
+                        }
+                        else
+                            Console.WriteLine("\nValor não pode ser R$ 0,00 ou negativo. Tente novamente.");
                     }
-                    else
-                        Console.WriteLine("Valor não pode ser R$ 0,00 ou negativo. Tente novamente.");
+                    
                 }
+            }
 
+            void ValDescontoTroco()
+            {
                 double valDescontoAnterior = 0;
 
                 foreach (var valDescCompraAnterior in descontoProximaCompra)
@@ -337,27 +371,51 @@ namespace HextecInformatica
                 }
 
                 if (valDescontoAnterior > 0)
-               {
+                {
                     Console.WriteLine($"\nvocê possui R$ {valDescontoAnterior:F2} de desconto acumulado de compras anteriores.");
                     Console.Write("Deseja usar o desconto (S/N)? ");
                     string respUsaDescontoAnterior = Console.ReadLine();
                     if (respUsaDescontoAnterior == "S" || respUsaDescontoAnterior == "s")
                     {
-                        valRestante -= valDescontoAnterior;
-                        valorDesconto += valDescontoAnterior;
-                        Console.WriteLine($"Valor de R$ {valDescontoAnterior:F2} do cashback adquirido na compra anterior foi adicionado com sucesso!");
+                        bool valRestantePositivo = false;
+                        while (valRestantePositivo == false)
+                        {
+                            double valorCashbackUsado = EvitaQuebraCodFloat("Valor a ser utilizado: R$ ");
 
-                        descontoProximaCompra.Clear();
+                            if (valorCashbackUsado > 0 && valorCashbackUsado <= valRestante && valorCashbackUsado <= valDescontoAnterior)
+                            {
+                                valRestante -= valorCashbackUsado;
+                                valorDesconto += valorCashbackUsado;
+                                valDescontoAnterior -= valorCashbackUsado;
+                                // Limpa a pilha antiga e adiciona o novo saldo (se houver)
+                                descontoProximaCompra.Clear();
+
+                                if (valDescontoAnterior > 0)
+                                {
+                                    descontoProximaCompra.Push(valDescontoAnterior);
+                                }
+
+                                Console.WriteLine($"\nDesconto de R$ {valorCashbackUsado:F2} aplicado com sucesso!");
+                                Console.WriteLine($"Saldo restante de cashback: R$ {descontoProximaCompra.Peek():F2}");
+
+                                valRestantePositivo = true;
+                            }
+                            else
+                            {
+                                Console.WriteLine("\nValor inválido! Verifique se o valor é positivo, se não excede o total da compra ou seu saldo de cashback.");
+                                Console.WriteLine($"Saldo Cashback: {valDescontoAnterior:F2} | Valor Compra: {valRestante:F2}");
+                            }
+                        }
+                        
                     }
                 }
-                
 
             }
 
             void FormaPagamentoQueue()
             {
                 totalPagamento = valRestante;
-                Console.WriteLine($"\nTotal a ser pago: R$ {totalPagamento}");
+                Console.WriteLine($"\nTotal a ser pago: R$ {totalPagamento:F2}");
                 Console.WriteLine("Selecione a forma de pagamento conforme listado abaixo:");
                 Console.WriteLine("1 - Dinheiro");
                 Console.WriteLine("2 - Cartão de Crédito");
@@ -507,7 +565,7 @@ namespace HextecInformatica
                     Console.WriteLine("\n--- PARABÉNS! ---");
                     Console.WriteLine($"Sua compra gerou um cashback!");
                     Console.WriteLine($"Valor ganho: {descontoProximaCompra.Peek():F2} (5% do total)");
-                    Console.WriteLine("Este valor será descontado automaticamente na sua próxima compra.");
+                    Console.WriteLine("Este valor poderá ser usado na sua próxima compra.");
                     Console.WriteLine("-----------------");
                 }
             }
