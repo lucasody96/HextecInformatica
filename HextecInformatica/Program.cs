@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HextecInformatica.Classes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -6,13 +7,15 @@ namespace HextecInformatica
 {
     class Program
     {
+
         static void Main(string[] args)
         {
             //=================================================================
-            // 1. DICTIONARYS/ LISTAS
+            // 1. LISTAS
             //=================================================================
+
             Dictionary<int, string> nomeProduto = new Dictionary<int, string>();
-            Dictionary<int, double> valorProduto= new Dictionary<int, double>();
+            Dictionary<int, double> valorProduto = new Dictionary<int, double>();
             Dictionary<int, int> estoqueProduto = new Dictionary<int, int>();
             List<int> listaCarrinho = new List<int>();
 
@@ -20,7 +23,7 @@ namespace HextecInformatica
             //2. STACKS E QUEUE
             //================================================================
             Stack<double> descontoProximaCompra = new Stack<double>();
-            
+
             Queue<string> filaPagamentos = new Queue<string>();
 
             //================================================================
@@ -52,7 +55,7 @@ namespace HextecInformatica
                 switch (opcaoLogin)
                 {
                     case "1":
-                        IniciarCompra();
+                        IniciarVenda();
                         break;
                     case "2":
                         //Opção para visualizar o sistema como vendedor/colaborador da loja
@@ -75,26 +78,8 @@ namespace HextecInformatica
             //================================================================
             //5. MÉTODOS/FUNÇÕES
             //================================================================
-            void ProdutosCadastrados()
-            {
-                //Adicionando produtos (parametros a serem informados - ID, Nome, Valor, Estoque)
-                AdicionarProdutos(1, "Mouse sem fio", 65.90, 32);
-                AdicionarProdutos(2, "Pen Drive", 44.90, 25);
-                AdicionarProdutos(3, "SSD", 390.49, 10);
-                AdicionarProdutos(4, "Memória Ram", 280.89, 0);
-                AdicionarProdutos(5, "Monitor", 749.99, 15);
-                AdicionarProdutos(6, "Headset Gamer", 231.89, 0);
-                AdicionarProdutos(7, "Placa de vídeo", 2100.99, 1);
-            }
-
-            void AdicionarProdutos(int codProduto, string descricao, double valor, int estoque) 
-            {
-                nomeProduto.Add(codProduto, descricao);
-                valorProduto.Add(codProduto, valor);
-                estoqueProduto.Add(codProduto, estoque);
-            }
-
-            void IniciarCompra() 
+           
+            void IniciarVenda() 
             {
                 listaCarrinho.Clear();
                 filaPagamentos.Clear();
@@ -573,6 +558,25 @@ namespace HextecInformatica
             void InciarComoColaborador()
             {
                 Console.WriteLine("Em construção, saindo do programa...");
+            }
+
+            void ProdutosCadastrados()
+            {
+                //Adicionando produtos (parametros a serem informados - ID, Nome, Valor, Estoque)
+                AdicionarProdutos(1, "Mouse sem fio", 65.90, 32);
+                AdicionarProdutos(2, "Pen Drive", 44.90, 25);
+                AdicionarProdutos(3, "SSD", 390.49, 10);
+                AdicionarProdutos(4, "Memória Ram", 280.89, 0);
+                AdicionarProdutos(5, "Monitor", 749.99, 15);
+                AdicionarProdutos(6, "Headset Gamer", 231.89, 0);
+                AdicionarProdutos(7, "Placa de vídeo", 2100.99, 1);
+            }
+
+            void AdicionarProdutos(int codProduto, string descricao, double valor, int estoque)
+            {
+                nomeProduto.Add(codProduto, descricao);
+                valorProduto.Add(codProduto, valor);
+                estoqueProduto.Add(codProduto, estoque);
             }
 
             //Métodos para mensagens de exceção (até ser passado sobre isso)
