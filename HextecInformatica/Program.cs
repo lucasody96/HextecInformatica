@@ -14,9 +14,8 @@ namespace HextecInformatica
             // 1. LISTAS
             //=================================================================
 
-            Dictionary<int, string> nomeProduto = new Dictionary<int, string>();
-            Dictionary<int, double> valorProduto = new Dictionary<int, double>();
-            Dictionary<int, int> estoqueProduto = new Dictionary<int, int>();
+            List<Produto> listaProdutos = new List<Produto>();
+
             List<int> listaCarrinho = new List<int>();
 
             //================================================================
@@ -39,6 +38,8 @@ namespace HextecInformatica
             //================================================================
             bool execucaoPrograma = true;
             ProdutosCadastrados();
+
+            Cliente ClienteAtual;
 
             do
             {
@@ -85,9 +86,31 @@ namespace HextecInformatica
                 filaPagamentos.Clear();
                 valRestante = 0; //zerar o valor a ser pago, garantindo estar zerado ao iniciar uma nova compra
 
-                if (nomeCliente == "") {
-                    Console.Write("\nDigite seu nome: ");
-                    nomeCliente = Console.ReadLine();
+                if (ClienteAtual == null) {
+
+                    string nomeCliente = "", cpfCliente = "";
+
+                    do
+                    {
+                        //implementando
+                        Console.Write("\nDigite seu nome: ");
+                        nomeCliente = Console.ReadLine();
+
+                        Console.WriteLine("\nInforme seu CPF/CNPJ: ");
+                        cpfCliente = Console.ReadLine();
+
+                        if (nomeCliente != null)
+                        {
+                            ClienteAtual.Nome = nomeCliente;
+                            ClienteAtual.CpfCnpj = cpfCliente;
+                        }
+                        else
+                        {
+                            Console.WriteLine("Não é permitido Nome e CPF/CNPJ em branco, por favor, informar o ");
+                        }
+
+                    } while (nomeCliente == "" && cpfCliente == "");
+
                 }
                 
                 // método "Catálogo de Itens"
@@ -562,21 +585,14 @@ namespace HextecInformatica
 
             void ProdutosCadastrados()
             {
-                //Adicionando produtos (parametros a serem informados - ID, Nome, Valor, Estoque)
-                AdicionarProdutos(1, "Mouse sem fio", 65.90, 32);
-                AdicionarProdutos(2, "Pen Drive", 44.90, 25);
-                AdicionarProdutos(3, "SSD", 390.49, 10);
-                AdicionarProdutos(4, "Memória Ram", 280.89, 0);
-                AdicionarProdutos(5, "Monitor", 749.99, 15);
-                AdicionarProdutos(6, "Headset Gamer", 231.89, 0);
-                AdicionarProdutos(7, "Placa de vídeo", 2100.99, 1);
-            }
-
-            void AdicionarProdutos(int codProduto, string descricao, double valor, int estoque)
-            {
-                nomeProduto.Add(codProduto, descricao);
-                valorProduto.Add(codProduto, valor);
-                estoqueProduto.Add(codProduto, estoque);
+                //listaProdutos.Add(new Produto(codigo, Descricao, Valor, Disponível));
+                listaProdutos.Add(new Produto(1, "Mouse sem fio", 65.90, 32));
+                listaProdutos.Add(new Produto(2, "Pen Drive", 44.90, 25));
+                listaProdutos.Add(new Produto(3, "SSD", 390.49, 10));
+                listaProdutos.Add(new Produto(4, "Memória Ram", 280.89, 0));
+                listaProdutos.Add(new Produto(5, "Monitor", 749.99, 15));
+                listaProdutos.Add(new Produto(6, "Headset Gamer", 231.89, 0));
+                listaProdutos.Add(new Produto(7, "Placa de vídeo", 2100.99, 1));
             }
 
             //Métodos para mensagens de exceção (até ser passado sobre isso)

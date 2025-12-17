@@ -10,6 +10,8 @@ namespace HextecInformatica.Classes
     {
         public string Nome {  get; set; }
         public string CpfCnpj {  get; set; }
+        public string TipoPessoa { get; set; }
+        
         private Stack<double> descontoProximaCompra = new Stack<double>();
         public Cliente(string nome, string cpfCnpj) 
         {
