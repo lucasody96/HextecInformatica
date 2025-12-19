@@ -10,22 +10,8 @@ namespace HextecInformatica
 
         static void Main(string[] args)
         {
-            //=================================================================
-            // 1. LISTAS
-            //=================================================================
-
             //================================================================
-            //2. STACKS E QUEUE
-            //================================================================
-
-
-            //================================================================
-            //3. VARIÁVEIS E CONSTANTES
-            //================================================================
-
-
-            //================================================================
-            //4. PROGRAMA PRINCIPAL
+            //PROGRAMA PRINCIPAL
             //================================================================
             Loja Hextec = new Loja("Hextec Informática");
 
@@ -84,8 +70,7 @@ namespace HextecInformatica
             void IniciarVenda() 
             {
                 Cliente ClienteLoja;
-
-
+              
                 Console.Write("\nDigite seu nome: ");
                 string nomeCliente = Console.ReadLine();
 
@@ -105,10 +90,31 @@ namespace HextecInformatica
                 Hextec.CatalogoProdutos();
 
                 //opção para selecionar a quantidade de itens. Criar método
+                //Passar a lista da loja para a lista do carrinho
+                Carrinho CarrinhoCompraAtual = new Carrinho(Hextec.ListaProdutos);
 
+                bool codZero = false;
+                while (!codZero)
+                {
+                    int codProdutoSelecionado = EvitaQuebraCodInt("\nSelecione o item a ser adicionado ao carrinho ou 0 para sair: ");
 
+                    if (codProdutoSelecionado > 0)
+                    {
+                        string msgRetorno = CarrinhoCompraAtual.AdicionaItensCarrinho(codProdutoSelecionado);
+                        Console.WriteLine(msgRetorno);
+                    }
+                    else if (codProdutoSelecionado < 0)
+                        Console.WriteLine("Valor informado inválido, por favor, tente novamente!");
+                    else
+                        codZero = true;
+                }
 
                 //visualização dos itens do carrinho + valor a ser pago, subtotal
+                CarrinhoCompraAtual.VisualizaçãoItensCarrinho();
+
+
+
+                    
 
 
                 //Permite ao cliente remover o item do carrinho, caso haja produtos
@@ -141,7 +147,7 @@ namespace HextecInformatica
 
                 //Se ele gastar mais de 100 reais ele ganha 10 pontos de fidelidade, cada ponto de fidelidade da a ele 0,5% de desconto na próxima compra.
 
-                Console.ReadKey();
+                    Console.ReadKey();
             }
 
             //Métodos para mensagens de exceção (até ser passado sobre isso)
