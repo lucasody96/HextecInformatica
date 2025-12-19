@@ -10,14 +10,7 @@ namespace HextecInformatica.Classes
 {
     public class Cliente
     {
-<<<<<<< Updated upstream
-        public string Nome {  get; set; }
-        public string CpfCnpj {  get; set; }
-        public string TipoPessoa { get; set; }
-        
-        private Stack<double> descontoProximaCompra = new Stack<double>();
-        public Cliente(string nome, string cpfCnpj) 
-=======
+
         public string Nome {  get; private set; }
 
         public string TipoPessoa { get; private set; }
@@ -25,7 +18,6 @@ namespace HextecInformatica.Classes
         public string Cnpj { get; private set; }
 
         public Cliente(string nome )
->>>>>>> Stashed changes
         {
             Nome = nome;
         }
