@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace HextecInformatica.Classes
 {
-    public class Venda
+    public class Carrinho
     {
-       
+
     }
 }

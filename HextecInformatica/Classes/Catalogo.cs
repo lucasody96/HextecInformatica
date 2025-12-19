@@ -6,8 +6,11 @@ using System.Threading.Tasks;
 
 namespace HextecInformatica.Classes
 {
-    public class Venda
+    public class Catalogo
     {
-       
+        List<Produto> produtos { get; set; }
+
+
+
     }
 }

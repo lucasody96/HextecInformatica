@@ -10,15 +10,19 @@ namespace HextecInformatica.Classes
     {
         public int Codigo { get; set; }
         public string Descricao { get; set; }
-        public double Valor { get; set; }
-        public int Disponivel { get; set; }
+        public decimal Valor { get; set; }
+        public int Estoque { get; set; }
 
-        public Produto(int codigo, string descricao, double valor, int disponivel)
+        public Produto(int codigo, string descricao, decimal valor, int disponivel)
         {
             Codigo = codigo;
             Descricao = descricao;
             Valor = valor;
-            Disponivel = disponivel;
+            Estoque = disponivel;
+        }
+        public override string ToString()
+        {
+            return $"{Codigo} | {Descricao} | R$ {Valor} | {Estoque}";
         }
 
     }

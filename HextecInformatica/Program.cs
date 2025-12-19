@@ -14,37 +14,48 @@ namespace HextecInformatica
             // 1. LISTAS
             //=================================================================
 
+<<<<<<< Updated upstream
             List<Produto> listaProdutos = new List<Produto>();
 
             List<int> listaCarrinho = new List<int>();
+=======
+>>>>>>> Stashed changes
 
             //================================================================
             //2. STACKS E QUEUE
             //================================================================
-            Stack<double> descontoProximaCompra = new Stack<double>();
 
-            Queue<string> filaPagamentos = new Queue<string>();
 
             //================================================================
             //3. VARIÁVEIS E CONSTANTES
             //================================================================
-            const string NOME_LOJA = "Hextec Informática";
 
-            double totalPagamento = 0, valorFrete = 0, valorDesconto = 0, valRestante = 0, totalMercadoria = 0, valDescontoFidelidade = 0;
-            string nomeCliente = "";
 
             //================================================================
             //4. PROGRAMA PRINCIPAL
             //================================================================
-            bool execucaoPrograma = true;
-            ProdutosCadastrados();
+            Loja MinhaLoja = new Loja("Hextec Informática");
 
+<<<<<<< Updated upstream
             Cliente ClienteAtual;
 
+=======
+            //Carregar os itens
+            MinhaLoja.AdicionarProduto(new Produto(1, "Mouse sem fio", 65.90m, 32));
+            MinhaLoja.AdicionarProduto(new Produto(2, "Pen Drive", 44.90m, 25));
+            MinhaLoja.AdicionarProduto(new Produto(3, "SSD", 390.49m, 10));
+            MinhaLoja.AdicionarProduto(new Produto(4, "Memória Ram", 280.89m, 0));
+            MinhaLoja.AdicionarProduto(new Produto(5, "Monitor", 749.99m, 15));
+            MinhaLoja.AdicionarProduto(new Produto(6, "Headset Gamer", 231.89m, 0));
+            MinhaLoja.AdicionarProduto(new Produto(7, "Placa de vídeo", 2100.99m, 1));
+
+            bool execucaoPrograma = true;
+>>>>>>> Stashed changes
             do
             {
+                Console.Clear();
                 Console.WriteLine("-----------------------------------------");
-                Console.WriteLine($"   Bem-vindo à {NOME_LOJA}");
+                Console.WriteLine($"   Bem-vindo à {MinhaLoja.Nome}");
                 Console.WriteLine("-----------------------------------------");
                 Console.WriteLine("Selecione a opção desejada:");
                 Console.Write("\n[1] - Comprar (cliente)");
@@ -52,15 +63,16 @@ namespace HextecInformatica
                 Console.Write("\n[3] - Sair");
                 Console.Write("\n\nO que você deseja fazer? ");
 
+
                 string opcaoLogin = Console.ReadLine();
                 switch (opcaoLogin)
                 {
                     case "1":
+
                         IniciarVenda();
                         break;
                     case "2":
                         //Opção para visualizar o sistema como vendedor/colaborador da loja
-                        InciarComoColaborador();
                         execucaoPrograma = false;
                         break;
                     case "3":
@@ -82,10 +94,9 @@ namespace HextecInformatica
            
             void IniciarVenda() 
             {
-                listaCarrinho.Clear();
-                filaPagamentos.Clear();
-                valRestante = 0; //zerar o valor a ser pago, garantindo estar zerado ao iniciar uma nova compra
+                Cliente ClienteLoja;
 
+<<<<<<< Updated upstream
                 if (ClienteAtual == null) {
 
                     string nomeCliente = "", cpfCliente = "";
@@ -111,66 +122,68 @@ namespace HextecInformatica
 
                     } while (nomeCliente == "" && cpfCliente == "");
 
+=======
+                Console.Write("\nDigite seu nome: ");
+                string nomeCliente = Console.ReadLine();
+
+                if (MinhaLoja.ClienteJaComprou(nomeCliente))
+                    Console.WriteLine($"\nSeja bem vindo de volta {nomeCliente}!");
+                else
+                {
+                    Console.WriteLine($"\nSeja bem vindo {nomeCliente}");
+                    ClienteLoja = new Cliente(nomeCliente);
+
+                    ClienteLoja.DadosCliente();
+>>>>>>> Stashed changes
                 }
-                
+
+                Console.WriteLine("\nLista de produtos disponíveis no nosso estoque para compra: ");
+                Console.WriteLine("\nCódigo - Nome do produto - Valor - Em estoque");
                 // método "Catálogo de Itens"
-                ListaItensCadastrados();
+                MinhaLoja.CatalogoProdutos();
 
                 //opção para selecionar a quantidade de itens. Criar método
-                AdicionaCarrinhoCompras();
 
-                if (listaCarrinho.Count > 0)
-                {
-                    //visualização dos itens do carrinho + valor a ser pago, subtotal
-                    VisualizaçãoItensCarrinho();
 
-                    //Permite ao cliente remover o item do carrinho, caso haja produtos
-                    RemoveCarrinhoCompras();
 
-                    // Verificação se todos os itens foram removidos.
-                    if (listaCarrinho.Count == 0)
-                    {
-                        Console.WriteLine("\nO carrinho ficou sem itens. A compra não pode prosseguir.\n");
-                        return;
-                    }
+                //visualização dos itens do carrinho + valor a ser pago, subtotal
 
-                    //Lógica para considerar somente o total de pagamento do momento 
-                    //Sem aplicar frete e outros descontos, ou seja, o total da mercadoria/ total bruto
-                    totalMercadoria = valRestante;
-                    //opção para ele selecionar a forma de entrega                   
-                    FormaEntrega();
 
-                    //opção para colocar um cupom de desconto no final da venda
-                    ValorDescontoCupom();
+                //Permite ao cliente remover o item do carrinho, caso haja produtos
 
-                    //Opção de usar o desconto de cashback da compra anterior
-                    ValDescontoTroco();
 
-                    //Seleção de produtos e soma do valor total de pagamento
-                    //opção para ele pagar com mais de uma forma, colocando o valor em cada uma das formas.
-                    //Pode escolher entre pagar em dinheiro e cartão
-                    //Usada a funcionalidade queue
-                    FormaPagamentoQueue();
+                // Verificação se todos os itens foram removidos.
 
-                    //Simular uma nota fiscal simples - em texto no terminal.
-                    //campos disponíveis, nome da loja, nome usuario/cliente, lista de produtos, valor frete e desconto e total de pagamento
-                    ImprimeNotaFiscal();
 
-                    //Se ele gastar mais de 100 reais ele ganha 10 pontos de fidelidade, cada ponto de fidelidade da a ele 0,5% de desconto na próxima compra.
-                    PontosFidelidade();
-                    
-                    Console.WriteLine("\nObrigado pela preferência e volte sempre!");
+                //Lógica para considerar somente o total de pagamento do momento 
+                //Sem aplicar frete e outros descontos, ou seja, o total da mercadoria/ total bruto
 
-                }
-                Console.WriteLine("\nPressione enter para realizar uma nova compra!");
-                Console.ReadLine();               
+                //opção para ele selecionar a forma de entrega                   
+
+
+                //opção para colocar um cupom de desconto no final da venda
+
+
+                //Opção de usar o desconto de cashback da compra anterior
+
+
+                //Seleção de produtos e soma do valor total de pagamento
+                //opção para ele pagar com mais de uma forma, colocando o valor em cada uma das formas.
+                //Pode escolher entre pagar em dinheiro e cartão
+                //Usada a funcionalidade queue
+
+
+                //Simular uma nota fiscal simples - em texto no terminal.
+                //campos disponíveis, nome da loja, nome usuario/cliente, lista de produtos, valor frete e desconto e total de pagamento
+
+
+                //Se ele gastar mais de 100 reais ele ganha 10 pontos de fidelidade, cada ponto de fidelidade da a ele 0,5% de desconto na próxima compra.
+
+                Console.ReadKey();
             }
 
-            void ListaItensCadastrados()
-            {
-                Console.WriteLine($"\nSeja bem vindo {nomeCliente}! Lista de produtos disponíveis no nosso estoque para compra:");
-                Console.WriteLine("\nCódigo - Nome do produto - Valor - Em estoque");
 
+<<<<<<< Updated upstream
                 foreach (var produtoCadastrado in nomeProduto)
                 {
                     int codProduto = produtoCadastrado.Key;
@@ -594,6 +607,9 @@ namespace HextecInformatica
                 listaProdutos.Add(new Produto(6, "Headset Gamer", 231.89, 0));
                 listaProdutos.Add(new Produto(7, "Placa de vídeo", 2100.99, 1));
             }
+=======
+            
+>>>>>>> Stashed changes
 
             //Métodos para mensagens de exceção (até ser passado sobre isso)
             int EvitaQuebraCodInt(string mensagem)
