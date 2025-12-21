@@ -43,7 +43,5 @@ namespace HextecInformatica.Classes
             return ListaClientes.FirstOrDefault(clientes => clientes.Nome == nomeInformado);        
         } 
 
-        
-
     }
 }

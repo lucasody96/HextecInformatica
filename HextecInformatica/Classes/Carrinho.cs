@@ -11,13 +11,20 @@ namespace HextecInformatica.Classes
     {
         public List<Produto> ListaProdutosDisponiveis { get; set; } = new List<Produto>();
         public List<Produto> ListaItensCarrinho { get; private set; } = new List<Produto>();
-        public decimal Subtotal { get; private set; }
-        
-        public Carrinho(decimal subtotal)
-        {
-            Subtotal = subtotal;
-        }
+        public decimal Subtotal => ListaItensCarrinho.Sum(item => item.Valor * item.QuantidadeComprada);
 
+        public decimal Frete {  get; set; }
+
+        public decimal DescontoCupom { get; set; }
+
+        public decimal DescontoCashback { get; set; }
+
+        public decimal TotalCompra => Subtotal + Frete - DescontoCupom - DescontoCashback;
+        
+        public Carrinho() 
+        { 
+
+        }
         public Carrinho(List<Produto> listaProdutosDisponiveis)
         {
             ListaProdutosDisponiveis = listaProdutosDisponiveis;
@@ -38,15 +45,16 @@ namespace HextecInformatica.Classes
                     {
                         ProdutoCatalogo.QuantidadeComprada += quantidadeComprada;
                         ProdutoCatalogo.Estoque -= quantidadeComprada;
-                        ListaItensCarrinho.Add(ProdutoCatalogo);
-                        
+
+                        // Verifica se já não tem esse item na lista para não duplicar na visualização
+                        if (!ListaItensCarrinho.Contains(ProdutoCatalogo))
+                            ListaItensCarrinho.Add(ProdutoCatalogo);  
                     }
                     else
                         Console.WriteLine("Valor de compra acima do estoque do item, não será adicionado ao carrinho");
                 }
                 else
                     Console.WriteLine($"{ProdutoCatalogo.Descricao} está com estoque esgotado! Não será adicionado ao carrinho");
-
             }
             else
                 Console.WriteLine("Item inexistente na lista de produtos, tente novamente!");
@@ -59,20 +67,19 @@ namespace HextecInformatica.Classes
             Console.WriteLine("           ITENS DO CARRINHO             " );
             Console.WriteLine("=========================================" );
 
-            Subtotal = 0;
-
             foreach (var ProdutoCarrinho in ListaItensCarrinho)
             {
                 decimal subTotalItem = ProdutoCarrinho.Valor * ProdutoCarrinho.QuantidadeComprada;
-              
                 Console.WriteLine($"{ProdutoCarrinho.Codigo} - {ProdutoCarrinho.Descricao} | Quantidade: {ProdutoCarrinho.QuantidadeComprada} | Valor: R$ {subTotalItem}");
-                Subtotal += subTotalItem;
             }
+
             Console.WriteLine("=========================================" );
-            Console.WriteLine($"subtotal: R$ {Subtotal}");
+            Console.WriteLine($"Subtotal: R$ {Subtotal}");
+            Console.WriteLine($"Frete:    {Frete}");
+            Console.WriteLine("-----------------------------------------");
+            Console.WriteLine($"TOTAL:    {TotalCompra}"); // Chama a propriedade automática TotalCompra
             Console.WriteLine("=========================================" );
         }
-
         
         public void RemoveItensCarrinho (int codProdutoRemovido)
         {
@@ -118,6 +125,45 @@ namespace HextecInformatica.Classes
             if (itemDevolvido != null)
             {
                 itemDevolvido.Estoque += QtdDevolvida;
+            }
+        }
+
+        public void FormaEntrega(int respFormaEntrega)
+        {
+            switch (respFormaEntrega)
+            {
+                case 1:
+                    Frete = 0;
+                    
+                    Console.WriteLine("Opção de retirada na loja selecionada. Frete gratuito!");
+                    break;
+                case 2:
+                    if (Subtotal > 300.00m)
+                    {
+                        Frete = 0;
+                        Console.WriteLine("Opção de entrega padrão selecionada e subtotal acima de R$ 300,00. Frete gratuito!");
+                    }
+                    else
+                    {
+                        Frete  = 20.00m;
+                        Console.WriteLine($"Opção de entrega padrão selecionada e subtotal abaixo de R$ 300,00. Valor do frete: R$ {Frete}!");
+                    }
+                    break;
+                case 3:
+                    if (Subtotal > 500.00m)
+                    {
+                        Frete = 0;
+                        Console.WriteLine("Opção de entrega expressa selecionada e subtotal acima de R$ 500,00. Frete gratuito!");
+                    }
+                    else
+                    {
+                        Frete = 40.00m;
+                        Console.WriteLine($"Opção de entrega padrão selecionada e subtotal abaixo de R$ 500,00. Valor do frete: R$ {Frete}!");
+                    }
+                    break;
+                default:
+                    Console.WriteLine("Forma de entrega selecionada inválida!");
+                    break;
             }
         }
     }

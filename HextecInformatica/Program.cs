@@ -64,7 +64,7 @@ namespace HextecInformatica
             Console.ReadKey();
 
             //================================================================
-            //5. MÉTODOS/FUNÇÕES Auxiliares
+            // MÉTODOS/FUNÇÕES Auxiliares
             //================================================================
            
             void IniciarVenda() 
@@ -144,16 +144,38 @@ namespace HextecInformatica
                     }
                 }
 
-                // Verificação se todos os itens foram removidos.
                 if (CarrinhoCompraAtual.ListaItensCarrinho.Count > 0)
                 {
-                    //Lógica para considerar somente o total de pagamento do momento 
-                    //Sem aplicar frete e outros descontos, ou seja, o total da mercadoria/ total bruto
+                    //opção para ele selecionar a forma de entrega
+                    Console.Clear();
+                    Console.WriteLine("\nFormas de entrega disponíveis com seus respectivos valores: ");
+                    Console.WriteLine("1 - Retirada na loja - Grátis");
+                    Console.WriteLine("2 - Entrega padrão - R$ 20,00, acima de R$ 300,00 é gratis ");
+                    Console.WriteLine("3 - Entrega expressa - R$ 40,00, acima de R$ 500,00 é grátis: ");
+                    bool formaEntregaInvalida = false;
+                    while (!formaEntregaInvalida)
+                    {
+                        int respFormaEntrega = EvitaQuebraCodInt("\nQual a forma de entrega desejada (informe de 1 a 3)? ");
 
-                    //opção para ele selecionar a forma de entrega                   
-
+                        if (respFormaEntrega > 0 && respFormaEntrega <= 3)
+                        {
+                            CarrinhoCompraAtual.FormaEntrega(respFormaEntrega);
+                            Console.WriteLine("\nPressione alguma tecla para prosseguir!");
+                            Console.ReadKey();
+                            formaEntregaInvalida = true;
+                        }
+                        else
+                            Console.WriteLine("Forma de entrega inválida.");
+                    }
 
                     //opção para colocar um cupom de desconto no final da venda
+                    Console.Clear();
+                    Console.Write("\nPossui cupom de desconto (S/N)? ");
+                    string respPossuiCupomDesconto = Console.ReadLine();
+
+                    
+
+
 
 
                     //Opção de usar o desconto de cashback da compra anterior
