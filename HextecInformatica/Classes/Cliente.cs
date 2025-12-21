@@ -38,9 +38,7 @@ namespace HextecInformatica.Classes
                         Cpf = Console.ReadLine();
 
                         if (Cpf.Length == 11)
-                        {
                             cpfCorreto = true;
-                        }
                         else
                             Console.WriteLine("CPF informado incorreto, digite um CPF válido");
 
@@ -57,9 +55,7 @@ namespace HextecInformatica.Classes
                         Cnpj = Console.ReadLine();
 
                         if (Cnpj.Length == 14)
-                        {
                             cnpjCorreto = true;
-                        }
                         else
                             Console.WriteLine("CPF informado incorreto, digite um CPF válido");
 

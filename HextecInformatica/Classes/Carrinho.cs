@@ -13,11 +13,6 @@ namespace HextecInformatica.Classes
         public List<Produto> ListaItensCarrinho { get; private set; } = new List<Produto>();
         public decimal Subtotal { get; private set; }
         
-        public Carrinho()
-        {
-
-        }
-
         public Carrinho(decimal subtotal)
         {
             Subtotal = subtotal;
@@ -28,41 +23,102 @@ namespace HextecInformatica.Classes
             ListaProdutosDisponiveis = listaProdutosDisponiveis;
         }
 
-        public string AdicionaItensCarrinho(int codProduto)
+        public void AdicionaItensCarrinho(int codProduto)
         {
-            foreach (var ProdutoCatalogo in ListaProdutosDisponiveis)
+            var ProdutoCatalogo = ListaProdutosDisponiveis.FirstOrDefault(produto => produto.Codigo == codProduto);
+
+            if (ProdutoCatalogo != null)
             {
-                if (ProdutoCatalogo.Codigo == codProduto)
+                if (ProdutoCatalogo.Estoque > 0)
                 {
-                    if (ProdutoCatalogo.Estoque > 0)
+                    Console.Write($"Qual a quantidade do produto {ProdutoCatalogo.Descricao} você quer comprar? ");
+                    int quantidadeComprada = Convert.ToInt32(Console.ReadLine());
+
+                    if (quantidadeComprada <= ProdutoCatalogo.Estoque)
                     {
+                        ProdutoCatalogo.QuantidadeComprada += quantidadeComprada;
+                        ProdutoCatalogo.Estoque -= quantidadeComprada;
                         ListaItensCarrinho.Add(ProdutoCatalogo);
-                        return $"Produto {ProdutoCatalogo.Descricao} adicionado ao carrinho!";
+                        
                     }
                     else
-                        return $"Produto {ProdutoCatalogo.Descricao} esgotado! Não adicionado ao carrinho. ";
-                }       
+                        Console.WriteLine("Valor de compra acima do estoque do item, não será adicionado ao carrinho");
+                }
+                else
+                    Console.WriteLine($"{ProdutoCatalogo.Descricao} está com estoque esgotado! Não será adicionado ao carrinho");
+
             }
-            return "O item selecionado não está no catálogo de produtos, tente novamente!";
+            else
+                Console.WriteLine("Item inexistente na lista de produtos, tente novamente!");
         }
 
         public void VisualizaçãoItensCarrinho()
         {
+            Console.Clear();
             Console.WriteLine("\n========================================");
             Console.WriteLine("           ITENS DO CARRINHO             " );
             Console.WriteLine("=========================================" );
 
+            Subtotal = 0;
+
             foreach (var ProdutoCarrinho in ListaItensCarrinho)
             {
-                Console.WriteLine($"Produto: {ProdutoCarrinho.Descricao} | Valor: R$ {ProdutoCarrinho.Valor}");
+                decimal subTotalItem = ProdutoCarrinho.Valor * ProdutoCarrinho.QuantidadeComprada;
+              
+                Console.WriteLine($"{ProdutoCarrinho.Codigo} - {ProdutoCarrinho.Descricao} | Quantidade: {ProdutoCarrinho.QuantidadeComprada} | Valor: R$ {subTotalItem}");
+                Subtotal += subTotalItem;
             }
             Console.WriteLine("=========================================" );
-            foreach (var ProdutoCarrinho in ListaItensCarrinho)
-            {
-                Subtotal += ProdutoCarrinho.Valor;
-            }
             Console.WriteLine($"subtotal: R$ {Subtotal}");
             Console.WriteLine("=========================================" );
+        }
+
+        
+        public void RemoveItensCarrinho (int codProdutoRemovido)
+        {
+            //uso do linq para achar o item ao invés do foreach
+            var itemASerRemovido = ListaItensCarrinho.FirstOrDefault(item => item.Codigo == codProdutoRemovido);
+
+            if (itemASerRemovido != null)
+            {
+                Console.Write($"\nDigite a quantidade do produto {itemASerRemovido.Descricao} a ser removida: ");
+                int qtdRemovida = Convert.ToInt32(Console.ReadLine());
+
+                if (qtdRemovida == itemASerRemovido.QuantidadeComprada)
+                {
+                    ListaItensCarrinho.Remove(itemASerRemovido);
+                    DevolveItemEstoque(codProdutoRemovido, qtdRemovida);
+
+                    itemASerRemovido.QuantidadeComprada = 0;                   
+                }
+                else if (qtdRemovida < itemASerRemovido.QuantidadeComprada && qtdRemovida > 0)
+                {
+                    itemASerRemovido.QuantidadeComprada -= qtdRemovida;
+                    DevolveItemEstoque(codProdutoRemovido, qtdRemovida);
+                    Console.WriteLine($"Foram removidas {qtdRemovida} unidades do produto {itemASerRemovido.Descricao}!");
+                    
+                }
+                else
+                {
+                    Console.WriteLine("Quantidade informada inválida, não será removido o item do carrinho, preesione enter para prosseguir");
+                    Console.ReadKey();
+                }
+                    
+
+                VisualizaçãoItensCarrinho();
+            }
+            else
+                Console.WriteLine("Produto não encontrado no carrinho");
+        }
+
+        public void DevolveItemEstoque(int codProduto, int QtdDevolvida)
+        {
+            var itemDevolvido = ListaProdutosDisponiveis.FirstOrDefault(item => item.Codigo == codProduto);
+
+            if (itemDevolvido != null)
+            {
+                itemDevolvido.Estoque += QtdDevolvida;
+            }
         }
     }
 }

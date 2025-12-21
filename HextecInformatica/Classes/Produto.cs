@@ -13,6 +13,8 @@ namespace HextecInformatica.Classes
         public decimal Valor { get; set; }
         public int Estoque { get; set; }
 
+        public int QuantidadeComprada {  get; set; }
+
         public Produto(int codigo, string descricao, decimal valor, int disponivel)
         {
             Codigo = codigo;

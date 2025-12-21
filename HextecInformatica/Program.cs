@@ -64,7 +64,7 @@ namespace HextecInformatica
             Console.ReadKey();
 
             //================================================================
-            //5. MÉTODOS/FUNÇÕES
+            //5. MÉTODOS/FUNÇÕES Auxiliares
             //================================================================
            
             void IniciarVenda() 
@@ -74,16 +74,28 @@ namespace HextecInformatica
                 Console.Write("\nDigite seu nome: ");
                 string nomeCliente = Console.ReadLine();
 
-                if (Hextec.ClienteJaComprou(nomeCliente))
-                    Console.WriteLine($"\nSeja bem vindo de volta {nomeCliente}!");
+                //Buscar o cliente usando o método loja
+                Cliente clienteExistente = Hextec.ClienteJaComprou(nomeCliente);
+
+                if (clienteExistente != null)
+                {
+                    // Aproveitamos os dados que vieram da busca
+                    ClienteLoja = clienteExistente;
+
+                    Console.WriteLine($"\nSeja bem vindo de volta {nomeCliente}! Pressione enter para seguir com a compra.");
+                    Console.ReadKey();
+                } 
                 else
                 {
-                    Console.WriteLine($"\nSeja bem vindo {nomeCliente}");
+                    Console.WriteLine($"\nSeja bem vindo {nomeCliente}.");
+                    
                     ClienteLoja = new Cliente(nomeCliente);
 
                     ClienteLoja.DadosCliente();
+                    Hextec.CadastrarCliente(ClienteLoja);
                 }
 
+                Console.Clear();
                 Console.WriteLine("\nLista de produtos disponíveis no nosso estoque para compra: ");
                 Console.WriteLine("\nCódigo - Nome do produto - Valor - Em estoque");
                 // método "Catálogo de Itens"
@@ -100,52 +112,70 @@ namespace HextecInformatica
 
                     if (codProdutoSelecionado > 0)
                     {
-                        string msgRetorno = CarrinhoCompraAtual.AdicionaItensCarrinho(codProdutoSelecionado);
-                        Console.WriteLine(msgRetorno);
+                        CarrinhoCompraAtual.AdicionaItensCarrinho(codProdutoSelecionado);
                     }
                     else if (codProdutoSelecionado < 0)
                         Console.WriteLine("Valor informado inválido, por favor, tente novamente!");
                     else
                         codZero = true;
                 }
-
                 //visualização dos itens do carrinho + valor a ser pago, subtotal
                 CarrinhoCompraAtual.VisualizaçãoItensCarrinho();
 
-
-
-                    
-
-
                 //Permite ao cliente remover o item do carrinho, caso haja produtos
+                Console.Write("Deseja remover algum item (S/N)? ");
+                string respRemoveItem = Console.ReadLine();
 
+                if (respRemoveItem == "S" || respRemoveItem == "s")
+                {
+                    codZero = false;
+                    while (!codZero)
+                    {
+                        int codProdutoRemovido = EvitaQuebraCodInt("\nDigite o código do produto a ser removido (0 para sair): ");
+
+                        if (codProdutoRemovido > 0)
+                        {
+                            CarrinhoCompraAtual.RemoveItensCarrinho(codProdutoRemovido);
+                        }
+                        else if (codProdutoRemovido < 0)
+                            Console.WriteLine("Valor informado inválido, por favor, tente novamente!");
+                        else
+                            codZero = true;
+                    }
+                }
 
                 // Verificação se todos os itens foram removidos.
+                if (CarrinhoCompraAtual.ListaItensCarrinho.Count > 0)
+                {
+                    //Lógica para considerar somente o total de pagamento do momento 
+                    //Sem aplicar frete e outros descontos, ou seja, o total da mercadoria/ total bruto
+
+                    //opção para ele selecionar a forma de entrega                   
 
 
-                //Lógica para considerar somente o total de pagamento do momento 
-                //Sem aplicar frete e outros descontos, ou seja, o total da mercadoria/ total bruto
-
-                //opção para ele selecionar a forma de entrega                   
+                    //opção para colocar um cupom de desconto no final da venda
 
 
-                //opção para colocar um cupom de desconto no final da venda
+                    //Opção de usar o desconto de cashback da compra anterior
 
 
-                //Opção de usar o desconto de cashback da compra anterior
+                    //Seleção de produtos e soma do valor total de pagamento
+                    //opção para ele pagar com mais de uma forma, colocando o valor em cada uma das formas.
+                    //Pode escolher entre pagar em dinheiro e cartão
+                    //Usada a funcionalidade queue
 
 
-                //Seleção de produtos e soma do valor total de pagamento
-                //opção para ele pagar com mais de uma forma, colocando o valor em cada uma das formas.
-                //Pode escolher entre pagar em dinheiro e cartão
-                //Usada a funcionalidade queue
+                    //Simular uma nota fiscal simples - em texto no terminal.
+                    //campos disponíveis, nome da loja, nome usuario/cliente, lista de produtos, valor frete e desconto e total de pagamento
 
 
-                //Simular uma nota fiscal simples - em texto no terminal.
-                //campos disponíveis, nome da loja, nome usuario/cliente, lista de produtos, valor frete e desconto e total de pagamento
+                    //Se ele gastar mais de 100 reais ele ganha 10 pontos de fidelidade, cada ponto de fidelidade da a ele 0,5% de desconto na próxima compra.
 
+                }
+                else
+                    Console.WriteLine("\nCarrinho está vazio, não é possível prosseguir. Pressione enter para prosseguir.");
 
-                //Se ele gastar mais de 100 reais ele ganha 10 pontos de fidelidade, cada ponto de fidelidade da a ele 0,5% de desconto na próxima compra.
+                    
 
                     Console.ReadKey();
             }
