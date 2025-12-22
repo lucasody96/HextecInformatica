@@ -75,9 +75,14 @@ namespace HextecInformatica.Classes
 
             Console.WriteLine("=========================================" );
             Console.WriteLine($"Subtotal: R$ {Subtotal}");
-            Console.WriteLine($"Frete:    {Frete}");
+            if (Frete > 0)
+                Console.WriteLine($"Frete: R$ {Frete}");
+            if (DescontoCupom > 0)
+                Console.WriteLine($"Cupom Desconto: R$ -{DescontoCupom:F2}");
+            if (DescontoCashback > 0)
+                Console.WriteLine($"Cupom Desconto: R$ -{DescontoCashback:F2}");
             Console.WriteLine("-----------------------------------------");
-            Console.WriteLine($"TOTAL:    {TotalCompra}"); // Chama a propriedade automática TotalCompra
+            Console.WriteLine($"TOTAL:    {TotalCompra:F2}"); // Chama a propriedade automática TotalCompra
             Console.WriteLine("=========================================" );
         }
         
@@ -158,11 +163,35 @@ namespace HextecInformatica.Classes
                     else
                     {
                         Frete = 40.00m;
-                        Console.WriteLine($"Opção de entrega padrão selecionada e subtotal abaixo de R$ 500,00. Valor do frete: R$ {Frete}!");
+                        Console.WriteLine($"Opção de entrega expressa selecionada e subtotal abaixo de R$ 500,00. Valor do frete: R$ {Frete}!");
                     }
                     break;
                 default:
                     Console.WriteLine("Forma de entrega selecionada inválida!");
+                    break;
+            }
+        }
+
+        public void CalculoDescontoCupom()
+        {
+            Console.Write($"Informe o cupom de desconto: ");
+            string cupomDesconto = Console.ReadLine();
+
+            switch (cupomDesconto)
+            {
+                case "CUPOM5%DESCONTO":
+                    DescontoCupom = Subtotal * 0.05m;
+                    Console.WriteLine($"Desconto de cupom R$ {DescontoCupom:F2} aplicado com sucesso!");
+                    break;
+                case "CUPOM10%DESCONTO":
+                    DescontoCupom = Subtotal * 0.10m;
+                    Console.WriteLine($"Desconto de cupom R$ {DescontoCupom:F2} aplicado com sucesso!");
+                    break;
+                case "CUPOM15%DESCONTO":
+                    DescontoCupom = Subtotal * 0.15m;
+                    Console.WriteLine($"Desconto de cupom R$ {DescontoCupom:F2} aplicado com sucesso!");
+                    break;
+                default:
                     break;
             }
         }

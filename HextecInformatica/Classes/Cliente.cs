@@ -10,7 +10,6 @@ namespace HextecInformatica.Classes
 {
     public class Cliente
     {
-
         public string Nome {  get; private set; }
 
         public string TipoPessoa { get; private set; }

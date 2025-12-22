@@ -170,9 +170,21 @@ namespace HextecInformatica
 
                     //opção para colocar um cupom de desconto no final da venda
                     Console.Clear();
-                    Console.Write("\nPossui cupom de desconto (S/N)? ");
+                    if (CarrinhoCompraAtual.Subtotal >= 250 && CarrinhoCompraAtual.Subtotal < 500)
+                        Console.WriteLine("Você ganhou um cupom de desconto de 5% nesta compra! Digite CUPOM5%DESCONTO para utilizá-lo");
+                    else if (CarrinhoCompraAtual.Subtotal >= 500 && CarrinhoCompraAtual.Subtotal < 1000)
+                        Console.WriteLine("Você ganhou um cupom de desconto de 10% nesta compra! Digite CUPOM10%DESCONTO para utilizá-lo");
+                    else if (CarrinhoCompraAtual.Subtotal >= 1000)
+                        Console.WriteLine("Você ganhou um cupom de desconto de 15% nesta compra! Digite CUPOM15%DESCONTO para utilizá-lo");
+
+                    Console.Write("\nDeseja usar o cupom (S/N)? ");
                     string respPossuiCupomDesconto = Console.ReadLine();
 
+                    if (respPossuiCupomDesconto == "S" || respPossuiCupomDesconto == "s")
+                    {
+                        CarrinhoCompraAtual.CalculoDescontoCupom();
+                    }
+                    CarrinhoCompraAtual.VisualizaçãoItensCarrinho();
                     
 
 
