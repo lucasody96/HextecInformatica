@@ -233,7 +233,7 @@ namespace HextecInformatica.Classes
                             }
                             else
                             {
-                                Console.WriteLine($"{formaPagamentosDisponiveis.Descricao}: R$ {Subtotal:F2} (Entregue: {ValorSelecionado:F2}, Troco: {troco:F2})");
+                                Console.WriteLine($"{formaPagamentosDisponiveis.Descricao}: R$ {TotalCompra:F2} (Entregue: {ValorSelecionado:F2}, Troco: {troco:F2})");
                                 PagamentosRealizados(TotalCompra);
                             }
                         }
