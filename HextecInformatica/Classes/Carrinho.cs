@@ -11,20 +11,22 @@ namespace HextecInformatica.Classes
     {
         public List<Produto> ListaProdutosDisponiveis { get; set; } = new List<Produto>();
         public List<Produto> ListaItensCarrinho { get; private set; } = new List<Produto>();
+
+        public List<FormaPagamento> ListaFormasPagamentos { get; private set; } = new List<FormaPagamento>();
+
         public decimal Subtotal => ListaItensCarrinho.Sum(item => item.Valor * item.QuantidadeComprada);
 
-        public decimal Frete {  get; set; }
+        public decimal Frete { get; set; }
 
         public decimal DescontoCupom { get; set; }
 
         public decimal DescontoCashback { get; set; }
 
-        public decimal TotalCompra => Subtotal + Frete - DescontoCupom - DescontoCashback;
-        
-        public Carrinho() 
-        { 
+        public decimal Pagamentos {  get; private set; }
 
-        }
+        public decimal TotalCompra => Subtotal + Frete - DescontoCupom - DescontoCashback - Pagamentos;
+
+
         public Carrinho(List<Produto> listaProdutosDisponiveis)
         {
             ListaProdutosDisponiveis = listaProdutosDisponiveis;
@@ -48,7 +50,7 @@ namespace HextecInformatica.Classes
 
                         // Verifica se já não tem esse item na lista para não duplicar na visualização
                         if (!ListaItensCarrinho.Contains(ProdutoCatalogo))
-                            ListaItensCarrinho.Add(ProdutoCatalogo);  
+                            ListaItensCarrinho.Add(ProdutoCatalogo);
                     }
                     else
                         Console.WriteLine("Valor de compra acima do estoque do item, não será adicionado ao carrinho");
@@ -64,8 +66,8 @@ namespace HextecInformatica.Classes
         {
             Console.Clear();
             Console.WriteLine("\n========================================");
-            Console.WriteLine("           ITENS DO CARRINHO             " );
-            Console.WriteLine("=========================================" );
+            Console.WriteLine("           ITENS DO CARRINHO             ");
+            Console.WriteLine("=========================================");
 
             foreach (var ProdutoCarrinho in ListaItensCarrinho)
             {
@@ -73,7 +75,7 @@ namespace HextecInformatica.Classes
                 Console.WriteLine($"{ProdutoCarrinho.Codigo} - {ProdutoCarrinho.Descricao} | Quantidade: {ProdutoCarrinho.QuantidadeComprada} | Valor: R$ {subTotalItem}");
             }
 
-            Console.WriteLine("=========================================" );
+            Console.WriteLine("=========================================");
             Console.WriteLine($"Subtotal: R$ {Subtotal}");
             if (Frete > 0)
                 Console.WriteLine($"Frete: R$ {Frete}");
@@ -83,10 +85,10 @@ namespace HextecInformatica.Classes
                 Console.WriteLine($"Cupom Desconto: R$ -{DescontoCashback:F2}");
             Console.WriteLine("-----------------------------------------");
             Console.WriteLine($"TOTAL:    {TotalCompra:F2}"); // Chama a propriedade automática TotalCompra
-            Console.WriteLine("=========================================" );
+            Console.WriteLine("=========================================");
         }
-        
-        public void RemoveItensCarrinho (int codProdutoRemovido)
+
+        public void RemoveItensCarrinho(int codProdutoRemovido)
         {
             //uso do linq para achar o item ao invés do foreach
             var itemASerRemovido = ListaItensCarrinho.FirstOrDefault(item => item.Codigo == codProdutoRemovido);
@@ -101,21 +103,21 @@ namespace HextecInformatica.Classes
                     ListaItensCarrinho.Remove(itemASerRemovido);
                     DevolveItemEstoque(codProdutoRemovido, qtdRemovida);
 
-                    itemASerRemovido.QuantidadeComprada = 0;                   
+                    itemASerRemovido.QuantidadeComprada = 0;
                 }
                 else if (qtdRemovida < itemASerRemovido.QuantidadeComprada && qtdRemovida > 0)
                 {
                     itemASerRemovido.QuantidadeComprada -= qtdRemovida;
                     DevolveItemEstoque(codProdutoRemovido, qtdRemovida);
                     Console.WriteLine($"Foram removidas {qtdRemovida} unidades do produto {itemASerRemovido.Descricao}!");
-                    
+
                 }
                 else
                 {
                     Console.WriteLine("Quantidade informada inválida, não será removido o item do carrinho, preesione enter para prosseguir");
                     Console.ReadKey();
                 }
-                    
+
 
                 VisualizaçãoItensCarrinho();
             }
@@ -139,7 +141,7 @@ namespace HextecInformatica.Classes
             {
                 case 1:
                     Frete = 0;
-                    
+
                     Console.WriteLine("Opção de retirada na loja selecionada. Frete gratuito!");
                     break;
                 case 2:
@@ -150,7 +152,7 @@ namespace HextecInformatica.Classes
                     }
                     else
                     {
-                        Frete  = 20.00m;
+                        Frete = 20.00m;
                         Console.WriteLine($"Opção de entrega padrão selecionada e subtotal abaixo de R$ 300,00. Valor do frete: R$ {Frete}!");
                     }
                     break;
@@ -194,6 +196,101 @@ namespace HextecInformatica.Classes
                 default:
                     break;
             }
+        }
+
+        public void FormaPagamentoSelecionada(int formaPagamentoSelecionada, decimal ValorSelecionado, Cliente ClientePagamento)
+        {
+            //carrega as formas de pagamento disponíveis
+            FormasPagamentosDisponíveis();
+
+            var formaPagamentosDisponiveis = ListaFormasPagamentos.FirstOrDefault(formaPagamento =>
+                                                 formaPagamento.Codigo == formaPagamentoSelecionada);
+
+            if (formaPagamentosDisponiveis != null)
+            {
+                formaPagamentosDisponiveis.Valor = ValorSelecionado;
+
+                switch (formaPagamentoSelecionada)
+                {
+                    case 1:
+
+                        Console.WriteLine($"{formaPagamentosDisponiveis.Descricao}: R$ {ValorSelecionado:F2}");
+                        
+                        if (formaPagamentosDisponiveis.Valor > TotalCompra)
+                        {
+                            decimal troco = formaPagamentosDisponiveis.Valor - TotalCompra;
+                            Console.WriteLine($"--> Troco a devolver: R$ {troco:F2}");
+
+                            Console.Write("\nDeseja usar o troco na próxima compra como desconto? ");
+                            string usaTrocoProxCompra = Console.ReadLine();
+
+                            if (usaTrocoProxCompra == "S" || usaTrocoProxCompra == "s")
+                            {
+                                ClientePagamento.AdicionarDescontoProximaCompra(troco);
+
+                                Console.WriteLine($"Valor disponível para ser usado como desconto na próxima compra: R$ {ClientePagamento.DescProximaCompra:F2}");
+                                PagamentosRealizados(TotalCompra);
+                            }
+                            else
+                            {
+                                Console.WriteLine($"{formaPagamentosDisponiveis.Descricao}: R$ {Subtotal:F2} (Entregue: {ValorSelecionado:F2}, Troco: {troco:F2})");
+                                PagamentosRealizados(TotalCompra);
+                            }
+                        }
+                        else if (formaPagamentosDisponiveis.Valor <= TotalCompra)
+                            PagamentosRealizados(ValorSelecionado);
+                        break;
+
+                    case 2:
+                        if (formaPagamentosDisponiveis.Valor <= TotalCompra)
+                        {
+                            Console.WriteLine($"{formaPagamentosDisponiveis.Descricao}: R$ {ValorSelecionado:F2}");
+                            PagamentosRealizados(ValorSelecionado);
+                        }else
+                            Console.WriteLine("Valor pago acima do subtotal não permitido para condição de pagamento cartão de crédito");
+                        break;
+
+                    case 3:
+
+                        if (formaPagamentosDisponiveis.Valor <= TotalCompra)
+                        {
+                            Console.WriteLine($"{formaPagamentosDisponiveis.Descricao}: R$ {ValorSelecionado:F2}");
+                            PagamentosRealizados(ValorSelecionado);
+                        }
+                        else
+                            Console.WriteLine("Valor pago acima do subtotal não permitido para condição de pagamento cartão de débito");
+                        break;
+                    case 4:
+
+                        if (formaPagamentosDisponiveis.Valor <= TotalCompra)
+                        {
+                            Console.WriteLine($"{formaPagamentosDisponiveis.Descricao}: R$ {ValorSelecionado:F2}");
+                            PagamentosRealizados(ValorSelecionado);
+                        }
+                        else
+                            Console.WriteLine("Valor pago acima do subtotal não permitido para condição de pagamento boleto");
+                        break;
+                }
+
+                Console.WriteLine("Pressione uma tecla para prosseguir!");
+                Console.ReadKey();
+
+            }
+            else
+                Console.WriteLine("Condição de pagamento informa inválida!");
+        }
+
+        private void FormasPagamentosDisponíveis()
+        {
+            ListaFormasPagamentos.Add(new FormaPagamento(1, "Dinheiro", 0));
+            ListaFormasPagamentos.Add(new FormaPagamento(2, "Cartão de Crédito", 0));
+            ListaFormasPagamentos.Add(new FormaPagamento(3, "Cartão de Débito", 0));
+            ListaFormasPagamentos.Add(new FormaPagamento(4, "Boleto", 0));
+        }
+
+        private void PagamentosRealizados(decimal valorPago) 
+        {
+            Pagamentos += valorPago;
         }
     }
 }

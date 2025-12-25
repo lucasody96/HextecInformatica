@@ -16,6 +16,8 @@ namespace HextecInformatica.Classes
         public string Cpf {  get; private set; }
         public string Cnpj { get; private set; }
 
+        public decimal DescProximaCompra { get; private set; } = 0;
+
         public Cliente(string nome )
         {
             Nome = nome;
@@ -65,6 +67,11 @@ namespace HextecInformatica.Classes
                     Console.WriteLine("\nValor informado inválido, informar F para pessoa física ou J para pessoa jurídica");
             }
 
+        }
+
+        public void AdicionarDescontoProximaCompra(decimal valor) 
+        {
+            DescProximaCompra += valor;
         }
     }
 }

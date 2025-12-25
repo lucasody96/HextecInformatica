@@ -183,20 +183,32 @@ namespace HextecInformatica
                     if (respPossuiCupomDesconto == "S" || respPossuiCupomDesconto == "s")
                     {
                         CarrinhoCompraAtual.CalculoDescontoCupom();
+                        Console.WriteLine("\nPressione alguma tecla para prosseguir!");
+                        Console.ReadKey();
                     }
-                    CarrinhoCompraAtual.VisualizaçãoItensCarrinho();
-                    
-
-
-
 
                     //Opção de usar o desconto de cashback da compra anterior
 
 
                     //Seleção de produtos e soma do valor total de pagamento
-                    //opção para ele pagar com mais de uma forma, colocando o valor em cada uma das formas.
-                    //Pode escolher entre pagar em dinheiro e cartão
-                    //Usada a funcionalidade queue
+                    Console.Clear();
+                    Console.WriteLine($"\nTotal a ser pago: R$ {CarrinhoCompraAtual.TotalCompra:F2}");
+                    Console.WriteLine("Selecione a forma de pagamento conforme listado abaixo:");
+                    Console.WriteLine("1 - Dinheiro");
+                    Console.WriteLine("2 - Cartão de Crédito");
+                    Console.WriteLine("3 - Cartão de Débito");
+                    Console.WriteLine("4 - Boleto");
+
+                    do
+                    {
+                        Console.Clear();
+                        Console.WriteLine($"Valor restante a ser pago: R$ {CarrinhoCompraAtual.TotalCompra:F2}");
+                        int formaPagamento = EvitaQuebraCodInt($"Digite o código da condição de pagamento a ser utilizada: ");
+                        decimal valorFormaPagamento = EvitaQuebraCodDecimal($"Valor: R$ ");
+
+                        CarrinhoCompraAtual.FormaPagamentoSelecionada(formaPagamento, valorFormaPagamento, ClienteLoja);
+
+                    } while (CarrinhoCompraAtual.TotalCompra > 0);
 
 
                     //Simular uma nota fiscal simples - em texto no terminal.
@@ -207,7 +219,7 @@ namespace HextecInformatica
 
                 }
                 else
-                    Console.WriteLine("\nCarrinho está vazio, não é possível prosseguir. Pressione enter para prosseguir.");
+                    Console.WriteLine("\nCarrinho está vazio, não é possível prosseguir. Pressione enter para reiniciar a sua compra.");
 
                     
 
@@ -242,6 +254,22 @@ namespace HextecInformatica
                 }
 
                 return numFloat;
+            }
+
+            decimal EvitaQuebraCodDecimal(string mensagem)
+            {
+                decimal numDecimal; // 1. Mudamos a variável para decimal
+
+                Console.Write(mensagem);
+
+                // 2. Usamos decimal.TryParse
+                while (!decimal.TryParse(Console.ReadLine(), out numDecimal))
+                {
+                    Console.Write("Erro: Valor inválido. Não é permitido informar letras e deve ser informado algum valor.\n\n");
+                    Console.Write(mensagem);
+                }
+
+                return numDecimal;
             }
         }
     }
