@@ -14,6 +14,8 @@ namespace HextecInformatica.Classes
 
         public List<FormaPagamento> ListaFormasPagamentos { get; private set; } = new List<FormaPagamento>();
 
+        public Utils Utils { get; set; } = new Utils();
+
         public decimal Subtotal => ListaItensCarrinho.Sum(item => item.Valor * item.QuantidadeComprada);
 
         public decimal Frete { get; set; }
@@ -40,8 +42,7 @@ namespace HextecInformatica.Classes
             {
                 if (ProdutoCatalogo.Estoque > 0)
                 {
-                    Console.Write($"Qual a quantidade do produto {ProdutoCatalogo.Descricao} você quer comprar? ");
-                    int quantidadeComprada = Convert.ToInt32(Console.ReadLine());
+                    int quantidadeComprada = Utils.EvitaQuebraCodInt($"Qual a quantidade do produto {ProdutoCatalogo.Descricao} você quer comprar? ");
 
                     if (quantidadeComprada <= ProdutoCatalogo.Estoque)
                     {
@@ -95,8 +96,7 @@ namespace HextecInformatica.Classes
 
             if (itemASerRemovido != null)
             {
-                Console.Write($"\nDigite a quantidade do produto {itemASerRemovido.Descricao} a ser removida: ");
-                int qtdRemovida = Convert.ToInt32(Console.ReadLine());
+                int qtdRemovida = Utils.EvitaQuebraCodInt($"\nDigite a quantidade do produto {itemASerRemovido.Descricao} a ser removida: ");
 
                 if (qtdRemovida == itemASerRemovido.QuantidadeComprada)
                 {
@@ -195,6 +195,31 @@ namespace HextecInformatica.Classes
                     break;
                 default:
                     break;
+            }
+        }
+
+        public void CalculoDescontoCashback(Cliente ClienteCashback)
+        {
+            bool valRestantePositivo = false;
+            while (valRestantePositivo == false)
+            {
+                decimal valorCashbackUsado = Utils.EvitaQuebraCodDecimal("Valor a ser utilizado: R$ ");
+
+                if (valorCashbackUsado > 0 && valorCashbackUsado <= TotalCompra && valorCashbackUsado <= ClienteCashback.DescProximaCompra)
+                {
+                    DescontoCashback += valorCashbackUsado;
+                    ClienteCashback.DebitaDescontoProximaCompra(valorCashbackUsado);
+
+                    Console.WriteLine($"\nDesconto de R$ {DescontoCashback:F2} aplicado com sucesso!");
+                    Console.WriteLine($"Saldo restante de cashback: R$ {ClienteCashback.DescProximaCompra:F2}");
+
+                    valRestantePositivo = true;
+                }
+                else
+                {
+                    Console.WriteLine("\nValor inválido! Verifique se o valor é positivo, se não excede o total da compra ou seu saldo de cashback.");
+                    Console.WriteLine($"Saldo Cashback: {ClienteCashback.DescProximaCompra:F2} | Valor Compra: {TotalCompra:F2}");
+                }
             }
         }
 

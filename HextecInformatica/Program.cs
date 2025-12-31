@@ -14,6 +14,7 @@ namespace HextecInformatica
             //PROGRAMA PRINCIPAL
             //================================================================
             Loja Hextec = new Loja("Hextec Informática");
+            Utils utils = new Utils();
 
             //Carregar os itens
             Hextec.AdicionarProduto(new Produto(1, "Mouse sem fio", 65.90m, 32));
@@ -38,12 +39,10 @@ namespace HextecInformatica
                 Console.Write("\n[3] - Sair");
                 Console.Write("\n\nO que você deseja fazer? ");
 
-
                 string opcaoLogin = Console.ReadLine();
                 switch (opcaoLogin)
                 {
                     case "1":
-
                         IniciarVenda();
                         break;
                     case "2":
@@ -108,7 +107,7 @@ namespace HextecInformatica
                 bool codZero = false;
                 while (!codZero)
                 {
-                    int codProdutoSelecionado = EvitaQuebraCodInt("\nSelecione o item a ser adicionado ao carrinho ou 0 para sair: ");
+                    int codProdutoSelecionado = utils.EvitaQuebraCodInt("\nSelecione o item a ser adicionado ao carrinho ou 0 para sair: ");
 
                     if (codProdutoSelecionado > 0)
                     {
@@ -131,7 +130,7 @@ namespace HextecInformatica
                     codZero = false;
                     while (!codZero)
                     {
-                        int codProdutoRemovido = EvitaQuebraCodInt("\nDigite o código do produto a ser removido (0 para sair): ");
+                        int codProdutoRemovido = utils. EvitaQuebraCodInt("\nDigite o código do produto a ser removido (0 para sair): ");
 
                         if (codProdutoRemovido > 0)
                         {
@@ -155,7 +154,7 @@ namespace HextecInformatica
                     bool formaEntregaInvalida = false;
                     while (!formaEntregaInvalida)
                     {
-                        int respFormaEntrega = EvitaQuebraCodInt("\nQual a forma de entrega desejada (informe de 1 a 3)? ");
+                        int respFormaEntrega = utils.EvitaQuebraCodInt("\nQual a forma de entrega desejada (informe de 1 a 3)? ");
 
                         if (respFormaEntrega > 0 && respFormaEntrega <= 3)
                         {
@@ -188,31 +187,40 @@ namespace HextecInformatica
                     }
 
                     //Opção de usar o desconto de cashback da compra anterior
+                    if (ClienteLoja.DescProximaCompra > 0)
+                    {
+                        Console.WriteLine($"\nvocê possui R$ {ClienteLoja.DescProximaCompra:F2} de desconto acumulado de compras anteriores.");
+                        Console.Write("Deseja usar o desconto (S/N)? ");
+                        string respUsaDescontoAnterior = Console.ReadLine();
 
+                        if (respUsaDescontoAnterior == "S" || respUsaDescontoAnterior == "s")
+                            CarrinhoCompraAtual.CalculoDescontoCashback(ClienteLoja);
+                    }
 
                     //Seleção de produtos e soma do valor total de pagamento
-                    Console.Clear();
-                    Console.WriteLine($"\nTotal a ser pago: R$ {CarrinhoCompraAtual.TotalCompra:F2}");
-                    Console.WriteLine("Selecione a forma de pagamento conforme listado abaixo:");
-                    Console.WriteLine("1 - Dinheiro");
-                    Console.WriteLine("2 - Cartão de Crédito");
-                    Console.WriteLine("3 - Cartão de Débito");
-                    Console.WriteLine("4 - Boleto");
-
                     do
                     {
                         Console.Clear();
-                        Console.WriteLine($"Valor restante a ser pago: R$ {CarrinhoCompraAtual.TotalCompra:F2}");
-                        int formaPagamento = EvitaQuebraCodInt($"Digite o código da condição de pagamento a ser utilizada: ");
-                        decimal valorFormaPagamento = EvitaQuebraCodDecimal($"Valor: R$ ");
+                        Console.WriteLine($"\nTotal a ser pago: R$ {CarrinhoCompraAtual.TotalCompra:F2}");
+                        Console.WriteLine("Selecione a forma de pagamento conforme listado abaixo:");
+                        Console.WriteLine("1 - Dinheiro");
+                        Console.WriteLine("2 - Cartão de Crédito");
+                        Console.WriteLine("3 - Cartão de Débito");
+                        Console.WriteLine("4 - Boleto");
+
+                        int formaPagamento = utils.EvitaQuebraCodInt($"Digite o código da condição de pagamento a ser utilizada: ");
+                        decimal valorFormaPagamento = utils.EvitaQuebraCodDecimal($"Valor: R$ ");
 
                         CarrinhoCompraAtual.FormaPagamentoSelecionada(formaPagamento, valorFormaPagamento, ClienteLoja);
 
                     } while (CarrinhoCompraAtual.TotalCompra > 0);
 
-
+                    Venda VendaAtual = new Venda();
                     //Simular uma nota fiscal simples - em texto no terminal.
                     //campos disponíveis, nome da loja, nome usuario/cliente, lista de produtos, valor frete e desconto e total de pagamento
+
+
+
 
 
                     //Se ele gastar mais de 100 reais ele ganha 10 pontos de fidelidade, cada ponto de fidelidade da a ele 0,5% de desconto na próxima compra.
@@ -221,56 +229,10 @@ namespace HextecInformatica
                 else
                     Console.WriteLine("\nCarrinho está vazio, não é possível prosseguir. Pressione enter para reiniciar a sua compra.");
 
-                    
-
                     Console.ReadKey();
             }
 
-            //Métodos para mensagens de exceção (até ser passado sobre isso)
-            int EvitaQuebraCodInt(string mensagem)
-            {
-                int numInteiro;
-
-                Console.Write(mensagem);
-
-                while(!int.TryParse(Console.ReadLine(), out numInteiro))
-                {
-                    Console.Write("Erro: Valor inválido (Informe apenas números inteiros) \n\n");
-                    Console.Write(mensagem);
-                }
-                return numInteiro;  
-            }
-
-            double EvitaQuebraCodFloat(string mensagem)
-            {
-                double numFloat;
-
-                Console.Write(mensagem);
-
-                while (!double.TryParse(Console.ReadLine(), out numFloat))
-                {
-                    Console.Write("Erro: Valor inválido , não é permitido informar letras e deve ser informado algum valor\n\n");
-                    Console.Write(mensagem);
-                }
-
-                return numFloat;
-            }
-
-            decimal EvitaQuebraCodDecimal(string mensagem)
-            {
-                decimal numDecimal; // 1. Mudamos a variável para decimal
-
-                Console.Write(mensagem);
-
-                // 2. Usamos decimal.TryParse
-                while (!decimal.TryParse(Console.ReadLine(), out numDecimal))
-                {
-                    Console.Write("Erro: Valor inválido. Não é permitido informar letras e deve ser informado algum valor.\n\n");
-                    Console.Write(mensagem);
-                }
-
-                return numDecimal;
-            }
+            
         }
     }
 }

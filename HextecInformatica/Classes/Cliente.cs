@@ -16,7 +16,7 @@ namespace HextecInformatica.Classes
         public string Cpf {  get; private set; }
         public string Cnpj { get; private set; }
 
-        public decimal DescProximaCompra { get; private set; } = 0;
+        public decimal DescProximaCompra { get; private set; }
 
         public Cliente(string nome )
         {
@@ -72,6 +72,11 @@ namespace HextecInformatica.Classes
         public void AdicionarDescontoProximaCompra(decimal valor) 
         {
             DescProximaCompra += valor;
+        }
+
+        public void DebitaDescontoProximaCompra(decimal valor)
+        {
+            DescProximaCompra -= valor;
         }
     }
 }

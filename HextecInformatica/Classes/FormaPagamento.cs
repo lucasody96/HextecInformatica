@@ -19,5 +19,6 @@ namespace HextecInformatica.Classes
             Descricao = descricao;
             Valor = valor;
         }
+
     }
 }
