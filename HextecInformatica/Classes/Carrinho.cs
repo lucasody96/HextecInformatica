@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace HextecInformatica.Classes
+﻿namespace HextecInformatica.Classes
 {
     public class Carrinho
     {
@@ -27,6 +20,8 @@ namespace HextecInformatica.Classes
         public decimal Pagamentos {  get; private set; }
 
         public decimal TotalCompra => Subtotal + Frete - DescontoCupom - DescontoCashback - Pagamentos;
+
+        public decimal TotalNotaFiscal => Subtotal + Frete - DescontoCupom - DescontoCashback;
 
 
         public Carrinho(List<Produto> listaProdutosDisponiveis)
@@ -66,27 +61,29 @@ namespace HextecInformatica.Classes
         public void VisualizaçãoItensCarrinho()
         {
             Console.Clear();
-            Console.WriteLine("\n========================================");
-            Console.WriteLine("           ITENS DO CARRINHO             ");
-            Console.WriteLine("=========================================");
+
+
+            Utils.FormataCabecalho("ITENS DO CARRINHO");
 
             foreach (var ProdutoCarrinho in ListaItensCarrinho)
             {
                 decimal subTotalItem = ProdutoCarrinho.Valor * ProdutoCarrinho.QuantidadeComprada;
-                Console.WriteLine($"{ProdutoCarrinho.Codigo} - {ProdutoCarrinho.Descricao} | Quantidade: {ProdutoCarrinho.QuantidadeComprada} | Valor: R$ {subTotalItem}");
+                Console.WriteLine($"| {ProdutoCarrinho.Codigo,-3} - {ProdutoCarrinho.Descricao,-25} | Qtd: {ProdutoCarrinho.QuantidadeComprada,3} | R$ {subTotalItem,10:F2} |");
             }
 
-            Console.WriteLine("=========================================");
-            Console.WriteLine($"Subtotal: R$ {Subtotal}");
+            Utils.ImprimeLinhaSeparadora('=');
+
+            Console.WriteLine($"Subtotal........: {Subtotal,25:C}");
             if (Frete > 0)
-                Console.WriteLine($"Frete: R$ {Frete}");
+                Console.WriteLine($"Frete...........: {Frete,25:C}");
             if (DescontoCupom > 0)
-                Console.WriteLine($"Cupom Desconto: R$ -{DescontoCupom:F2}");
+                Console.WriteLine($"Cupom Desconto...........: -{DescontoCupom,24:C}");
             if (DescontoCashback > 0)
-                Console.WriteLine($"Cupom Desconto: R$ -{DescontoCashback:F2}");
-            Console.WriteLine("-----------------------------------------");
-            Console.WriteLine($"TOTAL:    {TotalCompra:F2}"); // Chama a propriedade automática TotalCompra
-            Console.WriteLine("=========================================");
+                Console.WriteLine($"Cashback........: -{DescontoCashback,24:C}");
+
+            Utils.ImprimeLinhaSeparadora('-');
+            Console.WriteLine($"TOTAL A PAGAR...: {TotalCompra,25:C}"); // Chama a propriedade automática TotalCompra
+            Utils.ImprimeLinhaSeparadora('=');
         }
 
         public void RemoveItensCarrinho(int codProdutoRemovido)
@@ -117,7 +114,6 @@ namespace HextecInformatica.Classes
                     Console.WriteLine("Quantidade informada inválida, não será removido o item do carrinho, preesione enter para prosseguir");
                     Console.ReadKey();
                 }
-
 
                 VisualizaçãoItensCarrinho();
             }
@@ -203,6 +199,7 @@ namespace HextecInformatica.Classes
             bool valRestantePositivo = false;
             while (valRestantePositivo == false)
             {
+                Console.WriteLine($"Valor a ser pago: R$ {TotalCompra:F2}");//COLOCAR :F2
                 decimal valorCashbackUsado = Utils.EvitaQuebraCodDecimal("Valor a ser utilizado: R$ ");
 
                 if (valorCashbackUsado > 0 && valorCashbackUsado <= TotalCompra && valorCashbackUsado <= ClienteCashback.DescProximaCompra)
@@ -225,6 +222,7 @@ namespace HextecInformatica.Classes
 
         public void FormaPagamentoSelecionada(int formaPagamentoSelecionada, decimal ValorSelecionado, Cliente ClientePagamento)
         {
+
             //carrega as formas de pagamento disponíveis
             FormasPagamentosDisponíveis();
 
@@ -296,10 +294,6 @@ namespace HextecInformatica.Classes
                             Console.WriteLine("Valor pago acima do subtotal não permitido para condição de pagamento boleto");
                         break;
                 }
-
-                Console.WriteLine("Pressione uma tecla para prosseguir!");
-                Console.ReadKey();
-
             }
             else
                 Console.WriteLine("Condição de pagamento informa inválida!");
@@ -316,6 +310,20 @@ namespace HextecInformatica.Classes
         private void PagamentosRealizados(decimal valorPago) 
         {
             Pagamentos += valorPago;
+        }
+
+        public void LimpaCarrinho() 
+        {
+            foreach (var itensCarrinho in ListaItensCarrinho)
+            {
+                itensCarrinho.QuantidadeComprada = 0;
+            }
+
+            ListaItensCarrinho.Clear();
+            Pagamentos = 0;
+            DescontoCashback = 0;
+            DescontoCupom = 0;
+            Frete = 0;
         }
     }
 }

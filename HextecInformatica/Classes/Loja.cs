@@ -14,6 +14,8 @@ namespace HextecInformatica.Classes
 
         public List<Produto> ListaProdutos { get; set; } = new List<Produto>();
 
+        public Utils Utils { get; set; } = new Utils();
+
         public Loja(string nome)
         {
             Nome = nome;
@@ -22,15 +24,6 @@ namespace HextecInformatica.Classes
         public void AdicionarProduto(Produto produto)
         {
             ListaProdutos.Add(produto);
-        }
-
-        public void CatalogoProdutos()
-        {
-            //Logica semelhante a vista na aula
-            foreach (var produtos in ListaProdutos)
-            {
-                Console.WriteLine(produtos);
-            }
         }
 
         public void CadastrarCliente (Cliente NovoCliente) 
