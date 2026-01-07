@@ -18,6 +18,7 @@ namespace HextecInformatica.Classes
 
             Utils UtilsNotaFiscal = new Utils(); //Instancia os formatadores
 
+            Console.Clear();
             //Cabeçalho da nota
             UtilsNotaFiscal.ImprimeLinhaSeparadora('=');
             Console.WriteLine($"| {"NOTA FISCAL DE VENDA AO CONSUMIDOR",-77}|");
