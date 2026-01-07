@@ -19,9 +19,13 @@
 
         public decimal Pagamentos {  get; private set; }
 
-        public decimal TotalCompra => Subtotal + Frete - DescontoCupom - DescontoCashback - Pagamentos;
+        public decimal Troco { get; private set; }
 
-        public decimal TotalNotaFiscal => Subtotal + Frete - DescontoCupom - DescontoCashback;
+        public decimal TotalCompra => Math.Round(Subtotal + Frete - DescontoCupom - DescontoCashback - Pagamentos, 2);
+
+        public decimal TotalNotaFiscal => Math.Round(Subtotal + Frete - DescontoCupom - DescontoCashback, 2);
+
+        public bool TrocoFoiConvertido { get; set; } = false;
 
 
         public Carrinho(List<Produto> listaProdutosDisponiveis)
@@ -68,21 +72,21 @@
             foreach (var ProdutoCarrinho in ListaItensCarrinho)
             {
                 decimal subTotalItem = ProdutoCarrinho.Valor * ProdutoCarrinho.QuantidadeComprada;
-                Console.WriteLine($"| {ProdutoCarrinho.Codigo,-3} - {ProdutoCarrinho.Descricao,-25} | Qtd: {ProdutoCarrinho.QuantidadeComprada,3} | R$ {subTotalItem,10:F2} |");
+                Console.WriteLine($"| {ProdutoCarrinho.Codigo} - {ProdutoCarrinho.Descricao,-25} | Qtd: {ProdutoCarrinho.QuantidadeComprada,9} | TOTAL ITEM: {subTotalItem,15:C} |");
             }
 
             Utils.ImprimeLinhaSeparadora('=');
 
-            Console.WriteLine($"Subtotal........: {Subtotal,25:C}");
+            Console.WriteLine($"Subtotal: {Subtotal:C}");
             if (Frete > 0)
-                Console.WriteLine($"Frete...........: {Frete,25:C}");
+                Console.WriteLine($"Frete: {Frete:C}");
             if (DescontoCupom > 0)
-                Console.WriteLine($"Cupom Desconto...........: -{DescontoCupom,24:C}");
+                Console.WriteLine($"Cupom Desconto: -{DescontoCupom:C}");
             if (DescontoCashback > 0)
-                Console.WriteLine($"Cashback........: -{DescontoCashback,24:C}");
+                Console.WriteLine($"Cashback: -{DescontoCashback:C}");
 
             Utils.ImprimeLinhaSeparadora('-');
-            Console.WriteLine($"TOTAL A PAGAR...: {TotalCompra,25:C}"); // Chama a propriedade automática TotalCompra
+            Console.WriteLine($"TOTAL A PAGAR: {TotalCompra:C}"); // Chama a propriedade automática TotalCompra
             Utils.ImprimeLinhaSeparadora('=');
         }
 
@@ -241,22 +245,23 @@
                         
                         if (formaPagamentosDisponiveis.Valor > TotalCompra)
                         {
-                            decimal troco = formaPagamentosDisponiveis.Valor - TotalCompra;
-                            Console.WriteLine($"--> Troco a devolver: R$ {troco:F2}");
+                            Troco = formaPagamentosDisponiveis.Valor - TotalCompra;
+                            Console.WriteLine($"--> Troco a devolver: R$ {Troco:F2}");
 
-                            Console.Write("\nDeseja usar o troco na próxima compra como desconto? ");
+                            Console.Write("\nDeseja usar o troco na próxima compra como desconto (S/N)? ");
                             string usaTrocoProxCompra = Console.ReadLine();
 
                             if (usaTrocoProxCompra == "S" || usaTrocoProxCompra == "s")
                             {
-                                ClientePagamento.AdicionarDescontoProximaCompra(troco);
+                                ClientePagamento.AdicionarDescontoProximaCompra(Troco);
+                                TrocoFoiConvertido = true;
 
                                 Console.WriteLine($"Valor disponível para ser usado como desconto na próxima compra: R$ {ClientePagamento.DescProximaCompra:F2}");
                                 PagamentosRealizados(TotalCompra);
                             }
                             else
                             {
-                                Console.WriteLine($"{formaPagamentosDisponiveis.Descricao}: R$ {TotalCompra:F2} (Entregue: {ValorSelecionado:F2}, Troco: {troco:F2})");
+                                Console.WriteLine($"{formaPagamentosDisponiveis.Descricao}: R$ {TotalCompra:F2} (Entregue: {ValorSelecionado:F2}, Troco: {Troco:F2})");
                                 PagamentosRealizados(TotalCompra);
                             }
                         }

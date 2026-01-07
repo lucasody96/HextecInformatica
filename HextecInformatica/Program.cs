@@ -187,16 +187,18 @@ namespace HextecInformatica
                     else if (CarrinhoCompraAtual.Subtotal >= 1000)
                         Console.WriteLine("Você ganhou um cupom de desconto de 15% nesta compra! Digite CUPOM15%DESCONTO para utilizá-lo");
 
-                    Console.Write("\nDeseja usar o cupom (S/N)? ");
-                    string respPossuiCupomDesconto = Console.ReadLine();
-
-                    if (respPossuiCupomDesconto == "S" || respPossuiCupomDesconto == "s")
+                    if (CarrinhoCompraAtual.Subtotal > 250)
                     {
-                        CarrinhoCompraAtual.CalculoDescontoCupom();
-                        Console.WriteLine("\nPressione alguma tecla para prosseguir!");
-                        Console.ReadKey();
-                    }
+                        Console.Write("\nDeseja usar o cupom (S/N)? ");
+                        string respPossuiCupomDesconto = Console.ReadLine();
 
+                        if (respPossuiCupomDesconto == "S" || respPossuiCupomDesconto == "s")
+                        {
+                            CarrinhoCompraAtual.CalculoDescontoCupom();
+                            Console.WriteLine("\nPressione alguma tecla para prosseguir!");
+                            Console.ReadKey();
+                        }
+                    }
 
                     //Opção de usar o desconto de cashback da compra anterior
                     if (ClienteLoja.DescProximaCompra > 0)
@@ -212,11 +214,14 @@ namespace HextecInformatica
                         Console.ReadKey();
                     }
 
+                    Console.Clear();
+                    CarrinhoCompraAtual.VisualizaçãoItensCarrinho();
+                    Console.WriteLine("\nPressione uma tecla para prosseguir!");
+                    Console.ReadKey();
                     //Seleção de produtos e soma do valor total de pagamento
                     do
                     {
                         Console.Clear();
-                        CarrinhoCompraAtual.VisualizaçãoItensCarrinho();
 
                         Console.WriteLine($"\nTotal a ser pago: R$ {CarrinhoCompraAtual.TotalCompra:F2}");
                         Console.WriteLine("Selecione a forma de pagamento conforme listado abaixo:");
@@ -241,9 +246,6 @@ namespace HextecInformatica
                     //Simular uma nota fiscal simples - em texto no terminal.
                     //campos disponíveis, nome da loja, nome usuario/cliente, lista de produtos, valor frete e desconto e total de pagamento
                     VendaAtual.ImprimeNotaFiscal(ClienteLoja, CarrinhoCompraAtual);
-
-                    //Se ele gastar mais de 100 reais ele ganha 10 pontos de fidelidade, cada ponto de fidelidade da a ele 0,5% de desconto na próxima compra.
-                    VendaAtual.PontosFidelidade(ClienteLoja, CarrinhoCompraAtual);
 
                     // Limpa a lista do carrinho, os pagamentos e totais
                     CarrinhoCompraAtual.LimpaCarrinho();

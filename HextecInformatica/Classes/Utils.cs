@@ -110,5 +110,12 @@ namespace HextecInformatica.Classes
             Console.WriteLine(linha.PadRight(LarguraPadrao - 1) + "|");
             ImprimeLinhaSeparadora('-');
         }
+
+        public void ImprimeDetalheFinanceiro(string texto, decimal valor, bool ehDesconto = false)
+        {
+            string textoComPontos = texto.PadRight(62, '.'); // Ajusta largura dos pontos
+            string valorFormatado = ehDesconto ? $"-{valor,13:C}" : $"{valor,14:C}";
+            Console.WriteLine($"| {textoComPontos}{valorFormatado} |");
+        }
     }
 }

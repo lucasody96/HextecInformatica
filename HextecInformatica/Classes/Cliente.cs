@@ -71,12 +71,12 @@ namespace HextecInformatica.Classes
 
         public void AdicionarDescontoProximaCompra(decimal valor) 
         {
-            DescProximaCompra += valor;
+            DescProximaCompra += Math.Round(valor, 2);
         }
 
         public void DebitaDescontoProximaCompra(decimal valor)
         {
-            DescProximaCompra -= valor;
+            DescProximaCompra -= Math.Round(valor, 2);
         }
     }
 }
