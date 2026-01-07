@@ -27,7 +27,7 @@ namespace HextecInformatica.Classes
             UtilsNotaFiscal.ImprimeLinhaSeparadora('=');
 
             // Dados do cliente
-            Console.WriteLine($"| DADOS DO CLIENTE: {new string(' ', 61)}");
+            Console.WriteLine($"| DADOS DO CLIENTE: {new string(' ', 59)}|");
             Console.WriteLine($"| Nome: {Cliente.Nome,-71}|");
 
             if (Cliente.TipoPessoa == "F")
