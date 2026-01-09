@@ -26,6 +26,10 @@ namespace HextecInformatica
             Hextec.AdicionarProduto(new Produto(6, "HEADSET GAMER", 231.89m, 0));
             Hextec.AdicionarProduto(new Produto(7, "PLACA DE VÍDEO", 2100.99m, 1));
 
+            //carrega os colaboradores
+            Hextec.AdicionaColaborador(new Colaborador("ADMIN", "ADMINISTRADOR DO SISTEMA", "admin"));
+            Hextec.AdicionaColaborador(new Colaborador("LUCAS.ODY", "LUCAS ODY", "1234"));
+
             bool execucaoPrograma = true;
 
             do
@@ -48,9 +52,7 @@ namespace HextecInformatica
                         IniciarVenda();
                         break;
                     case "2":
-                        AcessaColaborador();
-                        //Opção para visualizar o sistema como vendedor/colaborador da loja
-                        execucaoPrograma = false;
+                        AcessarColaborador();
                         break;
                     case "3":
                         Console.WriteLine("Saindo do programa....");
@@ -256,9 +258,40 @@ namespace HextecInformatica
                     Console.ReadKey();
             }
 
-            void AcessaColaborador() 
+            void AcessarColaborador() 
             {
-                Console.WriteLine("Em Construção... saindo do programa");
+                Colaborador Colaborador;
+
+                Console.Clear();
+                Console.WriteLine("Acesso para colaboradores");
+                bool achouColaborador = false;
+
+                do
+                {
+                    Console.Write("\nLogin: ");
+                    string usuarioColaborador = Console.ReadLine();
+                    Console.Write("Senha: ");
+                    string senhaColaborador = Console.ReadLine();
+
+                    achouColaborador = Hextec.VerificaColaboradorLoja(usuarioColaborador, senhaColaborador);
+
+                    if (achouColaborador == false)
+                    {
+                        Console.WriteLine("\nLogin ou senha incorretos!");
+                        Console.WriteLine("Deseja tentar novamente ou sair do programa (S/N)? ");
+                        string respLogin = Console.ReadLine();
+
+                        if (respLogin == "N" || respLogin == "n")
+                        {
+                            Console.WriteLine("\nSaindo do programa....");
+                            return;
+                        }
+
+                    }
+
+                } while (achouColaborador == false);
+                
+
             }
         }
     }
