@@ -1,7 +1,5 @@
 ﻿using HextecInformatica.Classes;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using HextecInformatica.Classes.ClassesFilhas;
 
 namespace HextecInformatica
 {
@@ -16,19 +14,13 @@ namespace HextecInformatica
             //================================================================
             Loja Hextec = new Loja("HEXTEC INFORMÁTICA");
             Utils Utils = new Utils();
+            Dados Dados = new Dados();
 
             //Carregar os itens
-            Hextec.AdicionarProduto(new Produto(1, "MOUSE SEM FIO", 65.90m, 32));
-            Hextec.AdicionarProduto(new Produto(2, "PEN DRIVE", 44.90m, 25));
-            Hextec.AdicionarProduto(new Produto(3, "SSD", 390.49m, 10));
-            Hextec.AdicionarProduto(new Produto(4, "MEMÓRIA RAM", 280.89m, 0));
-            Hextec.AdicionarProduto(new Produto(5, "MONITOR", 749.99m, 15));
-            Hextec.AdicionarProduto(new Produto(6, "HEADSET GAMER", 231.89m, 0));
-            Hextec.AdicionarProduto(new Produto(7, "PLACA DE VÍDEO", 2100.99m, 1));
+            Dados.CarregaProdutos(Hextec);
 
             //carrega os colaboradores
-            Hextec.AdicionaColaborador(new Colaborador("ADMIN", "ADMINISTRADOR DO SISTEMA", "admin"));
-            Hextec.AdicionaColaborador(new Colaborador("LUCAS.ODY", "LUCAS ODY", "1234"));
+            Dados.CarregaColaboradores(Hextec);
 
             bool execucaoPrograma = true;
 
@@ -265,32 +257,38 @@ namespace HextecInformatica
                 Console.Clear();
                 Console.WriteLine("Acesso para colaboradores");
                 bool achouColaborador = false;
-
+                string usuarioColaborador = "";
                 do
                 {
                     Console.Write("\nLogin: ");
-                    string usuarioColaborador = Console.ReadLine();
+                    usuarioColaborador = Console.ReadLine().Trim().ToUpper();
                     Console.Write("Senha: ");
-                    string senhaColaborador = Console.ReadLine();
+                    string senhaColaborador = Utils.LerSenhaComAsterisco();
 
                     achouColaborador = Hextec.VerificaColaboradorLoja(usuarioColaborador, senhaColaborador);
 
-                    if (achouColaborador == false)
+                    if (achouColaborador == true)
+                    {
+                        Hextec.RetornaColaboradorLogado(usuarioColaborador);
+                        Console.ReadKey();
+                    }else
                     {
                         Console.WriteLine("\nLogin ou senha incorretos!");
-                        Console.WriteLine("Deseja tentar novamente ou sair do programa (S/N)? ");
+                        Console.Write("Deseja tentar novamente (S/N)? ");
                         string respLogin = Console.ReadLine();
 
                         if (respLogin == "N" || respLogin == "n")
                         {
-                            Console.WriteLine("\nSaindo do programa....");
+                            Console.WriteLine("\nVoltando ao menu anterior. Pressione alguma tecla para prosseguir...");
+                            Console.ReadKey();
                             return;
                         }
-
                     }
 
                 } while (achouColaborador == false);
                 
+                Hextec.RetornaColaboradorLogado(usuarioColaborador);
+                Console.ReadKey();
 
             }
         }

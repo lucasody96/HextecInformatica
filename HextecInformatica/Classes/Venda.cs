@@ -1,17 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using HextecInformatica.Classes.ClassesFilhas;
 
 namespace HextecInformatica.Classes
 {
     public class Venda()
     {
         public int NumeroNotaFIscal { get; set; }
-
-        
 
         public void ImprimeNotaFiscal(Cliente Cliente, Carrinho Carrinho)
         {

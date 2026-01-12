@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace HextecInformatica.Classes
+﻿namespace HextecInformatica.Classes
 {
     public class Utils
     {
@@ -116,6 +109,35 @@ namespace HextecInformatica.Classes
             string textoComPontos = texto.PadRight(62, '.'); // Ajusta largura dos pontos
             string valorFormatado = ehDesconto ? $"-{valor,13:C}" : $"{valor,14:C}";
             Console.WriteLine($"| {textoComPontos}{valorFormatado} |");
+        }
+
+        public static string LerSenhaComAsterisco()
+        {
+            string senha = "";
+            ConsoleKeyInfo key;
+
+            do
+            {
+                // Lê a tecla pressionada, o 'true' impede que ela apareça na tela
+                key = Console.ReadKey(true);
+
+                // Se não for Backspace e não for Enter, adiciona a letra e imprime *
+                if (key.Key != ConsoleKey.Backspace && key.Key != ConsoleKey.Enter)
+                {
+                    senha += key.KeyChar;
+                    Console.Write("*");
+                }
+                // Se for Backspace e tiver algo digitado, apaga o último caractere
+                else if (key.Key == ConsoleKey.Backspace && senha.Length > 0)
+                {
+                    senha = senha.Substring(0, (senha.Length - 1));
+                    Console.Write("\b \b"); // O truque para apagar visualmente no Console
+                }
+            }
+            while (key.Key != ConsoleKey.Enter);
+
+            Console.WriteLine(); // Pula uma linha no final para não ficar grudado
+            return senha;
         }
     }
 }

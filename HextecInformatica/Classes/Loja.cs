@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using HextecInformatica.Classes.ClassesFilhas;
 
 namespace HextecInformatica.Classes
 {
@@ -45,21 +41,18 @@ namespace HextecInformatica.Classes
 
         public bool VerificaColaboradorLoja(string login, string senha) 
         {
+            return ListaColaboradores.Any(Colaborador => Colaborador.Login == login && Colaborador.Senha == senha);
+        }
 
-            var encontrouColaborador = ListaColaboradores.FirstOrDefault(colaboradores => colaboradores.Login == login);
+        public void RetornaColaboradorLogado(string colaboradorLogado)
+        {
+            var Colaborador = ListaColaboradores.FirstOrDefault(Colaboradores => Colaboradores.Login == colaboradorLogado);
 
-            if (encontrouColaborador != null)
+            if (Colaborador != null)
             {
-                var senhaColaborador = ListaColaboradores.FirstOrDefault(colaboradores => colaboradores.Senha == senha);
-
-                if (senhaColaborador != null)
-                    return true;
-                else
-                    return false;
+                Console.WriteLine("\nLogin realizado com sucesso!" +
+                                  $"\nSeja bem vindo {Colaborador.ToString()}! Pressione alguma tecla para prosseguir.");
             }
-            else
-                return false;
-
         }
 
     }

@@ -1,4 +1,6 @@
-﻿namespace HextecInformatica.Classes
+﻿using HextecInformatica.Classes.ClassesFilhas;
+
+namespace HextecInformatica.Classes
 {
     public class Carrinho
     {
