@@ -9,15 +9,15 @@ namespace HextecInformatica.Classes
         public void ImprimeNotaFiscal(Cliente Cliente, Carrinho Carrinho)
         {
 
-            Utils UtilsNotaFiscal = new Utils(); //Instancia os formatadores
+            //Instancia os formatadores
 
             Console.Clear();
             //Cabeçalho da nota
-            UtilsNotaFiscal.ImprimeLinhaSeparadora('=');
+            Utils.ImprimeLinhaSeparadora('=');
             Console.WriteLine($"| {"NOTA FISCAL DE VENDA AO CONSUMIDOR",-77}|");
-            Console.WriteLine($"| {"HEXTEC INFORMÁTICA LTDA",-77}|"           );
+            Console.WriteLine($"| {"HEXTEC INFORMÁTICA LTDA",-77}|");
             Console.WriteLine($"| Data: {DateTime.Now, -71}|"); //hora atual
-            UtilsNotaFiscal.ImprimeLinhaSeparadora('=');
+            Utils.ImprimeLinhaSeparadora('=');
 
             // Dados do cliente
             Console.WriteLine($"| DADOS DO CLIENTE: {new string(' ', 59)}|");
@@ -27,35 +27,35 @@ namespace HextecInformatica.Classes
                 Console.WriteLine($"| CPF: {Cliente.Cpf,-72}|");
             else
                 Console.WriteLine($"| CNPJ: {Cliente.Cnpj,-71}|");
-            UtilsNotaFiscal.ImprimeLinhaSeparadora('-');
+            Utils.ImprimeLinhaSeparadora('-');
 
             // TABELA DE ITENS
             // Cabeçalho da tabela de itens
             Console.WriteLine($"| {"QTD",-4} | {"DESCRIÇÃO DO PRODUTO",-37} | {"UNITÁRIO",-13} | {"TOTAL",-13} |");
-            UtilsNotaFiscal.ImprimeLinhaSeparadora('-');
+            Utils.ImprimeLinhaSeparadora('-');
 
-            foreach ( var itensComprados in Carrinho.ListaItensCarrinho)
+            foreach (var itensComprados in Carrinho.ListaItensCarrinho)
             {
                 decimal totalItem = itensComprados.Valor * itensComprados.QuantidadeComprada;
                 Console.WriteLine($"| {itensComprados.QuantidadeComprada,-4} | {itensComprados.Descricao,-37} | {itensComprados.Valor,-13:C} | {totalItem, -13:C} |");
             }
-            UtilsNotaFiscal.ImprimeLinhaSeparadora('-');
+            Utils.ImprimeLinhaSeparadora('-');
 
             //Subtotal, frete e descontos
-            UtilsNotaFiscal.ImprimeDetalheFinanceiro("SUBTOTAL DOS ITENS", Carrinho.Subtotal);
+            Utils.ImprimeDetalheFinanceiro("SUBTOTAL DOS ITENS", Carrinho.Subtotal);
 
             if (Carrinho.Frete > 0)
-                UtilsNotaFiscal.ImprimeDetalheFinanceiro("FRETE", Carrinho.Frete);
+                Utils.ImprimeDetalheFinanceiro("FRETE", Carrinho.Frete);
 
             if (Carrinho.DescontoCupom > 0)
-                UtilsNotaFiscal.ImprimeDetalheFinanceiro("DESCONTO (CUPOM)", Carrinho.DescontoCupom, true);
+                Utils.ImprimeDetalheFinanceiro("DESCONTO (CUPOM)", Carrinho.DescontoCupom, true);
 
             if (Carrinho.DescontoCashback > 0)
-                UtilsNotaFiscal.ImprimeDetalheFinanceiro("DESCONTO (CASHBACK UTILIZADO)", Carrinho.DescontoCashback, true);
+                Utils.ImprimeDetalheFinanceiro("DESCONTO (CASHBACK UTILIZADO)", Carrinho.DescontoCashback, true);
 
-            UtilsNotaFiscal.ImprimeLinhaSeparadora('=');
-            UtilsNotaFiscal.ImprimeDetalheFinanceiro("VALOR TOTAL DA NOTA", Carrinho.TotalNotaFiscal);
-            UtilsNotaFiscal.ImprimeLinhaSeparadora('=');
+            Utils.ImprimeLinhaSeparadora('=');
+            Utils.ImprimeDetalheFinanceiro("VALOR TOTAL DA NOTA", Carrinho.TotalNotaFiscal);
+            Utils.ImprimeLinhaSeparadora('=');
 
             //FORMAS DE PAGAMENTO USADAS
             Console.WriteLine($"| FORMAS DE PAGAMENTO:{new string(' ', 57)}|");
@@ -72,7 +72,7 @@ namespace HextecInformatica.Classes
             // troco se houver
             if (Carrinho.Troco > 0)
             {
-                UtilsNotaFiscal.ImprimeLinhaSeparadora('-');
+                Utils.ImprimeLinhaSeparadora('-');
 
                 if (Carrinho.TrocoFoiConvertido)
                     Console.WriteLine($"| {"DESCONTO PRÓXIMA COMPRA:",-62} {Cliente.DescProximaCompra,13:C} |");
@@ -83,11 +83,11 @@ namespace HextecInformatica.Classes
             
             else if (Carrinho.Troco > 0 && Cliente.DescProximaCompra > 0)
             {
-                UtilsNotaFiscal.ImprimeLinhaSeparadora('-');
+                Utils.ImprimeLinhaSeparadora('-');
                 Console.WriteLine($"| {"DESCONTO PRÓXIMA COMPRA:",-62} {Carrinho.Troco,13:C} |");
             }
 
-            UtilsNotaFiscal.ImprimeLinhaSeparadora('=');
+            Utils.ImprimeLinhaSeparadora('=');
 
             //RODAPÉ (CASHBACK GANHO)
             if (Carrinho.Subtotal > 100.00m)

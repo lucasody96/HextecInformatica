@@ -4,10 +4,10 @@ namespace HextecInformatica.Classes
 {
     public class Carrinho
     {
-        public List<Produto> ListaProdutosDisponiveis { get; set; } = new List<Produto>();
-        public List<Produto> ListaItensCarrinho { get; private set; } = new List<Produto>();
+        public List<Produto> ListaProdutosDisponiveis { get; set; } = [];
+        public List<Produto> ListaItensCarrinho { get; private set; } = [];
 
-        public List<FormaPagamento> ListaFormasPagamentos { get; private set; } = new List<FormaPagamento>();
+        public List<FormaPagamento> ListaFormasPagamentos { get; private set; } = [];
 
         public Utils Utils { get; set; } = new Utils();
 
@@ -179,7 +179,7 @@ namespace HextecInformatica.Classes
         public void CalculoDescontoCupom()
         {
             Console.Write($"Informe o cupom de desconto: ");
-            string cupomDesconto = Console.ReadLine();
+            string? cupomDesconto = Console.ReadLine();
 
             switch (cupomDesconto)
             {
@@ -251,7 +251,7 @@ namespace HextecInformatica.Classes
                             Console.WriteLine($"--> Troco a devolver: R$ {Troco:F2}");
 
                             Console.Write("\nDeseja usar o troco na próxima compra como desconto (S/N)? ");
-                            string usaTrocoProxCompra = Console.ReadLine();
+                            string? usaTrocoProxCompra = Console.ReadLine();
 
                             if (usaTrocoProxCompra == "S" || usaTrocoProxCompra == "s")
                             {

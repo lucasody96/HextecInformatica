@@ -6,26 +6,17 @@ using System.Threading.Tasks;
 
 namespace HextecInformatica.Classes
 {
-    public class Produto
+    public class Produto(int codigo, string descricao, decimal valor, int disponivel)
     {
-        public int Codigo { get; set; }
-        public string Descricao { get; set; }
-        public decimal Valor { get; set; }
-        public int Estoque { get; set; }
+        public int Codigo { get; set; } = codigo;
+        public string Descricao { get; set; } = descricao;
+        public decimal Valor { get; set; } = valor;
+        public int Estoque { get; set; } = disponivel;
+        public int QuantidadeComprada { get; set; }
 
-        public int QuantidadeComprada {  get; set; }
-
-        public Produto(int codigo, string descricao, decimal valor, int disponivel)
-        {
-            Codigo = codigo;
-            Descricao = descricao;
-            Valor = valor;
-            Estoque = disponivel;
-        }
         public override string ToString()
         {
             return $"{Codigo} | {Descricao} | R$ {Valor} | {Estoque}";
         }
-
     }
 }

@@ -2,7 +2,7 @@
 
 namespace HextecInformatica.Classes
 {
-    internal class Dados
+    public class Dados
     {
         public static void CarregaProdutos(Loja loja)
         {

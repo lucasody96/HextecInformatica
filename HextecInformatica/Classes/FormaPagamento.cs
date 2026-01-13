@@ -6,19 +6,11 @@ using System.Threading.Tasks;
 
 namespace HextecInformatica.Classes
 {
-    public class FormaPagamento
+    public class FormaPagamento(int codigo, string descricao, decimal valor)
     {
-        public int Codigo {  get; set; }
-        public string Descricao { get; set; }
+        public int Codigo { get; set; } = codigo;
+        public string Descricao { get; set; } = descricao;
 
-        public decimal Valor = 0;
-
-        public FormaPagamento(int codigo, string descricao, decimal valor) 
-        {
-            Codigo = codigo;
-            Descricao = descricao;
-            Valor = valor;
-        }
-
+        public decimal Valor = valor;
     }
 }

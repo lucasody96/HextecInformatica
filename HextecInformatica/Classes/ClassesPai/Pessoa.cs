@@ -1,19 +1,15 @@
 ﻿namespace HextecInformatica.Classes.ClassesPai
 {
-    public class Pessoa
+    public class Pessoa(string nome, string tipoPessoa, string cpf = "", string cnpj = "")
     {
-        public string Nome { get;  set; }
-        public string TipoPessoa { get;  set; }
-        public string Cpf { get;  set; }
-        public string Cnpj { get; set; }
+        public string Nome { get; set; } = nome;
+        public string TipoPessoa { get; set; } = tipoPessoa;
+        public string Cpf { get; set; } = cpf;
+        public string Cnpj { get; set; } = cnpj;
 
-        public Pessoa(string nome, string tipoPessoa, string cpf = "", string cnpj = "")
+        public virtual string MensagemBoasVindas()
         {
-            Nome = nome;
-            TipoPessoa = tipoPessoa;
-            Cpf = cpf;
-            Cnpj = cnpj;
+            return $"";
         }
-
     }
 }

@@ -12,14 +12,9 @@ namespace HextecInformatica
             //================================================================
             //PROGRAMA PRINCIPAL
             //================================================================
-            Loja Hextec = new Loja("HEXTEC INFORMÁTICA");
-            Utils Utils = new Utils();
-            Dados Dados = new Dados();
-
-            //Carregar os itens
+            Loja? Hextec = new("HEXTEC INFORMÁTICA");
+            Utils? Utils = new();
             Dados.CarregaProdutos(Hextec);
-
-            //carrega os colaboradores
             Dados.CarregaColaboradores(Hextec);
 
             bool execucaoPrograma = true;
@@ -37,7 +32,7 @@ namespace HextecInformatica
 
                 Console.Write("O que você deseja fazer? ");
 
-                string opcaoLogin = Console.ReadLine();
+                string? opcaoLogin = Console.ReadLine();
                 switch (opcaoLogin)
                 {
                     case "1":
@@ -65,30 +60,33 @@ namespace HextecInformatica
            
             void IniciarVenda() 
             {
-                Cliente ClienteLoja;
+                Cliente? ClienteLoja;
               
                 Console.Write("\nDigite seu nome: ");
-                string nomeCliente = Console.ReadLine();
-
+                string? nomeCliente = Console.ReadLine();
+                if (string.IsNullOrWhiteSpace(nomeCliente))
+                {
+                    Console.WriteLine("Nome não pode ser vazio. Pressione qualquer tecla para voltar ao menu.");
+                    Console.ReadKey();
+                    return;
+                }
                 //Buscar o cliente usando o método loja
-                Cliente clienteExistente = Hextec.ClienteJaComprou(nomeCliente);
+                Cliente? clienteExistente = Hextec.ClienteJaComprou(nomeCliente!);
+                // Aproveitamos os dados que vieram da busca
+                ClienteLoja = clienteExistente;
 
                 if (clienteExistente != null)
                 {
-                    // Aproveitamos os dados que vieram da busca
-                    ClienteLoja = clienteExistente;
-
-                    Console.WriteLine($"\nSeja bem vindo de volta {nomeCliente}! Pressione enter para seguir com a compra.");
+                    Console.WriteLine(ClienteLoja.MensagemBoasVindas());
                     Console.ReadKey();
                 } 
                 else
                 {
-                    Console.WriteLine($"\nSeja bem vindo {nomeCliente}.");
-                    
                     ClienteLoja = new Cliente(nomeCliente);
-
                     ClienteLoja.DadosCliente();
                     Hextec.CadastrarCliente(ClienteLoja);
+                    Console.WriteLine(ClienteLoja.MensagemBoasVindas());
+                    Console.ReadKey();
                 }
 
                 Console.Clear();
@@ -106,12 +104,12 @@ namespace HextecInformatica
 
                 //opção para selecionar a quantidade de itens. Criar método
                 //Passar a lista da loja para a lista do carrinho
-                Carrinho CarrinhoCompraAtual = new Carrinho(Hextec.ListaProdutos);
+                Carrinho? CarrinhoCompraAtual = new(Hextec.ListaProdutos);
 
                 bool codZero = false;
                 while (!codZero)
                 {
-                    int codProdutoSelecionado = Utils.EvitaQuebraCodInt("\nSelecione o item a ser adicionado ao carrinho ou 0 para sair: ");
+                    int codProdutoSelecionado = Classes.Utils.EvitaQuebraCodInt("\nSelecione o item a ser adicionado ao carrinho ou 0 para sair: ");
 
                     if (codProdutoSelecionado > 0)
                     {
@@ -127,14 +125,14 @@ namespace HextecInformatica
 
                 //Permite ao cliente remover o item do carrinho, caso haja produtos
                 Console.Write("Deseja remover algum item (S/N)? ");
-                string respRemoveItem = Console.ReadLine();
+                string? respRemoveItem = Console.ReadLine();
 
                 if (respRemoveItem == "S" || respRemoveItem == "s")
                 {
                     codZero = false;
                     while (!codZero)
                     {
-                        int codProdutoRemovido = Utils.EvitaQuebraCodInt("\nDigite o código do produto a ser removido (0 para sair): ");
+                        int codProdutoRemovido = Classes.Utils.EvitaQuebraCodInt("\nDigite o código do produto a ser removido (0 para sair): ");
 
                         if (codProdutoRemovido > 0)
                         {
@@ -159,7 +157,7 @@ namespace HextecInformatica
                     bool formaEntregaInvalida = false;
                     while (!formaEntregaInvalida)
                     {
-                        int respFormaEntrega = Utils.EvitaQuebraCodInt("\nQual a forma de entrega desejada (informe de 1 a 3)? ");
+                        int respFormaEntrega = Classes.Utils.EvitaQuebraCodInt("\nQual a forma de entrega desejada (informe de 1 a 3)? ");
 
                         if (respFormaEntrega > 0 && respFormaEntrega <= 3)
                         {
@@ -184,7 +182,7 @@ namespace HextecInformatica
                     if (CarrinhoCompraAtual.Subtotal > 250)
                     {
                         Console.Write("\nDeseja usar o cupom (S/N)? ");
-                        string respPossuiCupomDesconto = Console.ReadLine();
+                        string? respPossuiCupomDesconto = Console.ReadLine();
 
                         if (respPossuiCupomDesconto == "S" || respPossuiCupomDesconto == "s")
                         {
@@ -199,7 +197,7 @@ namespace HextecInformatica
                     {
                         Console.WriteLine($"\nvocê possui R$ {ClienteLoja.DescProximaCompra:F2} de desconto acumulado de compras anteriores.");
                         Console.Write("Deseja usar o desconto (S/N)? ");
-                        string respUsaDescontoAnterior = Console.ReadLine();
+                        string? respUsaDescontoAnterior = Console.ReadLine();
 
                         if (respUsaDescontoAnterior == "S" || respUsaDescontoAnterior == "s")
                             CarrinhoCompraAtual.CalculoDescontoCashback(ClienteLoja);
@@ -224,7 +222,7 @@ namespace HextecInformatica
                         Console.WriteLine("3 - Cartão de Débito");
                         Console.WriteLine("4 - Boleto");
 
-                        int formaPagamento = Utils.EvitaQuebraCodInt($"Digite o código da condição de pagamento a ser utilizada: ");
+                        int formaPagamento = Classes.Utils.EvitaQuebraCodInt($"Digite o código da condição de pagamento a ser utilizada: ");
                         decimal valorFormaPagamento = Utils.EvitaQuebraCodDecimal($"Valor: R$ ");
 
                         CarrinhoCompraAtual.FormaPagamentoSelecionada(formaPagamento, valorFormaPagamento, ClienteLoja);
@@ -235,7 +233,7 @@ namespace HextecInformatica
 
                     
                     Console.Clear();
-                    Venda VendaAtual = new Venda();
+                    Venda? VendaAtual = new();
 
                     //Simular uma nota fiscal simples - em texto no terminal.
                     //campos disponíveis, nome da loja, nome usuario/cliente, lista de produtos, valor frete e desconto e total de pagamento
@@ -252,30 +250,33 @@ namespace HextecInformatica
 
             void AcessarColaborador() 
             {
-                Colaborador Colaborador;
-
                 Console.Clear();
-                Console.WriteLine("Acesso para colaboradores");
-                bool achouColaborador = false;
-                string usuarioColaborador = "";
+                Utils.FormataCabecalho("ACESSO PARA COLABORADORES");
+                string? usuarioColaborador = "";
+
+
+                bool EhColaborador = false;
                 do
                 {
                     Console.Write("\nLogin: ");
-                    usuarioColaborador = Console.ReadLine().Trim().ToUpper();
+                    string? inputUsuarioColaborador = Console.ReadLine();
+                    usuarioColaborador = inputUsuarioColaborador != null ? inputUsuarioColaborador.Trim().ToUpper() : "";
+
                     Console.Write("Senha: ");
-                    string senhaColaborador = Utils.LerSenhaComAsterisco();
+                    string? senhaColaborador = Utils.LerSenhaComAsterisco();
 
-                    achouColaborador = Hextec.VerificaColaboradorLoja(usuarioColaborador, senhaColaborador);
+                    Colaborador? ColaboradorLogado = Hextec.VerificaColaboradorLoja(usuarioColaborador, senhaColaborador);
 
-                    if (achouColaborador == true)
+                    if (ColaboradorLogado != null)
                     {
+                        EhColaborador = true;
                         Hextec.RetornaColaboradorLogado(usuarioColaborador);
                         Console.ReadKey();
                     }else
                     {
                         Console.WriteLine("\nLogin ou senha incorretos!");
                         Console.Write("Deseja tentar novamente (S/N)? ");
-                        string respLogin = Console.ReadLine();
+                        string? respLogin = Console.ReadLine();
 
                         if (respLogin == "N" || respLogin == "n")
                         {
@@ -285,11 +286,52 @@ namespace HextecInformatica
                         }
                     }
 
-                } while (achouColaborador == false);
-                
-                Hextec.RetornaColaboradorLogado(usuarioColaborador);
-                Console.ReadKey();
+                } while (!EhColaborador);
 
+                bool execucaoComoColaborador = true;
+
+                do
+                {
+                    Console.Clear();
+                    Utils.FormataCabecalho("MENUS DOS COLABORADORES");
+                    Console.WriteLine("\nOpções Disponíveis:\n");
+                    Console.WriteLine("  [1] - Gerenciar Estoque");
+                    Console.WriteLine("  [2] - Visualizar Vendas");
+                    Console.WriteLine("  [3] - Relatórios");
+                    Console.WriteLine("  [4] - Logout\n");
+
+                    int? menuSelecionado = Classes.Utils.EvitaQuebraCodInt("Selecione o menu desejado: ");
+                    switch (menuSelecionado)
+                    {
+                        case 1:
+                            //Criar método para gerenciar estoque
+                            Console.WriteLine("Em construção, pressione algum botão para prosseguir");
+                            break;
+                        case 2:
+                            //Criar método para Visualizar Vendas
+                            Console.WriteLine("Em construção, pressione algum botão para prosseguir");
+                            break;
+                        case 3:
+                            //Criar método para Relatórios
+                            Console.WriteLine("Em construção, pressione algum botão para prosseguir");
+                            break;
+                        case 4:
+                            //sai para o menu anterior
+                            Console.WriteLine("Saindo do programa....");
+                            execucaoComoColaborador = false;
+                            break;
+                        default:
+                            Console.WriteLine("Opção inválida!\n");
+                            break;
+                    }
+
+
+                } while (execucaoComoColaborador);
+               
+
+
+
+                Console.ReadKey();
             }
         }
     }

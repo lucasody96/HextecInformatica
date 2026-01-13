@@ -8,7 +8,7 @@ namespace HextecInformatica.Classes.ClassesFilhas
 
         public Cliente(string nome) : base(nome, "", "", "")
         {
-           
+            Nome = nome;
         }
 
         public void DadosCliente() 
@@ -17,7 +17,8 @@ namespace HextecInformatica.Classes.ClassesFilhas
             while (!tipoPessoaCorreto)
             {
                 Console.Write("Trata-se de um cliente pessoa física (F) ou pessoa jurídica (J): ");
-                TipoPessoa = Console.ReadLine().ToUpper();
+                var input = Console.ReadLine();
+                TipoPessoa = input != null ? input.ToUpper() : string.Empty;
 
                 if (TipoPessoa == "F")
                 {
@@ -25,7 +26,7 @@ namespace HextecInformatica.Classes.ClassesFilhas
                     do
                     {
                         Console.Write("\nInforme o seu CPF: ");
-                        Cpf = Console.ReadLine();
+                        Cpf = Console.ReadLine() ?? string.Empty;
 
                         if (Cpf.Length == 11)
                             cpfCorreto = true;
@@ -42,7 +43,7 @@ namespace HextecInformatica.Classes.ClassesFilhas
                     do
                     {
                         Console.Write("\nInforme o seu CNPJ: ");
-                        Cnpj = Console.ReadLine();
+                        Cnpj = Console.ReadLine() ?? string.Empty;
 
                         if (Cnpj.Length == 14)
                             cnpjCorreto = true;
@@ -66,6 +67,11 @@ namespace HextecInformatica.Classes.ClassesFilhas
         public void DebitaDescontoProximaCompra(decimal valor)
         {
             DescProximaCompra -= Math.Round(valor, 2);
+        }
+
+        public override string MensagemBoasVindas()
+        {
+            return $"\nSeja bem vindo {Nome}! Pressione enter para seguir com a compra.";
         }
     }
 }

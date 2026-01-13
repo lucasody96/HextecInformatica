@@ -2,21 +2,14 @@
 
 namespace HextecInformatica.Classes.ClassesFilhas
 {
-    public class Colaborador: Pessoa
+    public class Colaborador(string nome, string cpf, string login, string senha) : Pessoa(nome, "F", cpf, "")
     {
-        public string Login { get; private set; }
-        public string Senha { get; private set; }
+        public string Login { get; private set; } = login;
+        public string Senha { get; private set; } = senha;
 
-        public Colaborador(string nome,  string cpf, string login, string senha) : base(nome, "F", cpf, "")
+        public override string MensagemBoasVindas()
         {
-            Login = login;
-            Senha = senha;
+            return $"\nSeja bem vindo {Nome}! Pressione enter para prosseguir ao menu do colaborador.";
         }
-
-        public override string ToString()
-        {
-            return $"{Login}";
-        }
-
     }
 }

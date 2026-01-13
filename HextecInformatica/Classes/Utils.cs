@@ -9,7 +9,7 @@
 
         }
 
-        public int EvitaQuebraCodInt(string mensagem)
+        public static int EvitaQuebraCodInt(string mensagem)
         {
             int numInteiro;
 
@@ -23,7 +23,7 @@
             return numInteiro;
         }
 
-        public double EvitaQuebraCodFloat(string mensagem)
+        public static double EvitaQuebraCodFloat(string mensagem)
         {
             double numFloat;
 
@@ -38,7 +38,7 @@
             return numFloat;
         }
 
-        public decimal EvitaQuebraCodDecimal(string mensagem)
+        public static decimal EvitaQuebraCodDecimal(string mensagem)
         {
             decimal numDecimal; // 1. Mudamos a variável para decimal
 
@@ -54,7 +54,7 @@
             return numDecimal;
         }
 
-        public void FormataCabecalho(string texto, char caractereBorda = '=')
+        public static void FormataCabecalho(string texto, char caractereBorda = '=')
         {
             string linhaSeparadora = new string(caractereBorda, LarguraPadrao);
             Console.WriteLine(linhaSeparadora);
@@ -70,7 +70,7 @@
         }
 
         // linhas divisórias simples
-        public void ImprimeLinhaSeparadora(char caractere = '-')
+        public static void ImprimeLinhaSeparadora(char caractere)
         {
             Console.WriteLine(new string(caractere, LarguraPadrao));
         }
@@ -78,7 +78,7 @@
         // O SEGREDO DO GRID: Este método aceita colunas dinâmicas
         // Exemplo de uso: FormataLinhaTabela("COD", "NOME", "PRECO");
         // O sinal negativo (-) alinha à esquerda. O positivo alinha à direita.
-        public void FormataLinhaProdutos(int id, string nome, decimal valor, int estoque)
+        public static void FormataLinhaProdutos(int id, string nome, decimal valor, int estoque)
         {
             // Definição das larguras:
             // ID: 5 caracteres | Nome: 35 caracteres | Valor: 15 caracteres | Estoque: Restante
@@ -94,7 +94,7 @@
         }
 
         // Sobrecarga para o Cabeçalho da Tabela (apenas textos)
-        public void FormataCabecalhoTabela()
+        public static void FormataCabecalhoTabela()
         {
             string linha = string.Format("| {0, -6} | {1, -35} | {2, -12} | {3, -7} |",
                                          "CÓDIGO", "DESCRIÇÃO PRODUTO", "VALOR UNIT", "ESTOQUE");
@@ -104,7 +104,7 @@
             ImprimeLinhaSeparadora('-');
         }
 
-        public void ImprimeDetalheFinanceiro(string texto, decimal valor, bool ehDesconto = false)
+        public static void ImprimeDetalheFinanceiro(string texto, decimal valor, bool ehDesconto = false)
         {
             string textoComPontos = texto.PadRight(62, '.'); // Ajusta largura dos pontos
             string valorFormatado = ehDesconto ? $"-{valor,13:C}" : $"{valor,14:C}";
