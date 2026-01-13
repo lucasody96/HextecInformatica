@@ -2,38 +2,21 @@
 
 namespace HextecInformatica.Classes
 {
-    public class Carrinho
+    public class Carrinho(List<Produto> listaProdutosDisponiveis)
     {
-        public List<Produto> ListaProdutosDisponiveis { get; set; } = [];
+        public List<Produto> ListaProdutosDisponiveis { get; set; } = listaProdutosDisponiveis;
         public List<Produto> ListaItensCarrinho { get; private set; } = [];
-
         public List<FormaPagamento> ListaFormasPagamentos { get; private set; } = [];
-
         public Utils Utils { get; set; } = new Utils();
-
         public decimal Subtotal => ListaItensCarrinho.Sum(item => item.Valor * item.QuantidadeComprada);
-
         public decimal Frete { get; set; }
-
         public decimal DescontoCupom { get; set; }
-
         public decimal DescontoCashback { get; set; }
-
-        public decimal Pagamentos {  get; private set; }
-
+        public decimal Pagamentos { get; private set; }
         public decimal Troco { get; private set; }
-
         public decimal TotalCompra => Math.Round(Subtotal + Frete - DescontoCupom - DescontoCashback - Pagamentos, 2);
-
         public decimal TotalNotaFiscal => Math.Round(Subtotal + Frete - DescontoCupom - DescontoCashback, 2);
-
         public bool TrocoFoiConvertido { get; set; } = false;
-
-
-        public Carrinho(List<Produto> listaProdutosDisponiveis)
-        {
-            ListaProdutosDisponiveis = listaProdutosDisponiveis;
-        }
 
         public void AdicionaItensCarrinho(int codProduto)
         {
@@ -228,10 +211,6 @@ namespace HextecInformatica.Classes
 
         public void FormaPagamentoSelecionada(int formaPagamentoSelecionada, decimal ValorSelecionado, Cliente ClientePagamento)
         {
-
-            //carrega as formas de pagamento disponíveis
-            FormasPagamentosDisponíveis();
-
             var formaPagamentosDisponiveis = ListaFormasPagamentos.FirstOrDefault(formaPagamento =>
                                                  formaPagamento.Codigo == formaPagamentoSelecionada);
 
@@ -304,14 +283,6 @@ namespace HextecInformatica.Classes
             }
             else
                 Console.WriteLine("Condição de pagamento informa inválida!");
-        }
-
-        private void FormasPagamentosDisponíveis()
-        {
-            ListaFormasPagamentos.Add(new FormaPagamento(1, "Dinheiro", 0));
-            ListaFormasPagamentos.Add(new FormaPagamento(2, "Cartão de Crédito", 0));
-            ListaFormasPagamentos.Add(new FormaPagamento(3, "Cartão de Débito", 0));
-            ListaFormasPagamentos.Add(new FormaPagamento(4, "Boleto", 0));
         }
 
         private void PagamentosRealizados(decimal valorPago) 

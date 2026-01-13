@@ -4,10 +4,6 @@
     {
         // Largura padrão para manter tudo alinhado (pode ajustar para 80 ou 100)
         private const int LarguraPadrao = 80;
-        public Utils()
-        {
-
-        }
 
         public static int EvitaQuebraCodInt(string mensagem)
         {

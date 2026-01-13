@@ -20,5 +20,13 @@ namespace HextecInformatica.Classes
             loja.AdicionaColaborador(new Colaborador("ADMINISTRADOR DO SISTEMA","00000000000", "ADMIN", "admin"));
             loja.AdicionaColaborador(new Colaborador("LUCAS ODY", "03711831036", "LUCAS.ODY", "1234"));
         }
+
+        public static void FormasPagamentosDisponíveis(Carrinho carrinho)
+        {
+            carrinho.ListaFormasPagamentos.Add(new FormaPagamento(1, "Dinheiro", 0));
+            carrinho.ListaFormasPagamentos.Add(new FormaPagamento(2, "Cartão de Crédito", 0));
+            carrinho.ListaFormasPagamentos.Add(new FormaPagamento(3, "Cartão de Débito", 0));
+            carrinho.ListaFormasPagamentos.Add(new FormaPagamento(4, "Boleto", 0));
+        }
     }
 }

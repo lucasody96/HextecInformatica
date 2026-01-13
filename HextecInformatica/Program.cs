@@ -6,14 +6,13 @@ namespace HextecInformatica
     class Program
     {
 
-        static void Main(string[] args)
+        private static void Main()
         {
 
             //================================================================
             //PROGRAMA PRINCIPAL
             //================================================================
             Loja? Hextec = new("HEXTEC INFORMÁTICA");
-            Utils? Utils = new();
             Dados.CarregaProdutos(Hextec);
             Dados.CarregaColaboradores(Hextec);
 
@@ -77,7 +76,7 @@ namespace HextecInformatica
 
                 if (clienteExistente != null)
                 {
-                    Console.WriteLine(ClienteLoja.MensagemBoasVindas());
+                    Console.WriteLine(clienteExistente.MensagemBoasVindas());
                     Console.ReadKey();
                 } 
                 else
@@ -193,7 +192,7 @@ namespace HextecInformatica
                     }
 
                     //Opção de usar o desconto de cashback da compra anterior
-                    if (ClienteLoja.DescProximaCompra > 0)
+                    if (ClienteLoja != null && ClienteLoja.DescProximaCompra > 0)
                     {
                         Console.WriteLine($"\nvocê possui R$ {ClienteLoja.DescProximaCompra:F2} de desconto acumulado de compras anteriores.");
                         Console.Write("Deseja usar o desconto (S/N)? ");
@@ -214,7 +213,8 @@ namespace HextecInformatica
                     do
                     {
                         Console.Clear();
-
+                        //carrega as formas de pagamento disponíveis
+                        Dados.FormasPagamentosDisponíveis(CarrinhoCompraAtual);
                         Console.WriteLine($"\nTotal a ser pago: R$ {CarrinhoCompraAtual.TotalCompra:F2}");
                         Console.WriteLine("Selecione a forma de pagamento conforme listado abaixo:");
                         Console.WriteLine("1 - Dinheiro");
@@ -225,7 +225,7 @@ namespace HextecInformatica
                         int formaPagamento = Classes.Utils.EvitaQuebraCodInt($"Digite o código da condição de pagamento a ser utilizada: ");
                         decimal valorFormaPagamento = Utils.EvitaQuebraCodDecimal($"Valor: R$ ");
 
-                        CarrinhoCompraAtual.FormaPagamentoSelecionada(formaPagamento, valorFormaPagamento, ClienteLoja);
+                        CarrinhoCompraAtual.FormaPagamentoSelecionada(formaPagamento, valorFormaPagamento, ClienteLoja!);
                         Console.WriteLine("\nPressione uma tecla para prosseguir!");
                         Console.ReadKey();
 
@@ -237,7 +237,7 @@ namespace HextecInformatica
 
                     //Simular uma nota fiscal simples - em texto no terminal.
                     //campos disponíveis, nome da loja, nome usuario/cliente, lista de produtos, valor frete e desconto e total de pagamento
-                    VendaAtual.ImprimeNotaFiscal(ClienteLoja, CarrinhoCompraAtual);
+                    VendaAtual.ImprimeNotaFiscal(ClienteLoja!, CarrinhoCompraAtual);
 
                     // Limpa a lista do carrinho, os pagamentos e totais
                     CarrinhoCompraAtual.LimpaCarrinho();
@@ -250,17 +250,17 @@ namespace HextecInformatica
 
             void AcessarColaborador() 
             {
-                Console.Clear();
-                Utils.FormataCabecalho("ACESSO PARA COLABORADORES");
-                string? usuarioColaborador = "";
-
-
                 bool EhColaborador = false;
                 do
                 {
+                    Console.Clear();
+                    Utils.FormataCabecalho("ACESSO PARA COLABORADORES");
                     Console.Write("\nLogin: ");
-                    string? inputUsuarioColaborador = Console.ReadLine();
-                    usuarioColaborador = inputUsuarioColaborador != null ? inputUsuarioColaborador.Trim().ToUpper() : "";
+
+                    string? usuarioColaboradorInput = Console.ReadLine();
+                    string usuarioColaborador = string.IsNullOrWhiteSpace(usuarioColaboradorInput) 
+                        ? "" 
+                        : usuarioColaboradorInput.Trim().ToUpper();
 
                     Console.Write("Senha: ");
                     string? senhaColaborador = Utils.LerSenhaComAsterisco();
@@ -300,31 +300,34 @@ namespace HextecInformatica
                     Console.WriteLine("  [3] - Relatórios");
                     Console.WriteLine("  [4] - Logout\n");
 
-                    int? menuSelecionado = Classes.Utils.EvitaQuebraCodInt("Selecione o menu desejado: ");
+                    int? menuSelecionado = Utils.EvitaQuebraCodInt("Selecione o menu desejado: ");
                     switch (menuSelecionado)
                     {
                         case 1:
                             //Criar método para gerenciar estoque
                             Console.WriteLine("Em construção, pressione algum botão para prosseguir");
+                            Console.ReadLine();
                             break;
                         case 2:
                             //Criar método para Visualizar Vendas
                             Console.WriteLine("Em construção, pressione algum botão para prosseguir");
+                            Console.ReadLine();
                             break;
                         case 3:
                             //Criar método para Relatórios
                             Console.WriteLine("Em construção, pressione algum botão para prosseguir");
+                            Console.ReadLine();
                             break;
                         case 4:
                             //sai para o menu anterior
                             Console.WriteLine("Saindo do programa....");
+                            Console.ReadLine();
                             execucaoComoColaborador = false;
                             break;
                         default:
                             Console.WriteLine("Opção inválida!\n");
                             break;
                     }
-
 
                 } while (execucaoComoColaborador);
                
