@@ -1,14 +1,23 @@
-﻿using HextecInformatica.Classes.ClassesPai;
+﻿using HextecInformatica.Classes.Entity.Core;
 
-namespace HextecInformatica.Classes.ClassesFilhas
+namespace HextecInformatica.Classes
 {
     public class Cliente : Pessoa
     {
+        private static int _contadorClientes = 0;   
         public decimal DescProximaCompra { get; private set; }
 
-        public Cliente(string nome) : base(nome, "", "", "")
+        public Cliente(string nome, string tipoPessoa = "F", string cpf = "", string cnpj = "")
+            : base(nome, tipoPessoa, cpf, cnpj)
         {
+            //geração do ID automático
+            _contadorClientes++;
+            Id = _contadorClientes;
+
             Nome = nome;
+            TipoPessoa = tipoPessoa;
+            Cpf = cpf;
+            Cnpj = cnpj;
         }
 
         public void DadosCliente() 
@@ -71,7 +80,7 @@ namespace HextecInformatica.Classes.ClassesFilhas
 
         public override string MensagemBoasVindas()
         {
-            return $"\nSeja bem vindo {Nome}! Pressione enter para seguir com a compra.";
+            return $"\nSeja bem vindo {Id} - {Nome}! Pressione enter para seguir com a compra.";
         }
     }
 }

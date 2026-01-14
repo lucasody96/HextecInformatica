@@ -1,4 +1,4 @@
-﻿using HextecInformatica.Classes.ClassesFilhas;
+﻿using HextecInformatica.Classes.Entity.Core;
 
 namespace HextecInformatica.Classes
 {
@@ -20,7 +20,7 @@ namespace HextecInformatica.Classes
 
         public void AdicionaItensCarrinho(int codProduto)
         {
-            var ProdutoCatalogo = ListaProdutosDisponiveis.FirstOrDefault(produto => produto.Codigo == codProduto);
+            var ProdutoCatalogo = ListaProdutosDisponiveis.FirstOrDefault(produto => produto.Id == codProduto);
 
             if (ProdutoCatalogo != null)
             {
@@ -57,7 +57,7 @@ namespace HextecInformatica.Classes
             foreach (var ProdutoCarrinho in ListaItensCarrinho)
             {
                 decimal subTotalItem = ProdutoCarrinho.Valor * ProdutoCarrinho.QuantidadeComprada;
-                Console.WriteLine($"| {ProdutoCarrinho.Codigo} - {ProdutoCarrinho.Descricao,-25} | Qtd: {ProdutoCarrinho.QuantidadeComprada,9} | TOTAL ITEM: {subTotalItem,15:C} |");
+                Console.WriteLine($"| {ProdutoCarrinho.Id} - {ProdutoCarrinho.Descricao,-25} | Qtd: {ProdutoCarrinho.QuantidadeComprada,9} | TOTAL ITEM: {subTotalItem,15:C} |");
             }
 
             Utils.ImprimeLinhaSeparadora('=');
@@ -78,7 +78,7 @@ namespace HextecInformatica.Classes
         public void RemoveItensCarrinho(int codProdutoRemovido)
         {
             //uso do linq para achar o item ao invés do foreach
-            var itemASerRemovido = ListaItensCarrinho.FirstOrDefault(item => item.Codigo == codProdutoRemovido);
+            var itemASerRemovido = ListaItensCarrinho.FirstOrDefault(item => item.Id == codProdutoRemovido);
 
             if (itemASerRemovido != null)
             {
@@ -112,7 +112,7 @@ namespace HextecInformatica.Classes
 
         public void DevolveItemEstoque(int codProduto, int QtdDevolvida)
         {
-            var itemDevolvido = ListaProdutosDisponiveis.FirstOrDefault(item => item.Codigo == codProduto);
+            var itemDevolvido = ListaProdutosDisponiveis.FirstOrDefault(item => item.Id == codProduto);
 
             if (itemDevolvido != null)
             {
@@ -212,7 +212,7 @@ namespace HextecInformatica.Classes
         public void FormaPagamentoSelecionada(int formaPagamentoSelecionada, decimal ValorSelecionado, Cliente ClientePagamento)
         {
             var formaPagamentosDisponiveis = ListaFormasPagamentos.FirstOrDefault(formaPagamento =>
-                                                 formaPagamento.Codigo == formaPagamentoSelecionada);
+                                                 formaPagamento.Id == formaPagamentoSelecionada);
 
             if (formaPagamentosDisponiveis != null)
             {

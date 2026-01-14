@@ -11,4 +11,8 @@
     <Compile Remove="Classes\Catalogo.cs" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Classes\Interfaces\" />
+  </ItemGroup>
+
 </Project>

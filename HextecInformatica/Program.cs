@@ -1,5 +1,5 @@
 ﻿using HextecInformatica.Classes;
-using HextecInformatica.Classes.ClassesFilhas;
+using HextecInformatica.Classes.Repositorio;
 
 namespace HextecInformatica
 {
@@ -25,9 +25,7 @@ namespace HextecInformatica
                 Console.WriteLine("\nSelecione a opção desejada:\n");
                 Console.WriteLine("  [1] - Comprar (Cliente)");
                 Console.WriteLine("  [2] - Área do Colaborador");
-                Console.WriteLine("  [3] - Sair");
-                Console.WriteLine();
-
+                Console.WriteLine("  [3] - Sair\n");
 
                 Console.Write("O que você deseja fazer? ");
 
@@ -63,6 +61,7 @@ namespace HextecInformatica
               
                 Console.Write("\nDigite seu nome: ");
                 string? nomeCliente = Console.ReadLine();
+
                 if (string.IsNullOrWhiteSpace(nomeCliente))
                 {
                     Console.WriteLine("Nome não pode ser vazio. Pressione qualquer tecla para voltar ao menu.");
@@ -70,13 +69,13 @@ namespace HextecInformatica
                     return;
                 }
                 //Buscar o cliente usando o método loja
-                Cliente? clienteExistente = Hextec.ClienteJaComprou(nomeCliente!);
+                Cliente? ClienteExiste = Hextec.ClienteJaComprou(nomeCliente!);
                 // Aproveitamos os dados que vieram da busca
-                ClienteLoja = clienteExistente;
+                ClienteLoja = ClienteExiste;
 
-                if (clienteExistente != null)
+                if (ClienteExiste != null)
                 {
-                    Console.WriteLine(clienteExistente.MensagemBoasVindas());
+                    Console.WriteLine(ClienteLoja!.MensagemBoasVindas());
                     Console.ReadKey();
                 } 
                 else
@@ -95,7 +94,7 @@ namespace HextecInformatica
                 foreach (var produto in Hextec.ListaProdutos)
                 {
                     // Chama o método formatador
-                    Utils.FormataLinhaProdutos(produto.Codigo, produto.Descricao, produto.Valor, produto.Estoque);
+                    Utils.FormataLinhaProdutos(produto.Id, produto.Descricao, produto.Valor, produto.Estoque);
                 }
 
                 Utils.ImprimeLinhaSeparadora('-');
@@ -222,7 +221,7 @@ namespace HextecInformatica
                         Console.WriteLine("3 - Cartão de Débito");
                         Console.WriteLine("4 - Boleto");
 
-                        int formaPagamento = Classes.Utils.EvitaQuebraCodInt($"Digite o código da condição de pagamento a ser utilizada: ");
+                        int formaPagamento = Utils.EvitaQuebraCodInt($"Digite o código da condição de pagamento a ser utilizada: ");
                         decimal valorFormaPagamento = Utils.EvitaQuebraCodDecimal($"Valor: R$ ");
 
                         CarrinhoCompraAtual.FormaPagamentoSelecionada(formaPagamento, valorFormaPagamento, ClienteLoja!);
@@ -234,10 +233,9 @@ namespace HextecInformatica
                     
                     Console.Clear();
                     Venda? VendaAtual = new();
-
                     //Simular uma nota fiscal simples - em texto no terminal.
                     //campos disponíveis, nome da loja, nome usuario/cliente, lista de produtos, valor frete e desconto e total de pagamento
-                    VendaAtual.ImprimeNotaFiscal(ClienteLoja!, CarrinhoCompraAtual);
+                    VendaAtual.ImprimeNotaFiscal(ClienteLoja!, CarrinhoCompraAtual, VendaAtual);
 
                     // Limpa a lista do carrinho, os pagamentos e totais
                     CarrinhoCompraAtual.LimpaCarrinho();

@@ -1,4 +1,4 @@
-﻿using HextecInformatica.Classes.ClassesFilhas;
+﻿using HextecInformatica.Classes.Entity.Core;
 
 namespace HextecInformatica.Classes
 {

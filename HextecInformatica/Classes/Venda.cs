@@ -1,14 +1,19 @@
-﻿using HextecInformatica.Classes.ClassesFilhas;
-
-namespace HextecInformatica.Classes
+﻿namespace HextecInformatica.Classes
 {
-    public class Venda()
+    public class Venda
     {
-        public int NumeroNotaFIscal { get; set; }
-
-        public void ImprimeNotaFiscal(Cliente Cliente, Carrinho Carrinho)
+        private static int _contadorVendas = 0;
+        private int NumeroNotaFIscal { get; set; }
+        public Venda()
         {
+            //geração do ID automático
+            _contadorVendas++;
+            NumeroNotaFIscal = _contadorVendas;
+        }
 
+        public void ImprimeNotaFiscal(Cliente Cliente, Carrinho Carrinho, Venda Venda)
+        {
+            
             //Instancia os formatadores
 
             Console.Clear();
@@ -16,6 +21,7 @@ namespace HextecInformatica.Classes
             Utils.ImprimeLinhaSeparadora('=');
             Console.WriteLine($"| {"NOTA FISCAL DE VENDA AO CONSUMIDOR",-77}|");
             Console.WriteLine($"| {"HEXTEC INFORMÁTICA LTDA",-77}|");
+            Console.WriteLine($"| NÚMERO DA NOTA FISCAL: {NumeroNotaFIscal,-59}|");
             Console.WriteLine($"| Data: {DateTime.Now, -71}|"); //hora atual
             Utils.ImprimeLinhaSeparadora('=');
 
