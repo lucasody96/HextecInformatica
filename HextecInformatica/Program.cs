@@ -302,8 +302,20 @@ namespace HextecInformatica
                     switch (menuSelecionado)
                     {
                         case 1:
+                            Console.Clear();
+                            Utils.FormataCabecalho("GERENCIAMENTO DE ITENS DO ESTOQUE");
+                            Console.WriteLine("\nOpções Disponíveis:\n");
+                            Console.WriteLine("  [1] - Visualização");
+                            Console.WriteLine("  [2] - Entrada");
+                            Console.WriteLine("  [3] - Ajuste");
+                            Console.WriteLine("  [4] - Logout\n");
                             //Criar método para gerenciar estoque
-                            Console.WriteLine("Em construção, pressione algum botão para prosseguir");
+                            int? menuSelecionadoEstoque = Utils.EvitaQuebraCodInt("Selecione o menu desejado: ");
+                            Hextec.GerenciamentoEstoque(menuSelecionadoEstoque);
+
+
+
+                            Console.WriteLine("\nPressione algum botão para prosseguir");
                             Console.ReadLine();
                             break;
                         case 2:
@@ -318,8 +330,7 @@ namespace HextecInformatica
                             break;
                         case 4:
                             //sai para o menu anterior
-                            Console.WriteLine("Saindo do programa....");
-                            Console.ReadLine();
+                            Console.WriteLine("Saindo do programa....Pressione alguma botão para prosseguir");
                             execucaoComoColaborador = false;
                             break;
                         default:

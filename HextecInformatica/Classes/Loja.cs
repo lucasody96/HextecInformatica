@@ -47,5 +47,51 @@ namespace HextecInformatica.Classes
                                   $"\nSeja bem vindo {Colaborador.Nome}! Pressione alguma tecla para prosseguir.");
             }
         }
+
+        public void GerenciamentoEstoque(int? menuSelecionado)
+        {
+            
+            
+            
+            
+
+            switch (menuSelecionado)
+            {
+                case 1:
+                    //Console.WriteLine("  [1] - Visualização");
+                    Console.Clear();
+                    Utils.FormataCabecalho("VISUALIZAÇÃO DE ITENS DO ESTOQUE");
+                    Utils.FormataCabecalhoTabela();
+
+                    foreach (var Produto in ListaProdutos)
+                    {
+                        Utils.FormataLinhaProdutos(Produto.Id, 
+                                                   Produto.Descricao, 
+                                                   Produto.Valor, 
+                                                   Produto.Estoque);
+                    }
+
+                    Utils.ImprimeLinhaSeparadora('=');
+                    break;
+                case 2:
+                    //Console.WriteLine("  [2] - Entrada");
+
+
+                    break;
+                case 3:
+                    //Console.WriteLine("  [3] - Ajuste");
+
+
+                    break;
+                case 4:
+                    //Console.WriteLine("  [4] - Logout\n");
+
+
+                    break;
+                default:
+                    Console.WriteLine("Opção inválida!\n");
+                    break;
+            }
+        }
     }
 }
