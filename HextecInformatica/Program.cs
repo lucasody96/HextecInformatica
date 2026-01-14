@@ -235,7 +235,7 @@ namespace HextecInformatica
                     Venda? VendaAtual = new();
                     //Simular uma nota fiscal simples - em texto no terminal.
                     //campos disponíveis, nome da loja, nome usuario/cliente, lista de produtos, valor frete e desconto e total de pagamento
-                    VendaAtual.ImprimeNotaFiscal(ClienteLoja!, CarrinhoCompraAtual, VendaAtual);
+                    VendaAtual.ImprimeNotaFiscal(ClienteLoja!, CarrinhoCompraAtual);
 
                     // Limpa a lista do carrinho, os pagamentos e totais
                     CarrinhoCompraAtual.LimpaCarrinho();

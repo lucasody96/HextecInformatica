@@ -3,15 +3,15 @@
     public class Venda
     {
         private static int _contadorVendas = 0;
-        private int NumeroNotaFIscal { get; set; }
+        private int NumeroNotaFiscal { get; set; }
         public Venda()
         {
             //geração do ID automático
             _contadorVendas++;
-            NumeroNotaFIscal = _contadorVendas;
+            NumeroNotaFiscal = _contadorVendas;
         }
 
-        public void ImprimeNotaFiscal(Cliente Cliente, Carrinho Carrinho, Venda Venda)
+        public void ImprimeNotaFiscal(Cliente Cliente, Carrinho Carrinho)
         {
             
             //Instancia os formatadores
@@ -21,7 +21,7 @@
             Utils.ImprimeLinhaSeparadora('=');
             Console.WriteLine($"| {"NOTA FISCAL DE VENDA AO CONSUMIDOR",-77}|");
             Console.WriteLine($"| {"HEXTEC INFORMÁTICA LTDA",-77}|");
-            Console.WriteLine($"| NÚMERO DA NOTA FISCAL: {NumeroNotaFIscal,-59}|");
+            Console.WriteLine($"| NÚMERO DA NOTA FISCAL: {NumeroNotaFiscal,-59}|");
             Console.WriteLine($"| Data: {DateTime.Now, -71}|"); //hora atual
             Utils.ImprimeLinhaSeparadora('=');
 
