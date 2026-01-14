@@ -1,4 +1,4 @@
-﻿namespace HextecInformatica.Classes.Entity
+﻿namespace HextecInformatica.Entities
 {
     public class Entity
     {

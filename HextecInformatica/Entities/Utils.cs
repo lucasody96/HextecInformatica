@@ -1,4 +1,4 @@
-﻿namespace HextecInformatica.Classes
+﻿namespace HextecInformatica.Entities
 {
     public class Utils
     {
@@ -52,7 +52,7 @@
 
         public static void FormataCabecalho(string texto, char caractereBorda = '=')
         {
-            string linhaSeparadora = new string(caractereBorda, LarguraPadrao);
+            string linhaSeparadora = new(caractereBorda, LarguraPadrao);
             Console.WriteLine(linhaSeparadora);
 
             // Centraliza o texto
@@ -81,7 +81,7 @@
 
             string linha = string.Format("| {0, -6} | {1, -35} | {2, 12} | {3, -7} |",
                                          id,
-                                         nome.Length > 35 ? nome.Substring(0, 32) + "..." : nome, // Corta nome se for muito longo
+                                         nome.Length > 35 ? string.Concat(nome.AsSpan(0, 32), "...") : nome, // Corta nome se for muito longo
                                          valor.ToString("C"), // Formata como dinheiro
                                          estoque);
 
@@ -126,13 +126,13 @@
                 // Se for Backspace e tiver algo digitado, apaga o último caractere
                 else if (key.Key == ConsoleKey.Backspace && senha.Length > 0)
                 {
-                    senha = senha.Substring(0, (senha.Length - 1));
+                    senha = senha[..^1];
                     Console.Write("\b \b"); // O truque para apagar visualmente no Console
                 }
             }
             while (key.Key != ConsoleKey.Enter);
 
-            Console.WriteLine(); // Pula uma linha no final para não ficar grudado
+            Console.WriteLine(); // Pula uma linha no final
             return senha;
         }
     }

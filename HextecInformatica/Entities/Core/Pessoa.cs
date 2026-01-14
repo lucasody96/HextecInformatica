@@ -1,4 +1,4 @@
-﻿namespace HextecInformatica.Classes.Entity.Core
+﻿namespace HextecInformatica.Entities.Core
 {
     public abstract class Pessoa(string nome, string tipoPessoa, string cpf = "", string cnpj = "") : Entity
     {

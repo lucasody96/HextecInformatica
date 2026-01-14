@@ -1,5 +1,5 @@
-﻿using HextecInformatica.Classes;
-using HextecInformatica.Classes.Repositorio;
+﻿using HextecInformatica.Entities;
+using HextecInformatica.Repositories;
 
 namespace HextecInformatica
 {
@@ -107,7 +107,7 @@ namespace HextecInformatica
                 bool codZero = false;
                 while (!codZero)
                 {
-                    int codProdutoSelecionado = Classes.Utils.EvitaQuebraCodInt("\nSelecione o item a ser adicionado ao carrinho ou 0 para sair: ");
+                    int codProdutoSelecionado = Utils.EvitaQuebraCodInt("\nSelecione o item a ser adicionado ao carrinho ou 0 para sair: ");
 
                     if (codProdutoSelecionado > 0)
                     {
@@ -130,7 +130,7 @@ namespace HextecInformatica
                     codZero = false;
                     while (!codZero)
                     {
-                        int codProdutoRemovido = Classes.Utils.EvitaQuebraCodInt("\nDigite o código do produto a ser removido (0 para sair): ");
+                        int codProdutoRemovido = Utils.EvitaQuebraCodInt("\nDigite o código do produto a ser removido (0 para sair): ");
 
                         if (codProdutoRemovido > 0)
                         {
@@ -155,7 +155,7 @@ namespace HextecInformatica
                     bool formaEntregaInvalida = false;
                     while (!formaEntregaInvalida)
                     {
-                        int respFormaEntrega = Classes.Utils.EvitaQuebraCodInt("\nQual a forma de entrega desejada (informe de 1 a 3)? ");
+                        int respFormaEntrega = Utils.EvitaQuebraCodInt("\nQual a forma de entrega desejada (informe de 1 a 3)? ");
 
                         if (respFormaEntrega > 0 && respFormaEntrega <= 3)
                         {

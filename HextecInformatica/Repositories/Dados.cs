@@ -1,6 +1,7 @@
-﻿using HextecInformatica.Classes.Entity.Core;
+﻿using HextecInformatica.Entities;
+using HextecInformatica.Entities.Core;
 
-namespace HextecInformatica.Classes.Repositorio
+namespace HextecInformatica.Repositories
 {
     public class Dados
     {

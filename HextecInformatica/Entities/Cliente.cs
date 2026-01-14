@@ -1,6 +1,6 @@
-﻿using HextecInformatica.Classes.Entity.Core;
+﻿using HextecInformatica.Entities.Core;
 
-namespace HextecInformatica.Classes
+namespace HextecInformatica.Entities
 {
     public class Cliente : Pessoa
     {

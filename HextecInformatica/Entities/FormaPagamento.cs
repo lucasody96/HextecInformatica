@@ -1,4 +1,4 @@
-﻿namespace HextecInformatica.Classes
+﻿namespace HextecInformatica.Entities
 {
     public class FormaPagamento(int id, string descricao, decimal valor)
     {

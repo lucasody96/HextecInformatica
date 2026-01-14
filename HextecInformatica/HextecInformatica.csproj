@@ -8,11 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Classes\Catalogo.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Classes\Interfaces\" />
+    <Folder Include="Interfaces\" />
+    <Folder Include="Services\" />
   </ItemGroup>
 
 </Project>

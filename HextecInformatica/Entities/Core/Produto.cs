@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HextecInformatica.Classes.Entity.Core
+namespace HextecInformatica.Entities.Core
 {
     public class Produto : Entity
     {

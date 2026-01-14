@@ -1,4 +1,4 @@
-﻿namespace HextecInformatica.Classes
+﻿namespace HextecInformatica.Entities
 {
     public class Venda
     {
