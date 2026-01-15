@@ -48,13 +48,16 @@ namespace HextecInformatica.Entities
             }
         }
 
+        public void ImprimeListaProdutos()
+        {
+            foreach (var Produto in ListaProdutos)
+            {
+                Produto.ImprimirProduto();
+            }
+        }
+
         public void GerenciamentoEstoque(int? menuSelecionado)
         {
-            
-            
-            
-            
-
             switch (menuSelecionado)
             {
                 case 1:
@@ -63,13 +66,7 @@ namespace HextecInformatica.Entities
                     Utils.FormataCabecalho("VISUALIZAÇÃO DE ITENS DO ESTOQUE");
                     Utils.FormataCabecalhoTabela();
 
-                    foreach (var Produto in ListaProdutos)
-                    {
-                        Utils.FormataLinhaProdutos(Produto.Id, 
-                                                   Produto.Descricao, 
-                                                   Produto.Valor, 
-                                                   Produto.Estoque);
-                    }
+                    ImprimeListaProdutos();
 
                     Utils.ImprimeLinhaSeparadora('=');
                     break;

@@ -91,11 +91,7 @@ namespace HextecInformatica
                 Utils.FormataCabecalho("CATÁLOGO DE PRODUTOS");
                 Utils.FormataCabecalhoTabela();
 
-                foreach (var produto in Hextec.ListaProdutos)
-                {
-                    // Chama o método formatador
-                    Utils.FormataLinhaProdutos(produto.Id, produto.Descricao, produto.Valor, produto.Estoque);
-                }
+                Hextec.ImprimeListaProdutos();
 
                 Utils.ImprimeLinhaSeparadora('-');
                 // método "Catálogo de Itens"
@@ -312,8 +308,6 @@ namespace HextecInformatica
                             //Criar método para gerenciar estoque
                             int? menuSelecionadoEstoque = Utils.EvitaQuebraCodInt("Selecione o menu desejado: ");
                             Hextec.GerenciamentoEstoque(menuSelecionadoEstoque);
-
-
 
                             Console.WriteLine("\nPressione algum botão para prosseguir");
                             Console.ReadLine();

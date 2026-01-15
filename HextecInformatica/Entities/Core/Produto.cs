@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using HextecInformatica.Interfaces;
 
 namespace HextecInformatica.Entities.Core
 {
-    public class Produto : Entity
+    public class Produto : Entity, IImprimeProdutos
     {
         private static int _contadorProdutos = 0;
         public string Descricao { get; set; }
@@ -24,6 +20,10 @@ namespace HextecInformatica.Entities.Core
             Valor = valor;
             Estoque = estoque;
             QuantidadeComprada = 0;
+        }
+        public void ImprimirProduto()
+        {
+            Utils.FormataLinhaProdutos(Id, Descricao, Valor, Estoque);
         }
 
         public override string ToString()
