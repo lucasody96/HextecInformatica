@@ -6,7 +6,6 @@ namespace HextecInformatica.Entities
     {
         public List<Produto> ListaProdutosDisponiveis { get; set; } = listaProdutosDisponiveis;
         public List<Produto> ListaItensCarrinho { get; private set; } = [];
-        public List<FormaPagamento> ListaFormasPagamentos { get; private set; } = [];
         public Utils Utils { get; set; } = new Utils();
         public decimal Subtotal => ListaItensCarrinho.Sum(item => item.Valor * item.QuantidadeComprada);
         public decimal Frete { get; set; }
@@ -122,19 +121,17 @@ namespace HextecInformatica.Entities
 
         public void FormaEntrega(int respFormaEntrega)
         {
+            Frete = 0;
             switch (respFormaEntrega)
             {
+                
                 case 1:
-                    Frete = 0;
 
                     Console.WriteLine("Opção de retirada na loja selecionada. Frete gratuito!");
                     break;
                 case 2:
                     if (Subtotal > 300.00m)
-                    {
-                        Frete = 0;
                         Console.WriteLine("Opção de entrega padrão selecionada e subtotal acima de R$ 300,00. Frete gratuito!");
-                    }
                     else
                     {
                         Frete = 20.00m;
@@ -143,10 +140,7 @@ namespace HextecInformatica.Entities
                     break;
                 case 3:
                     if (Subtotal > 500.00m)
-                    {
-                        Frete = 0;
                         Console.WriteLine("Opção de entrega expressa selecionada e subtotal acima de R$ 500,00. Frete gratuito!");
-                    }
                     else
                     {
                         Frete = 40.00m;

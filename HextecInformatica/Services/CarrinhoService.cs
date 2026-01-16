@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HextecInformatica.Interfaces
+namespace HextecInformatica.Services
 {
-    public interface IImprimeProdutos
+    public class CarrinhoService
     {
-        void ImprimirProduto();
     }
 }

@@ -2,7 +2,7 @@
 
 namespace HextecInformatica.Entities.Core
 {
-    public class Produto : Entity, IImprimeProdutos
+    public class Produto : Entity, IProdutos
     {
         private static int _contadorProdutos = 0;
         public string Descricao { get; set; }

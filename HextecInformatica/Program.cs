@@ -1,5 +1,6 @@
 ﻿using HextecInformatica.Entities;
 using HextecInformatica.Repositories;
+using HextecInformatica.Services;
 
 namespace HextecInformatica
 {
@@ -8,14 +9,25 @@ namespace HextecInformatica
 
         private static void Main()
         {
+            //Repositórios
+            var clienteRepo = new ClienteRepository();
+            var colaboradorRepo = new ColaboradorRepository();
+            var produtoRepo = new ProdutoRepository();
+
+            //Dados iniciais
+            Dados.CarregaProdutos(produtoRepo);
+            Dados.CarregaColaboradores(colaboradorRepo);
+
+            //Iniciando os services
+            var vendaService = new VendaService();
+            var colaboradorService = new ColaboradorService();
+            var carrinhoService = new CarrinhoService();
 
             //================================================================
             //PROGRAMA PRINCIPAL
             //================================================================
             Loja? Hextec = new("HEXTEC INFORMÁTICA");
-            Dados.CarregaProdutos(Hextec);
-            Dados.CarregaColaboradores(Hextec);
-
+            
             bool execucaoPrograma = true;
 
             do
@@ -33,7 +45,7 @@ namespace HextecInformatica
                 switch (opcaoLogin)
                 {
                     case "1":
-                        IniciarVenda();
+                        IniciarVenda(carrinhoService, vendaService, produtoRepo, clienteRepo);
                         break;
                     case "2":
                         AcessarColaborador();
@@ -55,10 +67,10 @@ namespace HextecInformatica
             // MÉTODOS/FUNÇÕES Auxiliares
             //================================================================
            
-            void IniciarVenda() 
+            void IniciarVenda(Carrinho carrinhoService, Venda vendaService, ProdutoRepository produtoRepo, ClienteRepository clienteRepo) 
             {
-                Cliente? ClienteLoja;
-              
+                var clienteService = new ClienteService();
+
                 Console.Write("\nDigite seu nome: ");
                 string? nomeCliente = Console.ReadLine();
 
@@ -68,24 +80,10 @@ namespace HextecInformatica
                     Console.ReadKey();
                     return;
                 }
-                //Buscar o cliente usando o método loja
-                Cliente? ClienteExiste = Hextec.ClienteJaComprou(nomeCliente!);
-                // Aproveitamos os dados que vieram da busca
-                ClienteLoja = ClienteExiste;
 
-                if (ClienteExiste != null)
-                {
-                    Console.WriteLine(ClienteLoja!.MensagemBoasVindas());
-                    Console.ReadKey();
-                } 
-                else
-                {
-                    ClienteLoja = new Cliente(nomeCliente);
-                    ClienteLoja.DadosCliente();
-                    Hextec.CadastrarCliente(ClienteLoja);
-                    Console.WriteLine(ClienteLoja.MensagemBoasVindas());
-                    Console.ReadKey();
-                }
+                clienteService.VerificaClienteExistente(clienteRepo, nomeCliente);
+                //Buscar o cliente usando o método loja
+                
 
                 Console.Clear();
                 Utils.FormataCabecalho("CATÁLOGO DE PRODUTOS");
