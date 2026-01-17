@@ -21,7 +21,6 @@ namespace HextecInformatica
             //Iniciando os services
             var vendaService = new VendaService();
             var colaboradorService = new ColaboradorService();
-            var carrinhoService = new CarrinhoService();
 
             //================================================================
             //PROGRAMA PRINCIPAL
@@ -45,10 +44,10 @@ namespace HextecInformatica
                 switch (opcaoLogin)
                 {
                     case "1":
-                        IniciarVenda(carrinhoService, vendaService, produtoRepo, clienteRepo);
+                        IniciarVenda(produtoRepo, clienteRepo);
                         break;
                     case "2":
-                        AcessarColaborador();
+                        AcessarColaborador(produtoRepo, colaboradorRepo);
                         break;
                     case "3":
                         Console.WriteLine("Saindo do programa....");
@@ -67,10 +66,8 @@ namespace HextecInformatica
             // MÉTODOS/FUNÇÕES Auxiliares
             //================================================================
            
-            void IniciarVenda(Carrinho carrinhoService, Venda vendaService, ProdutoRepository produtoRepo, ClienteRepository clienteRepo) 
+            void IniciarVenda(ProdutoRepository produtoRepo, ClienteRepository clienteRepo) 
             {
-                var clienteService = new ClienteService();
-
                 Console.Write("\nDigite seu nome: ");
                 string? nomeCliente = Console.ReadLine();
 
@@ -81,39 +78,19 @@ namespace HextecInformatica
                     return;
                 }
 
-                clienteService.VerificaClienteExistente(clienteRepo, nomeCliente);
-                //Buscar o cliente usando o método loja
-                
+                ClienteService clienteService = new ClienteService();
+                ClienteService.VerificaClienteExistente(clienteRepo, nomeCliente);
 
-                Console.Clear();
-                Utils.FormataCabecalho("CATÁLOGO DE PRODUTOS");
-                Utils.FormataCabecalhoTabela();
-
-                Hextec.ImprimeListaProdutos();
-
-                Utils.ImprimeLinhaSeparadora('-');
+                CarrinhoService carrinhoService = new CarrinhoService();
                 // método "Catálogo de Itens"
+                carrinhoService.ImprimeListaProdutosDisponiveis();
 
                 //opção para selecionar a quantidade de itens. Criar método
                 //Passar a lista da loja para a lista do carrinho
-                Carrinho? CarrinhoCompraAtual = new(Hextec.ListaProdutos);
+                carrinhoService.AdicionaItensCarrinho();
 
-                bool codZero = false;
-                while (!codZero)
-                {
-                    int codProdutoSelecionado = Utils.EvitaQuebraCodInt("\nSelecione o item a ser adicionado ao carrinho ou 0 para sair: ");
-
-                    if (codProdutoSelecionado > 0)
-                    {
-                        CarrinhoCompraAtual.AdicionaItensCarrinho(codProdutoSelecionado);
-                    }
-                    else if (codProdutoSelecionado < 0)
-                        Console.WriteLine("Valor informado inválido, por favor, tente novamente!");
-                    else
-                        codZero = true;
-                }
                 //visualização dos itens do carrinho + valor a ser pago, subtotal
-                CarrinhoCompraAtual.VisualizaçãoItensCarrinho();
+                carrinhoService.VisualizaçãoItensCarrinho();
 
                 //Permite ao cliente remover o item do carrinho, caso haja produtos
                 Console.Write("Deseja remover algum item (S/N)? ");
