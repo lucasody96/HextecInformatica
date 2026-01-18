@@ -10,7 +10,7 @@ namespace HextecInformatica.Services
 {
     public class ClienteService
     {
-        public static void VerificaClienteExistente(ClienteRepository clienteRepos,string nome)
+        public Cliente? VerificaClienteExistente(ClienteRepository clienteRepos, string nome)
         {
             var clienteExiste = clienteRepos.BuscaNome(nome);
 
@@ -19,6 +19,8 @@ namespace HextecInformatica.Services
                 Console.WriteLine(clienteExiste.MensagemBoasVindas());
                 Console.ReadKey();
             }
+
+            return clienteExiste;
         }
     }
 }

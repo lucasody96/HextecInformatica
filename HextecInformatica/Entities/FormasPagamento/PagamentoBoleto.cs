@@ -2,7 +2,7 @@
 
 namespace HextecInformatica.Entities.FormasPagamento
 {
-    public class PagamentoCartaoBoleto : IFormasPagamento
+    public class PagamentoBoleto : IFormasPagamento
     {
         public int Id { get; set; }
         public string? Descricao { get; set; }

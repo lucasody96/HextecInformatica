@@ -1,4 +1,5 @@
 ﻿using HextecInformatica.Interfaces;
+using HextecInformatica.Repositories;
 
 namespace HextecInformatica.Entities.Core
 {
@@ -29,6 +30,11 @@ namespace HextecInformatica.Entities.Core
         public override string ToString()
         {
             return $"{Id} | {Descricao} | R$ {Valor} | {Estoque}";
+        }
+
+        public void DevolveItemEstoque(int QtdDevolvida)
+        {
+           Estoque += QtdDevolvida;
         }
     }
 }

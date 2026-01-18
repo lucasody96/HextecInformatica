@@ -47,7 +47,7 @@ namespace HextecInformatica
                         IniciarVenda(produtoRepo, clienteRepo);
                         break;
                     case "2":
-                        AcessarColaborador(produtoRepo, colaboradorRepo);
+                        //AcessarColaborador(produtoRepo, colaboradorRepo);
                         break;
                     case "3":
                         Console.WriteLine("Saindo do programa....");
@@ -68,6 +68,8 @@ namespace HextecInformatica
            
             void IniciarVenda(ProdutoRepository produtoRepo, ClienteRepository clienteRepo) 
             {
+                ClienteService clienteService = new();
+
                 Console.Write("\nDigite seu nome: ");
                 string? nomeCliente = Console.ReadLine();
 
@@ -78,8 +80,8 @@ namespace HextecInformatica
                     return;
                 }
 
-                ClienteService clienteService = new ClienteService();
-                ClienteService.VerificaClienteExistente(clienteRepo, nomeCliente);
+                clienteService.VerificaClienteExistente(clienteRepo, nomeCliente);
+                Cliente? ClienteLoja = clienteService.VerificaClienteExistente(clienteRepo, nomeCliente);
 
                 CarrinhoService carrinhoService = new CarrinhoService();
                 // método "Catálogo de Itens"
@@ -87,96 +89,28 @@ namespace HextecInformatica
 
                 //opção para selecionar a quantidade de itens. Criar método
                 //Passar a lista da loja para a lista do carrinho
-                carrinhoService.AdicionaItensCarrinho();
+                carrinhoService.AdicionaItensCarrinho(produtoRepo);
 
                 //visualização dos itens do carrinho + valor a ser pago, subtotal
                 carrinhoService.VisualizaçãoItensCarrinho();
 
                 //Permite ao cliente remover o item do carrinho, caso haja produtos
-                Console.Write("Deseja remover algum item (S/N)? ");
-                string? respRemoveItem = Console.ReadLine();
+                carrinhoService.RemoveItensCarrinho(produtoRepo);
 
-                if (respRemoveItem == "S" || respRemoveItem == "s")
+                //Seleciona a forma de entrega
+                carrinhoService.FormaEntrega();
+
+                if (carrinhoService.ListaItensCarrinho.Count > 0)
                 {
-                    codZero = false;
-                    while (!codZero)
-                    {
-                        int codProdutoRemovido = Utils.EvitaQuebraCodInt("\nDigite o código do produto a ser removido (0 para sair): ");
-
-                        if (codProdutoRemovido > 0)
-                        {
-                            CarrinhoCompraAtual.RemoveItensCarrinho(codProdutoRemovido);
-                        }
-                        else if (codProdutoRemovido < 0)
-                            Console.WriteLine("Valor informado inválido, por favor, tente novamente!");
-                        else
-                            codZero = true;
-                    }
-                }
-
-                if (CarrinhoCompraAtual.ListaItensCarrinho.Count > 0)
-                {
-                    //opção para ele selecionar a forma de entrega
-                    Console.Clear();
-                    
-                    Console.WriteLine("\nFormas de entrega disponíveis com seus respectivos valores: ");
-                    Console.WriteLine("1 - Retirada na loja - Grátis");
-                    Console.WriteLine("2 - Entrega padrão - R$ 20,00, acima de R$ 300,00 é gratis ");
-                    Console.WriteLine("3 - Entrega expressa - R$ 40,00, acima de R$ 500,00 é grátis: ");
-                    bool formaEntregaInvalida = false;
-                    while (!formaEntregaInvalida)
-                    {
-                        int respFormaEntrega = Utils.EvitaQuebraCodInt("\nQual a forma de entrega desejada (informe de 1 a 3)? ");
-
-                        if (respFormaEntrega > 0 && respFormaEntrega <= 3)
-                        {
-                            CarrinhoCompraAtual.FormaEntrega(respFormaEntrega);
-                            Console.WriteLine("\nPressione alguma tecla para prosseguir!");
-                            Console.ReadKey();
-                            formaEntregaInvalida = true;
-                        }
-                        else
-                            Console.WriteLine("Forma de entrega inválida.");
-                    }
 
                     //opção para colocar um cupom de desconto no final da venda
-                    Console.Clear();
-                    if (CarrinhoCompraAtual.Subtotal >= 250 && CarrinhoCompraAtual.Subtotal < 500)
-                        Console.WriteLine("Você ganhou um cupom de desconto de 5% nesta compra! Digite CUPOM5%DESCONTO para utilizá-lo");
-                    else if (CarrinhoCompraAtual.Subtotal >= 500 && CarrinhoCompraAtual.Subtotal < 1000)
-                        Console.WriteLine("Você ganhou um cupom de desconto de 10% nesta compra! Digite CUPOM10%DESCONTO para utilizá-lo");
-                    else if (CarrinhoCompraAtual.Subtotal >= 1000)
-                        Console.WriteLine("Você ganhou um cupom de desconto de 15% nesta compra! Digite CUPOM15%DESCONTO para utilizá-lo");
-
-                    if (CarrinhoCompraAtual.Subtotal > 250)
-                    {
-                        Console.Write("\nDeseja usar o cupom (S/N)? ");
-                        string? respPossuiCupomDesconto = Console.ReadLine();
-
-                        if (respPossuiCupomDesconto == "S" || respPossuiCupomDesconto == "s")
-                        {
-                            CarrinhoCompraAtual.CalculoDescontoCupom();
-                            Console.WriteLine("\nPressione alguma tecla para prosseguir!");
-                            Console.ReadKey();
-                        }
-                    }
+                    carrinhoService.CalculoDescontoCupom();
 
                     //Opção de usar o desconto de cashback da compra anterior
-                    if (ClienteLoja != null && ClienteLoja.DescProximaCompra > 0)
-                    {
-                        Console.WriteLine($"\nvocê possui R$ {ClienteLoja.DescProximaCompra:F2} de desconto acumulado de compras anteriores.");
-                        Console.Write("Deseja usar o desconto (S/N)? ");
-                        string? respUsaDescontoAnterior = Console.ReadLine();
-
-                        if (respUsaDescontoAnterior == "S" || respUsaDescontoAnterior == "s")
-                            CarrinhoCompraAtual.CalculoDescontoCashback(ClienteLoja);
-
-                        Console.WriteLine("\nPressione alguma tecla para prosseguir!");
-                        Console.ReadKey();
-                    }
+                    carrinhoService.CalculoDescontoCashback(ClienteLoja!);
 
                     Console.Clear();
-                    CarrinhoCompraAtual.VisualizaçãoItensCarrinho();
+                    carrinhoService.VisualizaçãoItensCarrinho();
                     Console.WriteLine("\nPressione uma tecla para prosseguir!");
                     Console.ReadKey();
                     //Seleção de produtos e soma do valor total de pagamento
