@@ -1,4 +1,6 @@
-﻿namespace HextecInformatica.Entities
+﻿using HextecInformatica.Services;
+
+namespace HextecInformatica.Entities
 {
     public class Venda
     {
@@ -11,7 +13,7 @@
             NumeroNotaFiscal = _contadorVendas;
         }
 
-        public void ImprimeNotaFiscal(Cliente Cliente, Carrinho Carrinho)
+        public void ImprimeNotaFiscal(Cliente Cliente, CarrinhoService Carrinho)
         {
             
             //Instancia os formatadores
@@ -66,14 +68,14 @@
             //FORMAS DE PAGAMENTO USADAS
             Console.WriteLine($"| FORMAS DE PAGAMENTO:{new string(' ', 57)}|");
 
-            foreach (var pagamentosUsados in Carrinho.ListaFormasPagamentos)
-            {
-                if (pagamentosUsados.Valor > 0) // Só mostra se foi usado
-                {
-                    string textoPag = $"{pagamentosUsados.Descricao}";
-                    Console.WriteLine($"| > {textoPag,-60} {pagamentosUsados.Valor,13:C} |");
-                }
-            }
+            //foreach (var pagamentosUsados in Carrinho.ListaFormasPagamentos)
+            //{
+            //    if (pagamentosUsados.Valor > 0) // Só mostra se foi usado
+            //    {
+            //        string textoPag = $"{pagamentosUsados.Descricao}";
+            //        Console.WriteLine($"| > {textoPag,-60} {pagamentosUsados.Valor,13:C} |");
+            //    }
+            //}
 
             // troco se houver
             if (Carrinho.Troco > 0)

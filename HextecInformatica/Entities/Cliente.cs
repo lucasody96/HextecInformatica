@@ -80,7 +80,7 @@ namespace HextecInformatica.Entities
 
         public override string MensagemBoasVindas()
         {
-            return $"\nSeja bem vindo {Id} - {Nome}! Pressione enter para seguir com a compra.";
+            return $"\nSeja bem vindo {Nome}! Pressione enter para seguir com a compra.";
         }
     }
 }

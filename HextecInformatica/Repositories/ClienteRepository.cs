@@ -10,7 +10,7 @@ namespace HextecInformatica.Repositories
 
         public void Adiciona(Cliente cliente)
         {
-            
+            ListaClientes?.Add(cliente);
         }
 
         public Cliente? BuscaNome(string nome)

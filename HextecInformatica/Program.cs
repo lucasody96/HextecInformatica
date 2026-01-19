@@ -80,12 +80,11 @@ namespace HextecInformatica
                     return;
                 }
 
-                clienteService.VerificaClienteExistente(clienteRepo, nomeCliente);
                 Cliente? ClienteLoja = clienteService.VerificaClienteExistente(clienteRepo, nomeCliente);
 
-                CarrinhoService carrinhoService = new CarrinhoService();
+                CarrinhoService carrinhoService = new();
                 // método "Catálogo de Itens"
-                carrinhoService.ImprimeListaProdutosDisponiveis();
+                carrinhoService.ImprimeListaProdutosDisponiveis(produtoRepo);
 
                 //opção para selecionar a quantidade de itens. Criar método
                 //Passar a lista da loja para a lista do carrinho
@@ -102,7 +101,6 @@ namespace HextecInformatica
 
                 if (carrinhoService.ListaItensCarrinho.Count > 0)
                 {
-
                     //opção para colocar um cupom de desconto no final da venda
                     carrinhoService.CalculoDescontoCupom();
 
@@ -114,36 +112,36 @@ namespace HextecInformatica
                     Console.WriteLine("\nPressione uma tecla para prosseguir!");
                     Console.ReadKey();
                     //Seleção de produtos e soma do valor total de pagamento
-                    do
-                    {
-                        Console.Clear();
-                        //carrega as formas de pagamento disponíveis
-                        Dados.FormasPagamentosDisponíveis(CarrinhoCompraAtual);
-                        Console.WriteLine($"\nTotal a ser pago: R$ {CarrinhoCompraAtual.TotalCompra:F2}");
-                        Console.WriteLine("Selecione a forma de pagamento conforme listado abaixo:");
-                        Console.WriteLine("1 - Dinheiro");
-                        Console.WriteLine("2 - Cartão de Crédito");
-                        Console.WriteLine("3 - Cartão de Débito");
-                        Console.WriteLine("4 - Boleto");
+                    //do
+                    //{
+                    //    Console.Clear();
+                    //    //carrega as formas de pagamento disponíveis
+                    //    Dados.FormasPagamentosDisponíveis(CarrinhoCompraAtual);
+                    //    Console.WriteLine($"\nTotal a ser pago: R$ {CarrinhoCompraAtual.TotalCompra:F2}");
+                    //    Console.WriteLine("Selecione a forma de pagamento conforme listado abaixo:");
+                    //    Console.WriteLine("1 - Dinheiro");
+                    //    Console.WriteLine("2 - Cartão de Crédito");
+                    //    Console.WriteLine("3 - Cartão de Débito");
+                    //    Console.WriteLine("4 - Boleto");
 
-                        int formaPagamento = Utils.EvitaQuebraCodInt($"Digite o código da condição de pagamento a ser utilizada: ");
-                        decimal valorFormaPagamento = Utils.EvitaQuebraCodDecimal($"Valor: R$ ");
+                    //    int formaPagamento = Utils.EvitaQuebraCodInt($"Digite o código da condição de pagamento a ser utilizada: ");
+                    //    decimal valorFormaPagamento = Utils.EvitaQuebraCodDecimal($"Valor: R$ ");
 
-                        CarrinhoCompraAtual.FormaPagamentoSelecionada(formaPagamento, valorFormaPagamento, ClienteLoja!);
-                        Console.WriteLine("\nPressione uma tecla para prosseguir!");
-                        Console.ReadKey();
+                    //    CarrinhoCompraAtual.FormaPagamentoSelecionada(formaPagamento, valorFormaPagamento, ClienteLoja!);
+                    //    Console.WriteLine("\nPressione uma tecla para prosseguir!");
+                    //    Console.ReadKey();
 
-                    } while (CarrinhoCompraAtual.TotalCompra > 0);
+                    //} while (CarrinhoCompraAtual.TotalCompra > 0);
 
                     
-                    Console.Clear();
-                    Venda? VendaAtual = new();
-                    //Simular uma nota fiscal simples - em texto no terminal.
-                    //campos disponíveis, nome da loja, nome usuario/cliente, lista de produtos, valor frete e desconto e total de pagamento
-                    VendaAtual.ImprimeNotaFiscal(ClienteLoja!, CarrinhoCompraAtual);
+                    //Console.Clear();
+                    //Venda? VendaAtual = new();
+                    ////Simular uma nota fiscal simples - em texto no terminal.
+                    ////campos disponíveis, nome da loja, nome usuario/cliente, lista de produtos, valor frete e desconto e total de pagamento
+                    //VendaAtual.ImprimeNotaFiscal(ClienteLoja!, CarrinhoCompraAtual);
 
-                    // Limpa a lista do carrinho, os pagamentos e totais
-                    CarrinhoCompraAtual.LimpaCarrinho();
+                    //// Limpa a lista do carrinho, os pagamentos e totais
+                    //CarrinhoCompraAtual.LimpaCarrinho();
                 }
                 else
                     Console.WriteLine("\nCarrinho está vazio, não é possível prosseguir. Pressione enter para reiniciar a sua compra.");
@@ -151,103 +149,103 @@ namespace HextecInformatica
                     Console.ReadKey();
             }
 
-            void AcessarColaborador() 
-            {
-                bool EhColaborador = false;
-                do
-                {
-                    Console.Clear();
-                    Utils.FormataCabecalho("ACESSO PARA COLABORADORES");
-                    Console.Write("\nLogin: ");
+            //void AcessarColaborador() 
+            //{
+            //    bool EhColaborador = false;
+            //    do
+            //    {
+            //        Console.Clear();
+            //        Utils.FormataCabecalho("ACESSO PARA COLABORADORES");
+            //        Console.Write("\nLogin: ");
 
-                    string? usuarioColaboradorInput = Console.ReadLine();
-                    string usuarioColaborador = string.IsNullOrWhiteSpace(usuarioColaboradorInput) 
-                        ? "" 
-                        : usuarioColaboradorInput.Trim().ToUpper();
+            //        string? usuarioColaboradorInput = Console.ReadLine();
+            //        string usuarioColaborador = string.IsNullOrWhiteSpace(usuarioColaboradorInput) 
+            //            ? "" 
+            //            : usuarioColaboradorInput.Trim().ToUpper();
 
-                    Console.Write("Senha: ");
-                    string? senhaColaborador = Utils.LerSenhaComAsterisco();
+            //        Console.Write("Senha: ");
+            //        string? senhaColaborador = Utils.LerSenhaComAsterisco();
 
-                    Colaborador? ColaboradorLogado = Hextec.VerificaColaboradorLoja(usuarioColaborador, senhaColaborador);
+            //        Colaborador? ColaboradorLogado = Hextec.VerificaColaboradorLoja(usuarioColaborador, senhaColaborador);
 
-                    if (ColaboradorLogado != null)
-                    {
-                        EhColaborador = true;
-                        Hextec.RetornaColaboradorLogado(usuarioColaborador);
-                        Console.ReadKey();
-                    }else
-                    {
-                        Console.WriteLine("\nLogin ou senha incorretos!");
-                        Console.Write("Deseja tentar novamente (S/N)? ");
-                        string? respLogin = Console.ReadLine();
+            //        if (ColaboradorLogado != null)
+            //        {
+            //            EhColaborador = true;
+            //            Hextec.RetornaColaboradorLogado(usuarioColaborador);
+            //            Console.ReadKey();
+            //        }else
+            //        {
+            //            Console.WriteLine("\nLogin ou senha incorretos!");
+            //            Console.Write("Deseja tentar novamente (S/N)? ");
+            //            string? respLogin = Console.ReadLine();
 
-                        if (respLogin == "N" || respLogin == "n")
-                        {
-                            Console.WriteLine("\nVoltando ao menu anterior. Pressione alguma tecla para prosseguir...");
-                            Console.ReadKey();
-                            return;
-                        }
-                    }
+            //            if (respLogin == "N" || respLogin == "n")
+            //            {
+            //                Console.WriteLine("\nVoltando ao menu anterior. Pressione alguma tecla para prosseguir...");
+            //                Console.ReadKey();
+            //                return;
+            //            }
+            //        }
 
-                } while (!EhColaborador);
+            //    } while (!EhColaborador);
 
-                bool execucaoComoColaborador = true;
+            //    bool execucaoComoColaborador = true;
 
-                do
-                {
-                    Console.Clear();
-                    Utils.FormataCabecalho("MENUS DOS COLABORADORES");
-                    Console.WriteLine("\nOpções Disponíveis:\n");
-                    Console.WriteLine("  [1] - Gerenciar Estoque");
-                    Console.WriteLine("  [2] - Visualizar Vendas");
-                    Console.WriteLine("  [3] - Relatórios");
-                    Console.WriteLine("  [4] - Logout\n");
+            //    do
+            //    {
+            //        Console.Clear();
+            //        Utils.FormataCabecalho("MENUS DOS COLABORADORES");
+            //        Console.WriteLine("\nOpções Disponíveis:\n");
+            //        Console.WriteLine("  [1] - Gerenciar Estoque");
+            //        Console.WriteLine("  [2] - Visualizar Vendas");
+            //        Console.WriteLine("  [3] - Relatórios");
+            //        Console.WriteLine("  [4] - Logout\n");
 
-                    int? menuSelecionado = Utils.EvitaQuebraCodInt("Selecione o menu desejado: ");
-                    switch (menuSelecionado)
-                    {
-                        case 1:
-                            Console.Clear();
-                            Utils.FormataCabecalho("GERENCIAMENTO DE ITENS DO ESTOQUE");
-                            Console.WriteLine("\nOpções Disponíveis:\n");
-                            Console.WriteLine("  [1] - Visualização");
-                            Console.WriteLine("  [2] - Entrada");
-                            Console.WriteLine("  [3] - Ajuste");
-                            Console.WriteLine("  [4] - Logout\n");
-                            //Criar método para gerenciar estoque
-                            int? menuSelecionadoEstoque = Utils.EvitaQuebraCodInt("Selecione o menu desejado: ");
-                            Hextec.GerenciamentoEstoque(menuSelecionadoEstoque);
+            //        int? menuSelecionado = Utils.EvitaQuebraCodInt("Selecione o menu desejado: ");
+            //        switch (menuSelecionado)
+            //        {
+            //            case 1:
+            //                Console.Clear();
+            //                Utils.FormataCabecalho("GERENCIAMENTO DE ITENS DO ESTOQUE");
+            //                Console.WriteLine("\nOpções Disponíveis:\n");
+            //                Console.WriteLine("  [1] - Visualização");
+            //                Console.WriteLine("  [2] - Entrada");
+            //                Console.WriteLine("  [3] - Ajuste");
+            //                Console.WriteLine("  [4] - Logout\n");
+            //                //Criar método para gerenciar estoque
+            //                int? menuSelecionadoEstoque = Utils.EvitaQuebraCodInt("Selecione o menu desejado: ");
+            //                Hextec.GerenciamentoEstoque(menuSelecionadoEstoque);
 
-                            Console.WriteLine("\nPressione algum botão para prosseguir");
-                            Console.ReadLine();
-                            break;
-                        case 2:
-                            //Criar método para Visualizar Vendas
-                            Console.WriteLine("Em construção, pressione algum botão para prosseguir");
-                            Console.ReadLine();
-                            break;
-                        case 3:
-                            //Criar método para Relatórios
-                            Console.WriteLine("Em construção, pressione algum botão para prosseguir");
-                            Console.ReadLine();
-                            break;
-                        case 4:
-                            //sai para o menu anterior
-                            Console.WriteLine("Saindo do programa....Pressione alguma botão para prosseguir");
-                            execucaoComoColaborador = false;
-                            break;
-                        default:
-                            Console.WriteLine("Opção inválida!\n");
-                            break;
-                    }
+            //                Console.WriteLine("\nPressione algum botão para prosseguir");
+            //                Console.ReadLine();
+            //                break;
+            //            case 2:
+            //                //Criar método para Visualizar Vendas
+            //                Console.WriteLine("Em construção, pressione algum botão para prosseguir");
+            //                Console.ReadLine();
+            //                break;
+            //            case 3:
+            //                //Criar método para Relatórios
+            //                Console.WriteLine("Em construção, pressione algum botão para prosseguir");
+            //                Console.ReadLine();
+            //                break;
+            //            case 4:
+            //                //sai para o menu anterior
+            //                Console.WriteLine("Saindo do programa....Pressione alguma botão para prosseguir");
+            //                execucaoComoColaborador = false;
+            //                break;
+            //            default:
+            //                Console.WriteLine("Opção inválida!\n");
+            //                break;
+            //        }
 
-                } while (execucaoComoColaborador);
+            //    } while (execucaoComoColaborador);
                
 
 
 
-                Console.ReadKey();
-            }
+            //    Console.ReadKey();
+            //}
         }
     }
 }

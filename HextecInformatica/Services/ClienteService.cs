@@ -1,10 +1,5 @@
 ﻿using HextecInformatica.Entities;
 using HextecInformatica.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HextecInformatica.Services
 {
@@ -17,6 +12,13 @@ namespace HextecInformatica.Services
             if (clienteExiste != null)
             {
                 Console.WriteLine(clienteExiste.MensagemBoasVindas());
+                Console.ReadKey();
+            }else
+            {
+                Cliente clienteNovo = new(nome);
+                clienteNovo.DadosCliente();
+                Console.WriteLine(clienteNovo.MensagemBoasVindas());
+                clienteRepos.Adiciona(clienteNovo);
                 Console.ReadKey();
             }
 

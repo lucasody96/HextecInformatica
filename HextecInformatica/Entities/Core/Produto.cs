@@ -5,6 +5,8 @@ namespace HextecInformatica.Entities.Core
 {
     public class Produto : Entity, IProdutos
     {
+        private ProdutoRepository ProdutoRepository = new ProdutoRepository();
+
         private static int _contadorProdutos = 0;
         public string Descricao { get; set; }
         public decimal Valor { get; set; }
@@ -21,10 +23,6 @@ namespace HextecInformatica.Entities.Core
             Valor = valor;
             Estoque = estoque;
             QuantidadeComprada = 0;
-        }
-        public void ImprimirProduto()
-        {
-            Utils.FormataLinhaProdutos(Id, Descricao, Valor, Estoque);
         }
 
         public override string ToString()

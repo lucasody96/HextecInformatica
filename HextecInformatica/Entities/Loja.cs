@@ -10,14 +10,5 @@ namespace HextecInformatica.Entities
         public List<Produto> ListaProdutos { get; set; } = [];
         public List<Colaborador> ListaColaboradores { get; set; } = [];
 
-        public void ImprimeListaProdutos()
-        {
-            foreach (var Produto in ListaProdutos)
-            {
-                Produto.ImprimirProduto();
-            }
-        }
-
-        
     }
 }

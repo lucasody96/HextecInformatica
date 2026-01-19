@@ -13,7 +13,6 @@ namespace HextecInformatica.Interfaces
         public decimal Valor { get; set; }
         public int Estoque { get; set; }
         public int QuantidadeComprada { get; set; }
-        public void ImprimirProduto();
         public string ToString();
     }
 }

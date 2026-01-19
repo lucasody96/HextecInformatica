@@ -10,8 +10,6 @@ namespace HextecInformatica.Services
 {
     public class CarrinhoService
     {
-
-        public List<Produto> ListaProdutosDisponiveis { get; set; } = [];
         public List<Produto> ListaItensCarrinho { get; private set; } = [];
 
         private readonly List<IFormaEntrega> ListaFormasEntrega =
@@ -47,14 +45,14 @@ namespace HextecInformatica.Services
         public decimal TotalNotaFiscal => Math.Round(Subtotal + Frete - DescontoCupom - DescontoCashback, 2);
         public bool TrocoFoiConvertido { get; set; } = false;
 
-        public void ImprimeListaProdutosDisponiveis()
+        public void ImprimeListaProdutosDisponiveis(ProdutoRepository produto)
         {
             Console.Clear();
             Utils.FormataCabecalho("CATÁLOGO DE PRODUTOS");
 
-            foreach (var Produto in ListaProdutosDisponiveis)
+            foreach (var Produto in produto.ListaProdutos)
             {
-                Produto.ImprimirProduto();
+                Utils.FormataLinhaProdutos(Produto.Id, Produto.Descricao, Produto.Valor, Produto.Estoque);
             }
 
             Utils.ImprimeLinhaSeparadora('-');
@@ -186,7 +184,7 @@ namespace HextecInformatica.Services
             //opção para ele selecionar a forma de entrega
             Console.Clear();
             Utils.FormataCabecalho($"Escolha o Frete (Subtotal: {Subtotal:C})");
-            
+            Console.WriteLine();
             //Cria a lista de opções usando a Interface
             foreach (var formaEntrega in ListaFormasEntrega)
             {
@@ -226,12 +224,11 @@ namespace HextecInformatica.Services
                 Console.Clear();
                 Utils.FormataCabecalho("CUPOM DESCONTO DISPONÍVEL");
                 if (Subtotal >= 250 && Subtotal < 500)
-                    Console.WriteLine("Você ganhou um cupom de desconto de 5% nesta compra! Digite CUPOM5%DESCONTO para utilizá-lo");
+                    Console.WriteLine("\nDigite CUPOM5%DESCONTO para ganhar 5% de desconto nesta compra");
                 else if (Subtotal >= 500 && Subtotal < 1000)
-                    Console.WriteLine("Você ganhou um cupom de desconto de 10% nesta compra! Digite CUPOM10%DESCONTO para utilizá-lo");
+                    Console.WriteLine("\nDigite CUPOM10%DESCONTO para utilizá-lo para ganhar 10% de desconto nesta compra");
                 else if (Subtotal >= 1000)
-                    Console.WriteLine("Você ganhou um cupom de desconto de 15% nesta compra! Digite CUPOM15%DESCONTO para utilizá-lo");
-                Utils.ImprimeLinhaSeparadora('=');
+                    Console.WriteLine("\nDigite CUPOM15%DESCONTO para utilizá-lo para ganhar 15% de desconto nesta compra");
 
                 Console.Write("\nDeseja usar o cupom (S/N)? ");
                 string? respPossuiCupomDesconto = Console.ReadLine();
@@ -274,35 +271,12 @@ namespace HextecInformatica.Services
 
                 if (respUsaDescontoAnterior == "S" || respUsaDescontoAnterior == "s")
                 {
-                    bool valRestantePositivo = false;
-                    while (valRestantePositivo == false)
-                    {
-                        Console.WriteLine($"Valor a ser pago: R$ {TotalCompra:F2}");//COLOCAR :F2
-                        decimal valorCashbackUsado = Utils.EvitaQuebraCodDecimal("Valor a ser utilizado: R$ ");
-
-                        if (valorCashbackUsado > 0 && valorCashbackUsado <= TotalCompra && valorCashbackUsado <= clienteCashback.DescProximaCompra)
-                        {
-                            DescontoCashback += valorCashbackUsado;
-                            clienteCashback.DebitaDescontoProximaCompra(valorCashbackUsado);
-
-                            Console.WriteLine($"\nDesconto de R$ {DescontoCashback:F2} aplicado com sucesso!");
-                            Console.WriteLine($"Saldo restante de cashback: R$ {clienteCashback.DescProximaCompra:F2}");
-
-                            valRestantePositivo = true;
-                        }
-                        else
-                        {
-                            Console.WriteLine("\nValor inválido! Verifique se o valor é positivo, se não excede o total da compra ou seu saldo de cashback.");
-                            Console.WriteLine($"Saldo Cashback: {clienteCashback.DescProximaCompra:F2} | Valor Compra: {TotalCompra:F2}");
-                        }
-                    }
+                    DescontoCashback = new DescontoCashback(clienteCashback).CalcularDesconto(TotalCompra);
                 }
 
                 Console.WriteLine("\nPressione alguma tecla para prosseguir!");
                 Console.ReadKey();
             }
-
-            
         }
 
         public void FormaPagamentoSelecionada(int formaPagamentoSelecionada, decimal ValorSelecionado, Cliente ClientePagamento)

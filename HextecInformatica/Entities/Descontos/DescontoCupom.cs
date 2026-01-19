@@ -4,8 +4,6 @@ namespace HextecInformatica.Entities.Descontos
 {
     public abstract class DescontoCupom : IDesconto
     {
-        public string TipoDesconto { get; } = "Cupom";
-
         public string? CodigoCupom { get; protected set; } = string.Empty;
 
         public decimal PercentualDesconto { get; set; }

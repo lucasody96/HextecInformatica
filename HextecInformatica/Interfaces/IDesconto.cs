@@ -8,7 +8,6 @@ namespace HextecInformatica.Interfaces
 {
     public interface IDesconto
     {
-        string TipoDesconto { get; }
         decimal CalcularDesconto(decimal subtotal);
         string ObterMensagem(decimal valorDesconto);
     }
