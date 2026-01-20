@@ -6,6 +6,8 @@
         T? BuscaNome(string parametro);
         T? BuscaID(int parametro);
 
+        void Delete (T entidade);
+
 
     }
 }

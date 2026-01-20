@@ -23,5 +23,9 @@ namespace HextecInformatica.Repositories
             return ListaClientes?.FirstOrDefault(cliente => cliente.Id == id);
         }
 
+        public void Delete(Cliente cliente)
+        {
+            ListaClientes?.Remove(cliente);
+        }
     }
 }

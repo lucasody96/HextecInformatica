@@ -21,5 +21,9 @@ namespace HextecInformatica.Repositories
         {
             return ListaProdutos.FirstOrDefault(produto => produto.Id == id);
         }
+        public void Delete(Produto produto)
+        {
+            ListaProdutos.Add(produto);
+        }
     }
 }

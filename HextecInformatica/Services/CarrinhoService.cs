@@ -12,6 +12,8 @@ namespace HextecInformatica.Services
     {
         public List<Produto> ListaItensCarrinho { get; private set; } = [];
 
+        public List<string> HistoricoPagamentos = new List<string>();
+
         private readonly List<IFormaEntrega> ListaFormasEntrega =
         [
             new RetiradaLoja(),
@@ -40,7 +42,7 @@ namespace HextecInformatica.Services
         public decimal DescontoCupom { get; set; }
         public decimal DescontoCashback { get; set; }
         public decimal Pagamentos { get; private set; }
-        public decimal Troco { get; private set; }
+        public decimal Troco { get; set; }
         public decimal TotalCompra => Math.Round(Subtotal + Frete - DescontoCupom - DescontoCashback - Pagamentos, 2);
         public decimal TotalNotaFiscal => Math.Round(Subtotal + Frete - DescontoCupom - DescontoCashback, 2);
         public bool TrocoFoiConvertido { get; set; } = false;
@@ -162,7 +164,7 @@ namespace HextecInformatica.Services
                             }
                             else
                             {
-                                Console.WriteLine("Quantidade informada inválida, não será removido o item do carrinho, preesione enter para prosseguir");
+                                Console.WriteLine("Quantidade informada inválida, não será removido o item do carrinho, pressione alguma tecla para prosseguir");
                                 Console.ReadKey();
                             }
 
@@ -317,54 +319,36 @@ namespace HextecInformatica.Services
                     Console.ReadKey();
                     continue;
                 }
-                
+
+                //Saldo de cashback antes de processar o pagamento
+                decimal saldoAnterior = cliente.DescProximaCompra;
+
                 decimal abaterValor = formaPagamentoSelecionada.ProcessarPagamento(valorFormaPagamento, totalRestante, cliente!);
+
+                //Grava troco para impressão nota fiscal
+                if (valorFormaPagamento > totalRestante)
+                {
+                    Troco = valorFormaPagamento - totalRestante;
+
+                    // Verifica se o saldo do cliente aumentou.
+                    if (cliente.DescProximaCompra > saldoAnterior)
+                    {
+                        TrocoFoiConvertido = true;
+                    }
+                    else
+                    {
+                        TrocoFoiConvertido = false;
+                    }
+
+                }
+
                 totalRestante -= abaterValor;
+                HistoricoPagamentos.Add($"{formaPagamentoSelecionada.Descricao!.ToUpper()}: R$ {abaterValor:F2}");
 
             } while (totalRestante > 0);
 
             Console.WriteLine("\nPagamento concluído! Pressione uma tecla para prosseguir!");
             Console.ReadKey();
-
-
-
-
-
-
-            //    //    case 2:
-            //    //        if (formaPagamentosDisponiveis.Valor <= TotalCompra)
-            //    //        {
-            //    //            Console.WriteLine($"{formaPagamentosDisponiveis.Descricao}: R$ {ValorSelecionado:F2}");
-            //    //            PagamentosRealizados(ValorSelecionado);
-            //    //        }
-            //    //        else
-            //    //            Console.WriteLine("Valor pago acima do subtotal não permitido para condição de pagamento cartão de crédito");
-            //    //        break;
-
-            //    //    case 3:
-
-            //    //        if (formaPagamentosDisponiveis.Valor <= TotalCompra)
-            //    //        {
-            //    //            Console.WriteLine($"{formaPagamentosDisponiveis.Descricao}: R$ {ValorSelecionado:F2}");
-            //    //            PagamentosRealizados(ValorSelecionado);
-            //    //        }
-            //    //        else
-            //    //            Console.WriteLine("Valor pago acima do subtotal não permitido para condição de pagamento cartão de débito");
-            //    //        break;
-            //    //    case 4:
-
-            //    //        if (formaPagamentosDisponiveis.Valor <= TotalCompra)
-            //    //        {
-            //    //            Console.WriteLine($"{formaPagamentosDisponiveis.Descricao}: R$ {ValorSelecionado:F2}");
-            //    //            PagamentosRealizados(ValorSelecionado);
-            //    //        }
-            //    //        else
-            //    //            Console.WriteLine("Valor pago acima do subtotal não permitido para condição de pagamento boleto");
-            //    //        break;
-            //    //}
-            //}
-            //else
-            //    Console.WriteLine("Condição de pagamento informa inválida!");
         }
 
         public void LimpaCarrinho()

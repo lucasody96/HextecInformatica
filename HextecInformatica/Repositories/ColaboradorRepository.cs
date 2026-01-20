@@ -1,5 +1,4 @@
 ﻿using HextecInformatica.Entities;
-using HextecInformatica.Entities.Core;
 using HextecInformatica.Interfaces;
 
 namespace HextecInformatica.Repositories
@@ -21,6 +20,11 @@ namespace HextecInformatica.Repositories
         public Colaborador? BuscaID(int id)
         {
             return ListaColaboradores.FirstOrDefault(colaborador => colaborador.Id == id);
+        }
+
+        public void Delete(Colaborador colaborador)
+        {
+            ListaColaboradores?.Remove(colaborador);
         }
 
     }

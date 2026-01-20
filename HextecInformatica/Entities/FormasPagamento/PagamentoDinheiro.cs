@@ -1,4 +1,5 @@
 ﻿using HextecInformatica.Interfaces;
+using HextecInformatica.Services;
 
 namespace HextecInformatica.Entities.FormasPagamento
 {
@@ -9,24 +10,22 @@ namespace HextecInformatica.Entities.FormasPagamento
 
         public decimal Valor { get; set; }
 
-        public decimal Troco { get; set; }
-
         public decimal ProcessarPagamento(decimal valor, decimal totalRestante, Cliente cliente)
         {
+            
             if (valor > totalRestante)
             {
-                Troco = valor - totalRestante;
-                Console.WriteLine($"--> Troco a devolver: R$ {Troco:F2}");
+                decimal troco = valor - totalRestante;
+                Console.WriteLine($"--> Troco a devolver: R$ {troco:F2}");
 
                 Console.Write("\nDeseja usar o troco na próxima compra como desconto (S/N)? ");
                 string? usaTrocoProxCompra = Console.ReadLine();
 
                 if (usaTrocoProxCompra == "S" || usaTrocoProxCompra == "s")
                 {
-                    cliente.AdicionarDescontoProximaCompra(Troco);
-
-                    Console.WriteLine($"Valor disponível para ser usado como desconto na próxima compra: R$ {cliente.DescProximaCompra:F2}");
-                    
+                    cliente.AdicionarDescontoProximaCompra(troco);
+                    Console.WriteLine($"Valor disponível para ser usado como desconto na próxima compra: R$ {cliente.DescProximaCompra:F2}.");
+                    Console.ReadKey();
                 }
 
                 return totalRestante;
