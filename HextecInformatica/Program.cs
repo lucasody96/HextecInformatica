@@ -111,6 +111,8 @@ namespace HextecInformatica
                     carrinhoService.VisualizaçãoItensCarrinho();
                     Console.WriteLine("\nPressione uma tecla para prosseguir!");
                     Console.ReadKey();
+
+
                     //Seleção de produtos e soma do valor total de pagamento
                     //do
                     //{
