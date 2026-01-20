@@ -22,8 +22,8 @@ namespace HextecInformatica.Services
         private readonly List<IFormasPagamento> ListaFormasPagamentos =
         [
             new PagamentoDinheiro(),
-            new PagamentoCartaoCredito(),
             new PagamentoCartaoDebito(),
+            new PagamentoCartaoCredito(),
             new PagamentoBoleto()
         ];
 
@@ -183,7 +183,8 @@ namespace HextecInformatica.Services
         {
             //opção para ele selecionar a forma de entrega
             Console.Clear();
-            Utils.FormataCabecalho($"Escolha o Frete (Subtotal: {Subtotal:C})");
+            Utils.FormataCabecalho("SELEÇÃO DO FRETE");
+            Console.WriteLine("Selecione a forma de entrega conforme listado abaixo:");
             Console.WriteLine();
             //Cria a lista de opções usando a Interface
             foreach (var formaEntrega in ListaFormasEntrega)
@@ -263,6 +264,8 @@ namespace HextecInformatica.Services
 
         public void CalculoDescontoCashback(Cliente clienteCashback)
         {
+            Console.Clear();
+            Utils.FormataCabecalho("CASHBACK COMO DESCONTO");
             if (clienteCashback != null && clienteCashback.DescProximaCompra > 0)
             {
                 Console.WriteLine($"\nvocê possui R$ {clienteCashback.DescProximaCompra:F2} de desconto acumulado de compras anteriores.");
@@ -279,86 +282,89 @@ namespace HextecInformatica.Services
             }
         }
 
-        public void FormaPagamentoSelecionada(int formaPagamentoSelecionada, decimal ValorSelecionado, Cliente ClientePagamento)
+        public void FormaPagamentoSelecionada(Cliente cliente)
         {
-            var formaPagamentosDisponiveis = ListaFormasPagamentos.FirstOrDefault(formaPagamento =>
-                                                 formaPagamento.Id == formaPagamentoSelecionada);
+            decimal totalRestante = TotalCompra;
 
-            if (formaPagamentosDisponiveis != null)
+            do
             {
-                formaPagamentosDisponiveis.Valor = ValorSelecionado;
+                Console.Clear();
+                Utils.FormataCabecalho("SELEÇÃO DAS FORMAS DE PAGAMENTO");
+                Console.WriteLine($"\nTotal a ser pago: R$ {totalRestante:F2}");
+                Console.WriteLine("Selecione a forma de pagamento conforme listado abaixo:");
 
-                switch (formaPagamentoSelecionada)
+                foreach (var formasPagamento in ListaFormasPagamentos)
                 {
-                    case 1:
-
-                        Console.WriteLine($"{formaPagamentosDisponiveis.Descricao}: R$ {ValorSelecionado:F2}");
-
-                        if (formaPagamentosDisponiveis.Valor > TotalCompra)
-                        {
-                            Troco = formaPagamentosDisponiveis.Valor - TotalCompra;
-                            Console.WriteLine($"--> Troco a devolver: R$ {Troco:F2}");
-
-                            Console.Write("\nDeseja usar o troco na próxima compra como desconto (S/N)? ");
-                            string? usaTrocoProxCompra = Console.ReadLine();
-
-                            if (usaTrocoProxCompra == "S" || usaTrocoProxCompra == "s")
-                            {
-                                ClientePagamento.AdicionarDescontoProximaCompra(Troco);
-                                TrocoFoiConvertido = true;
-
-                                Console.WriteLine($"Valor disponível para ser usado como desconto na próxima compra: R$ {ClientePagamento.DescProximaCompra:F2}");
-                                PagamentosRealizados(TotalCompra);
-                            }
-                            else
-                            {
-                                Console.WriteLine($"{formaPagamentosDisponiveis.Descricao}: R$ {TotalCompra:F2} (Entregue: {ValorSelecionado:F2}, Troco: {Troco:F2})");
-                                PagamentosRealizados(TotalCompra);
-                            }
-                        }
-                        else if (formaPagamentosDisponiveis.Valor <= TotalCompra)
-                            PagamentosRealizados(ValorSelecionado);
-                        break;
-
-                    case 2:
-                        if (formaPagamentosDisponiveis.Valor <= TotalCompra)
-                        {
-                            Console.WriteLine($"{formaPagamentosDisponiveis.Descricao}: R$ {ValorSelecionado:F2}");
-                            PagamentosRealizados(ValorSelecionado);
-                        }
-                        else
-                            Console.WriteLine("Valor pago acima do subtotal não permitido para condição de pagamento cartão de crédito");
-                        break;
-
-                    case 3:
-
-                        if (formaPagamentosDisponiveis.Valor <= TotalCompra)
-                        {
-                            Console.WriteLine($"{formaPagamentosDisponiveis.Descricao}: R$ {ValorSelecionado:F2}");
-                            PagamentosRealizados(ValorSelecionado);
-                        }
-                        else
-                            Console.WriteLine("Valor pago acima do subtotal não permitido para condição de pagamento cartão de débito");
-                        break;
-                    case 4:
-
-                        if (formaPagamentosDisponiveis.Valor <= TotalCompra)
-                        {
-                            Console.WriteLine($"{formaPagamentosDisponiveis.Descricao}: R$ {ValorSelecionado:F2}");
-                            PagamentosRealizados(ValorSelecionado);
-                        }
-                        else
-                            Console.WriteLine("Valor pago acima do subtotal não permitido para condição de pagamento boleto");
-                        break;
+                    Console.WriteLine($" [{formasPagamento.Id}] - {formasPagamento.Descricao}");
                 }
-            }
-            else
-                Console.WriteLine("Condição de pagamento informa inválida!");
-        }
+                
+                int formaPagamento = Utils.EvitaQuebraCodInt($"\nDigite o código da condição de pagamento a ser utilizada: ");
+                decimal valorFormaPagamento = Utils.EvitaQuebraCodDecimal($"Valor: R$ ");
 
-        private void PagamentosRealizados(decimal valorPago)
-        {
-            Pagamentos += valorPago;
+                IFormasPagamento? formaPagamentoSelecionada = ListaFormasPagamentos.FirstOrDefault(formaPagamentoSelecionada =>
+                                                 formaPagamentoSelecionada.Id == formaPagamento);
+
+                if (formaPagamentoSelecionada == null)
+                {
+                    Console.WriteLine("Forma de pagamento selecionada inválida! Pressione uma tecla para prosseguir");
+                    Console.ReadKey();
+                    continue;
+                }
+
+                if (valorFormaPagamento <= 0)
+                {
+                    Console.WriteLine("O valor do pagamento deve ser maior que zero!");
+                    Console.ReadKey();
+                    continue;
+                }
+                
+                decimal abaterValor = formaPagamentoSelecionada.ProcessarPagamento(valorFormaPagamento, totalRestante, cliente!);
+                totalRestante -= abaterValor;
+
+            } while (totalRestante > 0);
+
+            Console.WriteLine("\nPagamento concluído! Pressione uma tecla para prosseguir!");
+            Console.ReadKey();
+
+
+
+
+
+
+            //    //    case 2:
+            //    //        if (formaPagamentosDisponiveis.Valor <= TotalCompra)
+            //    //        {
+            //    //            Console.WriteLine($"{formaPagamentosDisponiveis.Descricao}: R$ {ValorSelecionado:F2}");
+            //    //            PagamentosRealizados(ValorSelecionado);
+            //    //        }
+            //    //        else
+            //    //            Console.WriteLine("Valor pago acima do subtotal não permitido para condição de pagamento cartão de crédito");
+            //    //        break;
+
+            //    //    case 3:
+
+            //    //        if (formaPagamentosDisponiveis.Valor <= TotalCompra)
+            //    //        {
+            //    //            Console.WriteLine($"{formaPagamentosDisponiveis.Descricao}: R$ {ValorSelecionado:F2}");
+            //    //            PagamentosRealizados(ValorSelecionado);
+            //    //        }
+            //    //        else
+            //    //            Console.WriteLine("Valor pago acima do subtotal não permitido para condição de pagamento cartão de débito");
+            //    //        break;
+            //    //    case 4:
+
+            //    //        if (formaPagamentosDisponiveis.Valor <= TotalCompra)
+            //    //        {
+            //    //            Console.WriteLine($"{formaPagamentosDisponiveis.Descricao}: R$ {ValorSelecionado:F2}");
+            //    //            PagamentosRealizados(ValorSelecionado);
+            //    //        }
+            //    //        else
+            //    //            Console.WriteLine("Valor pago acima do subtotal não permitido para condição de pagamento boleto");
+            //    //        break;
+            //    //}
+            //}
+            //else
+            //    Console.WriteLine("Condição de pagamento informa inválida!");
         }
 
         public void LimpaCarrinho()

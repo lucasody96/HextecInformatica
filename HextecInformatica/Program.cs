@@ -112,30 +112,16 @@ namespace HextecInformatica
                     Console.WriteLine("\nPressione uma tecla para prosseguir!");
                     Console.ReadKey();
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/ResgatePagamento
                     //Seleção de produtos e soma do valor total de pagamento
-                    //do
-                    //{
-                    //    Console.Clear();
-                    //    //carrega as formas de pagamento disponíveis
-                    //    Dados.FormasPagamentosDisponíveis(CarrinhoCompraAtual);
-                    //    Console.WriteLine($"\nTotal a ser pago: R$ {CarrinhoCompraAtual.TotalCompra:F2}");
-                    //    Console.WriteLine("Selecione a forma de pagamento conforme listado abaixo:");
-                    //    Console.WriteLine("1 - Dinheiro");
-                    //    Console.WriteLine("2 - Cartão de Crédito");
-                    //    Console.WriteLine("3 - Cartão de Débito");
-                    //    Console.WriteLine("4 - Boleto");
+                    carrinhoService.FormaPagamentoSelecionada(ClienteLoja!);
 
-                    //    int formaPagamento = Utils.EvitaQuebraCodInt($"Digite o código da condição de pagamento a ser utilizada: ");
-                    //    decimal valorFormaPagamento = Utils.EvitaQuebraCodDecimal($"Valor: R$ ");
 
-                    //    CarrinhoCompraAtual.FormaPagamentoSelecionada(formaPagamento, valorFormaPagamento, ClienteLoja!);
-                    //    Console.WriteLine("\nPressione uma tecla para prosseguir!");
-                    //    Console.ReadKey();
 
-                    //} while (CarrinhoCompraAtual.TotalCompra > 0);
 
-                    
                     //Console.Clear();
                     //Venda? VendaAtual = new();
                     ////Simular uma nota fiscal simples - em texto no terminal.
