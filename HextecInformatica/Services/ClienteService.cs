@@ -13,6 +13,7 @@ namespace HextecInformatica.Services
             {
                 Console.WriteLine(clienteExiste.MensagemBoasVindas());
                 Console.ReadKey();
+                return clienteExiste;
             }else
             {
                 Cliente clienteNovo = new(nome);
@@ -20,9 +21,8 @@ namespace HextecInformatica.Services
                 Console.WriteLine(clienteNovo.MensagemBoasVindas());
                 clienteRepos.Adiciona(clienteNovo);
                 Console.ReadKey();
+                return clienteNovo;
             }
-
-            return clienteExiste;
         }
     }
 }

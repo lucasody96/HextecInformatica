@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using HextecInformatica.Entities;
 
 namespace HextecInformatica.Interfaces
 {
     public interface IFormasPagamento
     {
-        public int Id { get; set; }
-        public string? Descricao { get; set; }
+        int Id { get;  }
+        string? Descricao { get; }
 
-        public decimal Valor { get; set; }
+        decimal Valor { get; set; }
+        decimal ProcessarPagamento(decimal valor, decimal totalCompra, Cliente cliente);
+
+        string ToString(string descricao, decimal valor);
     }
 }

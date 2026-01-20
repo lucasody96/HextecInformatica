@@ -5,7 +5,7 @@ namespace HextecInformatica.Entities.Core
 {
     public class Produto : Entity, IProdutos
     {
-        private ProdutoRepository ProdutoRepository = new ProdutoRepository();
+        private readonly ProdutoRepository ProdutoRepository = new ();
 
         private static int _contadorProdutos = 0;
         public string Descricao { get; set; }
