@@ -12,7 +12,7 @@ namespace HextecInformatica.Repositories
             ListaProdutos.Add(produto);
         }
 
-        public Produto? BuscaNome(string descricao)
+        public Produto? BuscaLoginNome(string descricao)
         {
             return ListaProdutos.FirstOrDefault(produto => produto.Descricao == descricao);
         }

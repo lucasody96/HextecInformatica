@@ -13,7 +13,7 @@ namespace HextecInformatica.Repositories
             ListaClientes?.Add(cliente);
         }
 
-        public Cliente? BuscaNome(string nome)
+        public Cliente? BuscaLoginNome(string nome)
         {
             return ListaClientes?.FirstOrDefault(cliente => cliente.Nome == nome);
         }

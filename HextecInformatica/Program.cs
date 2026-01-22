@@ -1,4 +1,5 @@
 ﻿using HextecInformatica.Entities;
+using HextecInformatica.Entities.Core;
 using HextecInformatica.Repositories;
 using HextecInformatica.Services;
 
@@ -43,7 +44,7 @@ namespace HextecInformatica
                         IniciarVenda(produtoRepo, clienteRepo);
                         break;
                     case "2":
-                        AcessarColaborador(produtoRepo, colaboradorRepo);
+                        AcessarColaborador(clienteRepo, produtoRepo, colaboradorRepo);
                         break;
                     case "3":
                         Console.WriteLine("Saindo do programa....");
@@ -125,104 +126,36 @@ namespace HextecInformatica
                     Console.ReadKey();
             }
 
-            static void AcessarColaborador(ProdutoRepository produtoRepos, ColaboradorRepository colaboradorRepos)
+            static void AcessarColaborador(ClienteRepository clienteRepos, ProdutoRepository produtoRepos, ColaboradorRepository colaboradorRepos)
             {
+                ColaboradorService? colaboradorService = new();
 
+                Colaborador? colaboradorLogado = colaboradorService.VerificaColaboradorExistente(colaboradorRepos);
 
+                if (colaboradorLogado == null)
+                {
+                    Console.WriteLine("Falha no login. Pressione qualquer tecla para voltar ao menu principal.");
+                    Console.ReadKey();
+                    return;
+                }
 
-                //bool EhColaborador = false;
-                //do
-                //{
-                //    Console.Clear();
-                //    Utils.FormataCabecalho("ACESSO PARA COLABORADORES");
-                //    Console.Write("\nLogin: ");
+                int opcaoSelecionada;
+                do
+                {
+                    //exibe os menus do colaborador
+                    colaboradorService.ExibeMenusColaborador();
 
-                //    string? usuarioColaboradorInput = Console.ReadLine();
-                //    string usuarioColaborador = string.IsNullOrWhiteSpace(usuarioColaboradorInput)
-                //        ? ""
-                //        : usuarioColaboradorInput.Trim().ToUpper();
+                    opcaoSelecionada = Utils.EvitaQuebraCodInt("Escolha uma opção: ");
 
-                //    Console.Write("Senha: ");
-                //    string? senhaColaborador = Utils.LerSenhaComAsterisco();
+                    if (opcaoSelecionada != 5)
+                    {
+                        colaboradorService.AcionaMenuColaborador(opcaoSelecionada);
+                    }
+                    else
+                        Console.WriteLine("Saindo da área do colaborador... Pressione qualquer tecla para voltar ao menu principal.");
 
-                //    Colaborador? ColaboradorLogado = Hextec.VerificaColaboradorLoja(usuarioColaborador, senhaColaborador);
-
-                //    if (ColaboradorLogado != null)
-                //    {
-                //        EhColaborador = true;
-                //        Hextec.RetornaColaboradorLogado(usuarioColaborador);
-                //        Console.ReadKey();
-                //    }
-                //    else
-                //    {
-                //        Console.WriteLine("\nLogin ou senha incorretos!");
-                //        Console.Write("Deseja tentar novamente (S/N)? ");
-                //        string? respLogin = Console.ReadLine();
-
-                //        if (respLogin == "N" || respLogin == "n")
-                //        {
-                //            Console.WriteLine("\nVoltando ao menu anterior. Pressione alguma tecla para prosseguir...");
-                //            Console.ReadKey();
-                //            return;
-                //        }
-                //    }
-
-                //} while (!EhColaborador);
-
-                //bool execucaoComoColaborador = true;
-
-                //do
-                //{
-                //    Console.Clear();
-                //    Utils.FormataCabecalho("MENUS DOS COLABORADORES");
-                //    Console.WriteLine("\nOpções Disponíveis:\n");
-                //    Console.WriteLine("  [1] - Gerenciar Estoque");
-                //    Console.WriteLine("  [2] - Visualizar Vendas");
-                //    Console.WriteLine("  [3] - Relatórios");
-                //    Console.WriteLine("  [4] - Logout\n");
-
-                //    int? menuSelecionado = Utils.EvitaQuebraCodInt("Selecione o menu desejado: ");
-                //    switch (menuSelecionado)
-                //    {
-                //        case 1:
-                //            Console.Clear();
-                //            Utils.FormataCabecalho("GERENCIAMENTO DE ITENS DO ESTOQUE");
-                //            Console.WriteLine("\nOpções Disponíveis:\n");
-                //            Console.WriteLine("  [1] - Visualização");
-                //            Console.WriteLine("  [2] - Entrada");
-                //            Console.WriteLine("  [3] - Ajuste");
-                //            Console.WriteLine("  [4] - Logout\n");
-                //            //Criar método para gerenciar estoque
-                //            int? menuSelecionadoEstoque = Utils.EvitaQuebraCodInt("Selecione o menu desejado: ");
-                //            Hextec.GerenciamentoEstoque(menuSelecionadoEstoque);
-
-                //            Console.WriteLine("\nPressione algum botão para prosseguir");
-                //            Console.ReadLine();
-                //            break;
-                //        case 2:
-                //            //Criar método para Visualizar Vendas
-                //            Console.WriteLine("Em construção, pressione algum botão para prosseguir");
-                //            Console.ReadLine();
-                //            break;
-                //        case 3:
-                //            //Criar método para Relatórios
-                //            Console.WriteLine("Em construção, pressione algum botão para prosseguir");
-                //            Console.ReadLine();
-                //            break;
-                //        case 4:
-                //            //sai para o menu anterior
-                //            Console.WriteLine("Saindo do programa....Pressione alguma botão para prosseguir");
-                //            execucaoComoColaborador = false;
-                //            break;
-                //        default:
-                //            Console.WriteLine("Opção inválida!\n");
-                //            break;
-                //    }
-
-                //} while (execucaoComoColaborador);
-
-
-
+                } while (opcaoSelecionada != 5);
+                
 
                 Console.ReadKey();
             }

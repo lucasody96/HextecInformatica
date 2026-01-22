@@ -12,9 +12,9 @@ namespace HextecInformatica.Repositories
             ListaColaboradores.Add(colaborador);
         }
 
-        public Colaborador? BuscaNome(string nome)
+        public Colaborador? BuscaLoginNome(string login)
         {
-            return ListaColaboradores.FirstOrDefault(colaborador => colaborador.Nome == nome);
+            return ListaColaboradores.FirstOrDefault(colaborador => colaborador.Login == login);
         }
 
         public Colaborador? BuscaID(int id)

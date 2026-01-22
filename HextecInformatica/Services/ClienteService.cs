@@ -7,7 +7,7 @@ namespace HextecInformatica.Services
     {
         public Cliente? VerificaClienteExistente(ClienteRepository clienteRepos, string nome)
         {
-            var clienteExiste = clienteRepos.BuscaNome(nome);
+            var clienteExiste = clienteRepos.BuscaLoginNome(nome);
 
             if (clienteExiste != null)
             {
