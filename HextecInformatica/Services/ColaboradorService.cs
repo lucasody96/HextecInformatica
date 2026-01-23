@@ -7,17 +7,8 @@ namespace HextecInformatica.Services
 {
     public class ColaboradorService
     {
-        private static List<Menu> listaMenus =
-        [
-            new MenuGerenciaEstoque(),
-            new MenuVisualizaVendas(),
-            new MenuCadastroCliente(),
-            new MenuCadastroColaborador()
-        ];
-
-        public static List<Menu> ListaMenus { get => listaMenus; set => listaMenus = value; }
-
-        public Colaborador? VerificaColaboradorExistente(ColaboradorRepository colaboradorRepos)
+        private List<Menu> ListaMenus = [];
+        public static Colaborador? VerificaColaboradorExistente(ColaboradorRepository colaboradorRepos)
         {
             Colaborador? colaboradorLogado;
             bool tentarNovamente = true;
@@ -59,6 +50,17 @@ namespace HextecInformatica.Services
             return colaboradorLogado;
         }
 
+        public void CarregarMenus(ProdutoRepository prodRepo, ClienteRepository ClienteRepo, ColaboradorRepository ColabRepo)
+        {
+            ListaMenus =
+            [
+                new MenuGerenciaEstoque(prodRepo),
+                new MenuVisualizaVendas(prodRepo),
+                new MenuCadastroCliente(ClienteRepo),
+                new MenuCadastroColaborador(ColabRepo),
+            ];  
+        }
+
         public void ExibeMenusColaborador()
         {
             Console.Clear();
@@ -69,13 +71,7 @@ namespace HextecInformatica.Services
             {
                 Console.WriteLine($"  [{menu.Id}] - {menu.Descricao}");
             }
-            Console.WriteLine("  [5] - RETORNAR AO MENU ANTERIOR\n");
-        }
-
-        public Menu MenuEscolhido(int opcaoSelecionada)
-        {
-            var menuSelecionado = ListaMenus.FirstOrDefault(menu => menu.Id == opcaoSelecionada);
-            return menuSelecionado!;
+            Console.WriteLine("  [5] - Retornar ao Menu Anterior\n");
         }
 
         public void AcionaMenuColaborador(int opcaoSelecionada)
@@ -90,6 +86,11 @@ namespace HextecInformatica.Services
             }
 
             menuSelecionado.AcionaMenu();
+        }
+
+        public Menu? MenuEscolhido(int opcaoSelecionada)
+        {
+            return ListaMenus.FirstOrDefault(menu => menu.Id == opcaoSelecionada);
         }
     }
 }

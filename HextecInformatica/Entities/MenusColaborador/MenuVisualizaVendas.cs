@@ -1,13 +1,16 @@
 ﻿using HextecInformatica.Entities.Core;
+using HextecInformatica.Repositories;
 
 namespace HextecInformatica.Entities.MenusColaborador
 {
     public class MenuVisualizaVendas: Menu
     {
-        public MenuVisualizaVendas()
+        private readonly ProdutoRepository ProdutoRepository;
+        public MenuVisualizaVendas(ProdutoRepository prodRepo)
         {
             Id = 2;
-            Descricao = "VISUALIZAR VENDAS";
+            Descricao = "Visualizar Vendas";
+            ProdutoRepository = prodRepo;
         }
         public override void AcionaMenu()
         {

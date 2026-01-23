@@ -1,14 +1,17 @@
 ﻿using HextecInformatica.Entities.Core;
 using HextecInformatica.Interfaces;
+using HextecInformatica.Repositories;
 
 namespace HextecInformatica.Entities.MenusColaborador
 {
     public class MenuCadastroCliente: Menu
     {
-        public MenuCadastroCliente()
+        private readonly ClienteRepository ClienteRepository;
+        public MenuCadastroCliente(ClienteRepository ClienteRepo)
         {
             Id = 3;
-            Descricao = "CADASTRO DE CLIENTE";
+            Descricao = "Cadastro de Cliente";
+            ClienteRepository = ClienteRepo;
         }
 
         public override void AcionaMenu()

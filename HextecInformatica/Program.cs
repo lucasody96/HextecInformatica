@@ -64,7 +64,6 @@ namespace HextecInformatica
             //================================================================
             static void IniciarVenda(ProdutoRepository produtoRepo, ClienteRepository clienteRepo) 
             {
-                ClienteService clienteService = new();
 
                 Console.Write("\nDigite seu nome: ");
                 string? nomeCliente = Console.ReadLine();
@@ -76,7 +75,7 @@ namespace HextecInformatica
                     return;
                 }
 
-                Cliente? ClienteLoja = clienteService.VerificaClienteExistente(clienteRepo, nomeCliente);
+                Cliente? ClienteLoja = ClienteService.VerificaClienteExistente(clienteRepo, nomeCliente);
 
                 CarrinhoService carrinhoService = new();
                 // método "Catálogo de Itens"
@@ -130,7 +129,7 @@ namespace HextecInformatica
             {
                 ColaboradorService? colaboradorService = new();
 
-                Colaborador? colaboradorLogado = colaboradorService.VerificaColaboradorExistente(colaboradorRepos);
+                Colaborador? colaboradorLogado = ColaboradorService.VerificaColaboradorExistente(colaboradorRepos);
 
                 if (colaboradorLogado == null)
                 {
@@ -138,6 +137,9 @@ namespace HextecInformatica
                     Console.ReadKey();
                     return;
                 }
+
+                //carrega os menus do colaborador
+                colaboradorService.CarregarMenus(produtoRepos, clienteRepos, colaboradorRepos);
 
                 int opcaoSelecionada;
                 do
