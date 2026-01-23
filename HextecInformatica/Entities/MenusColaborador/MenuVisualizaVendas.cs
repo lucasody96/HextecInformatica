@@ -14,6 +14,8 @@ namespace HextecInformatica.Entities.MenusColaborador
         }
         public override void AcionaMenu()
         {
+            Console.Clear();
+            ExibirCabecalho(Descricao!);
         }
     }
 }

@@ -1,9 +1,10 @@
 ﻿using HextecInformatica.Entities.Core;
+using HextecInformatica.Interfaces;
 using HextecInformatica.Repositories;
 
 namespace HextecInformatica.Entities.MenusColaborador
 {
-    public class MenuGerenciaEstoque : Menu
+    public class MenuGerenciaEstoque : Menu, IMenus<ProdutoRepository>
     {
         private readonly ProdutoRepository ProdutoRepository;
         public MenuGerenciaEstoque(ProdutoRepository prodRepo)
@@ -20,9 +21,9 @@ namespace HextecInformatica.Entities.MenusColaborador
             do
             {
                 Console.Clear();
-                Utils.FormataCabecalho(Descricao!);
+                ExibirCabecalho(Descricao!);
 
-                VisualizarProdutos(ProdutoRepository);
+                Visualizar(ProdutoRepository);
 
                 Console.WriteLine("\nOpções Disponíveis:\n");
                 Console.WriteLine("  [1] - Inserir Novo Produto");
@@ -60,12 +61,12 @@ namespace HextecInformatica.Entities.MenusColaborador
 
         }
 
-        public static void Adicionar(ProdutoRepository produtoRepos)
+        public void Adicionar(ProdutoRepository produtoRepos)
         {
             Console.Clear();
-            Utils.FormataCabecalho("ADICIONAR PRODUTO AO ESTOQUE");
+            Utils.FormataCabecalho("Adicionar Produto ao Estoque");
 
-            VisualizarProdutos(produtoRepos);
+            Visualizar(produtoRepos);
 
             Console.Write("\nDigite a descrição do produto: ");
             string? descricaoProduto = Console.ReadLine();
@@ -83,12 +84,12 @@ namespace HextecInformatica.Entities.MenusColaborador
             Console.ReadKey();
         }
 
-        public static void Remover(ProdutoRepository produtoRepos)
+        public void Remover(ProdutoRepository produtoRepos)
         {
             // Implementar lógica para remover produto do estoque
             Console.Clear();
-            Utils.FormataCabecalho("REMOVER PRODUTO DO ESTOQUE");
-            VisualizarProdutos(produtoRepos);
+            Utils.FormataCabecalho("Remover Produto do Estoque");
+            Visualizar(produtoRepos);
 
             int idProduto = Utils.EvitaQuebraCodInt("\nDigite o ID do produto que deseja remover: ");
             Produto? produtoParaRemover = produtoRepos.BuscaID(idProduto);
@@ -111,18 +112,15 @@ namespace HextecInformatica.Entities.MenusColaborador
                 }
 
             }else
-            {
                 Console.WriteLine("\nProduto não encontrado. Verifique o ID e tente novamente.");
-            }
-
         }
 
-        public static void Atualizar(ProdutoRepository produtoRepos)
+        public void Atualizar(ProdutoRepository produtoRepos)
         {
             // Implementar lógica para atualizar dados do produto
             Console.Clear();
-            Utils.FormataCabecalho("ATUALIZAR DADOS DO PRODUTO");
-            VisualizarProdutos(produtoRepos);
+            Utils.FormataCabecalho("Atualizar Dados do Produto");
+            Visualizar(produtoRepos);
 
             int idProduto = Utils.EvitaQuebraCodInt("\nDigite o ID do produto que deseja atualizar: ");
             Produto? produtoParaAtualizar = produtoRepos.BuscaID(idProduto);
@@ -142,18 +140,14 @@ namespace HextecInformatica.Entities.MenusColaborador
 
             }
             else
-            {
                 Console.WriteLine("\nProduto não encontrado. Verifique o ID e tente novamente.");
-            }
-
-
         }
 
-        public static void VisualizarProdutos (ProdutoRepository produto)
+        public void Visualizar (ProdutoRepository produto)
         {
             Console.WriteLine();
             Utils.FormataCabecalho("PRODUTOS DO ESTOQUE");
-
+            Utils.FormataCabecalhoTabela();
             foreach (var Produto in produto.ListaProdutos)
             {
                 Utils.FormataLinhaProdutos(Produto.Id, Produto.Descricao, Produto.Valor, Produto.Estoque);

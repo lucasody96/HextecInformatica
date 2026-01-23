@@ -22,5 +22,11 @@ namespace HextecInformatica.Repositories
             colaborador.Adiciona(new Colaborador("ADMINISTRADOR DO SISTEMA","00000000000", "ADMIN", "admin"));
             colaborador.Adiciona(new Colaborador("LUCAS ODY", "03711831036", "LUCAS.ODY", "1234"));
         }
+
+        public static void CarregaClientes(ClienteRepository clienteRepos)
+        {
+            clienteRepos.Adiciona(new Cliente("MARIA SILVA", "F", "12345678900", string.Empty));
+            clienteRepos.Adiciona(new Cliente("EMPRESA XYZ LTDA", "J", string.Empty, "98765432000100"));
+        }
     }
 }

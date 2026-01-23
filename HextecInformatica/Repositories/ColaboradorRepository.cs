@@ -3,7 +3,7 @@ using HextecInformatica.Interfaces;
 
 namespace HextecInformatica.Repositories
 {
-    public class ColaboradorRepository: IRepositories<Colaborador>
+    public class ColaboradorRepository : IRepositories<Colaborador>
     {
         public List<Colaborador> ListaColaboradores { get; private set; } = [];
 
@@ -25,6 +25,11 @@ namespace HextecInformatica.Repositories
         public void Delete(Colaborador colaborador)
         {
             ListaColaboradores?.Remove(colaborador);
+        }
+
+        public void Update(Colaborador colaborador, int campoAlterado)
+        {
+
         }
 
     }

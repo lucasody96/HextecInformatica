@@ -27,15 +27,15 @@ namespace HextecInformatica.Repositories
             ListaProdutos.Remove(produto);
         }
 
-        public void Update(Produto produto, int CampoAlterado)
+        public void Update(Produto produto, int campoAlterado)
         {
             var produtoSelecionado = BuscaID(produto.Id);
             if (produtoSelecionado != null)
             {
-                switch (CampoAlterado)
+                switch (campoAlterado)
                 {
                     case 1:
-                        Console.WriteLine("Digite a nova descrição do produto: ");
+                        Console.Write("Digite a nova descrição do produto: ");
                         string? novaDescricao = Console.ReadLine();
                         produtoSelecionado.Descricao = novaDescricao ?? string.Empty;
                         break;

@@ -18,6 +18,7 @@ namespace HextecInformatica
             //Dados iniciais
             Dados.CarregaProdutos(produtoRepo);
             Dados.CarregaColaboradores(colaboradorRepo);
+            Dados.CarregaClientes(clienteRepo);
 
             //================================================================
             //PROGRAMA PRINCIPAL

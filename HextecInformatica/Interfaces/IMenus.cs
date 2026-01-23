@@ -8,8 +8,9 @@ namespace HextecInformatica.Interfaces
 {
     public interface IMenus<T>
     {
-        void Adiciona(T entidade);
-        void Remove(T entidade);
-        void Atualiza(T entidade);
+        void Adicionar(T entidade);
+        void Remover(T entidade);
+        void Atualizar(T entidade);
+        void Visualizar(T entidade);
     }
 }

@@ -135,5 +135,39 @@
             Console.WriteLine(); // Pula uma linha no final
             return senha;
         }
+
+        public static void FormataCabecalhoTabelaClientes()
+        {
+            // Ajustamos os tamanhos: ID(4), Nome(30), Tipo(4), Documento(18)
+            string linha = string.Format("| {0, -4} | {1, -30} | {2, -4} | {3, -18} |",
+                                         "ID", "NOME DO CLIENTE", "TIPO", "CPF / CNPJ");
+
+            ImprimeLinhaSeparadora('-');
+            // O PadRight garante que a linha vá até o final da largura padrão (80)
+            Console.WriteLine(linha.PadRight(LarguraPadrao - 1) + "|");
+            ImprimeLinhaSeparadora('-');
+        }
+
+        public static void FormataLinhaCliente(int id, string nome, string tipo, string documento)
+        {
+            // Garante que se o documento vier null, não quebra (vira vazio)
+            string docExibir = documento ?? "";
+
+            // Formatação específica para CPF (11 digitos) e CNPJ (14 digitos)
+            // Se quiser simplificar, pode remover esse bloco e passar o documento direto
+            if (docExibir.Length == 11 && long.TryParse(docExibir, out long cpfNum))
+                docExibir = cpfNum.ToString(@"000\.000\.000\-00");
+            else if (docExibir.Length == 14 && long.TryParse(docExibir, out long cnpjNum))
+                docExibir = cnpjNum.ToString(@"00\.000\.000\/0000\-00");
+
+            // Monta a linha usando os mesmos tamanhos do cabeçalho
+            string linha = string.Format("| {0, -4} | {1, -30} | {2, -4} | {3, -18} |",
+                                         id,
+                                         nome.Length > 30 ? nome.Substring(0, 27) + "..." : nome, // Corta nome longo
+                                         tipo,
+                                         docExibir);
+
+            Console.WriteLine(linha.PadRight(LarguraPadrao - 1) + "|");
+        }
     }
 }
