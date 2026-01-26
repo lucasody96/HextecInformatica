@@ -14,11 +14,13 @@ namespace HextecInformatica
             var clienteRepo = new ClienteRepository();
             var colaboradorRepo = new ColaboradorRepository();
             var produtoRepo = new ProdutoRepository();
+            var vendaRepo = new VendaRepository();
 
             //Dados iniciais
             Dados.CarregaProdutos(produtoRepo);
             Dados.CarregaColaboradores(colaboradorRepo);
             Dados.CarregaClientes(clienteRepo);
+            Dados.CarregaVendas(vendaRepo);
 
             //================================================================
             //PROGRAMA PRINCIPAL
@@ -42,10 +44,10 @@ namespace HextecInformatica
                 switch (opcaoLogin)
                 {
                     case "1":
-                        IniciarVenda(produtoRepo, clienteRepo);
+                        IniciarVenda(produtoRepo, clienteRepo, vendaRepo);
                         break;
                     case "2":
-                        AcessarColaborador(clienteRepo, produtoRepo, colaboradorRepo);
+                        AcessarColaborador(clienteRepo, produtoRepo, colaboradorRepo, vendaRepo);
                         break;
                     case "3":
                         Console.WriteLine("Saindo do programa....");
@@ -63,7 +65,7 @@ namespace HextecInformatica
             //================================================================
             // MÉTODOS/FUNÇÕES Auxiliares
             //================================================================
-            static void IniciarVenda(ProdutoRepository produtoRepo, ClienteRepository clienteRepo) 
+            static void IniciarVenda(ProdutoRepository produtoRepo, ClienteRepository clienteRepo, VendaRepository vendaRepo) 
             {
 
                 Console.Write("\nDigite seu nome: ");
@@ -115,7 +117,7 @@ namespace HextecInformatica
                     Console.Clear();
                     //Simular uma nota fiscal simples - em texto no terminal.
                     //campos disponíveis, nome da loja, nome usuario/cliente, lista de produtos, valor frete e desconto e total de pagamento
-                    vendaService.ImprimeNotaFiscal(ClienteLoja!, carrinhoService);
+                    vendaService.ImprimeNotaFiscal(ClienteLoja!, carrinhoService, vendaRepo);
 
                     // Limpa a lista do carrinho, os pagamentos e totais
                     carrinhoService.LimpaCarrinho();
@@ -126,7 +128,10 @@ namespace HextecInformatica
                     Console.ReadKey();
             }
 
-            static void AcessarColaborador(ClienteRepository clienteRepos, ProdutoRepository produtoRepos, ColaboradorRepository colaboradorRepos)
+            static void AcessarColaborador(ClienteRepository clienteRepos, 
+                                           ProdutoRepository produtoRepos, 
+                                           ColaboradorRepository colaboradorRepos, 
+                                           VendaRepository vendaRepos)
             {
                 ColaboradorService? colaboradorService = new();
 
@@ -140,7 +145,7 @@ namespace HextecInformatica
                 }
 
                 //carrega os menus do colaborador
-                colaboradorService.CarregarMenus(produtoRepos, clienteRepos, colaboradorRepos);
+                colaboradorService.CarregarMenus(produtoRepos, clienteRepos, colaboradorRepos, vendaRepos);
 
                 int opcaoSelecionada;
                 do
@@ -151,9 +156,7 @@ namespace HextecInformatica
                     opcaoSelecionada = Utils.EvitaQuebraCodInt("Escolha uma opção: ");
 
                     if (opcaoSelecionada != 5)
-                    {
                         colaboradorService.AcionaMenuColaborador(opcaoSelecionada);
-                    }
                     else
                         Console.WriteLine("Saindo da área do colaborador... Pressione qualquer tecla para voltar ao menu principal.");
 

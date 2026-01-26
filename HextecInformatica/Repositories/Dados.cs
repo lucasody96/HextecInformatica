@@ -28,5 +28,20 @@ namespace HextecInformatica.Repositories
             clienteRepos.Adiciona(new Cliente("MARIA SILVA", "F", "12345678900", string.Empty));
             clienteRepos.Adiciona(new Cliente("EMPRESA XYZ LTDA", "J", string.Empty, "98765432000100"));
         }
+
+        public static void CarregaVendas(VendaRepository vendaRepos)
+        {
+            // Implementação futura para carregar vendas iniciais, se necessário.
+            Venda vendaTeste1 = new();
+            vendaTeste1.SalvarVenda("MARIA SILVA", 500.00m, 20.00m, 10.00m);
+
+            vendaRepos.Adiciona(vendaTeste1);
+
+            Venda vendaTeste2 = new();
+            vendaTeste2.SalvarVenda("JOAO DA SILVA", 250.00m, 0m, 10.00m);
+
+            vendaRepos.Adiciona(vendaTeste2);
+
+        }
     }
 }

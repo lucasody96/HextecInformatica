@@ -169,5 +169,142 @@
 
             Console.WriteLine(linha.PadRight(LarguraPadrao - 1) + "|");
         }
+
+        public static void FormataCabecalhoColaborador()
+        {
+            // REMOVI a barra "|" do final desta string de formatação.
+            // O sistema vai preencher com espaços até a largura padrão e fechar com a barra depois.
+            string linha = string.Format("| {0, -6} | {1, -30} | {2, -15} | {3, -16}",
+                                         "ID", "NOME", "LOGIN", "CPF");
+
+            ImprimeLinhaSeparadora('='); // Usei '=' pois parece ser o padrão do topo da sua imagem
+            Console.WriteLine(linha.PadRight(Utils.LarguraPadrao - 1) + "|");
+            ImprimeLinhaSeparadora('-');
+        }
+        public static void FormataLinhaColaborador(int id, string nome, string login, string cpf)
+        {
+            // Tratamento CPF
+            string cpfExibir = cpf ?? "";
+            if (cpfExibir.Length == 11 && long.TryParse(cpfExibir, out long cpfNum))
+                cpfExibir = cpfNum.ToString(@"000\.000\.000\-00");
+
+            // Tratamento Nome (Truncar)
+            string nomeExibir = nome ?? "";
+            if (nomeExibir.Length > 30)
+                nomeExibir = nomeExibir.Substring(0, 27) + "...";
+
+            // Tratamento Login (Truncar)
+            string loginExibir = login ?? "";
+            if (loginExibir.Length > 15)
+                loginExibir = loginExibir.Substring(0, 12) + "...";
+
+            // REMOVI a barra "|" do final aqui também.
+            string linha = string.Format("| {0, -6} | {1, -30} | {2, -15} | {3, -16}",
+                                         id,
+                                         nomeExibir,
+                                         loginExibir,
+                                         cpfExibir);
+
+            // O PadRight preenche o espaço vazio e adicionamos a barra final manual
+            Console.WriteLine(linha.PadRight(Utils.LarguraPadrao - 1) + "|");
+        }
+        public static void FormataCabecalhoVendas()
+        {
+            // Apenas inicia a tabela visualmente
+            ImprimeLinhaSeparadora('=');
+            string titulo = "| LISTAGEM DE VENDAS (RESUMO FINANCEIRO)";
+            Console.WriteLine(titulo.PadRight(LarguraPadrao - 1) + "|");
+            ImprimeLinhaSeparadora('=');
+        }
+
+        public static void FormataLinhaVenda(int nota, DateTime data, string cliente, decimal total, decimal frete, decimal desconto)
+        {
+            // LINHA 1: Identificação (Nota, Data e Cliente)
+            // Estratégia: Nota e Data fixos à esquerda, Cliente ocupa o resto
+            string parte1 = string.Format(" NOTA: {0} | DATA: {1}", nota, data.ToString("dd/MM/yyyy"));
+
+            // Tratamento do Cliente (Preenche o resto da linha)
+            int espacoRestante = LarguraPadrao - parte1.Length - 5; // -5 para bordas e espaços
+            string clienteExibir = cliente.Length > espacoRestante ? cliente.Substring(0, espacoRestante - 3) + "..." : cliente;
+
+            string linha1 = string.Format("|{0} | CLIENTE: {1}", parte1, clienteExibir);
+
+            // LINHA 2: Valores Financeiros (Total, Frete, Desconto)
+            // Estratégia: Espaçamento fixo para ficar alinhado
+            string linha2 = string.Format("| TOTAL: {0, -12} | FRETE: {1, -10} | DESC.: {2, -10}",
+                                          total.ToString("C"),
+                                          frete.ToString("C"),
+                                          desconto.ToString("C"));
+
+            // IMPRESSÃO DO BLOCO
+            Console.WriteLine(linha1.PadRight(LarguraPadrao - 1) + "|");
+            Console.WriteLine(linha2.PadRight(LarguraPadrao - 1) + "|");
+
+            // Separador entre uma venda e outra (usar traço simples para não poluir)
+            ImprimeLinhaSeparadora('-');
+        }
+
+        public static void FormataCabecalhoItens()
+        {
+            // Cabeçalho interno para quando você detalhar uma venda
+            string linha = string.Format("| {0, -4} | {1, -35} | {2, -5} | {3, -12} | {4, -12}",
+                                         "ID", "PRODUTO", "QTD", "UNITÁRIO", "TOTAL");
+
+            Console.WriteLine("".PadRight(LarguraPadrao, ' ')); // Linha vazia para respiro
+            Console.WriteLine("| ITENS DA VENDA:".PadRight(LarguraPadrao - 1) + "|");
+            ImprimeLinhaSeparadora('-');
+            Console.WriteLine(linha.PadRight(LarguraPadrao - 1) + "|");
+            ImprimeLinhaSeparadora('-');
+        }
+
+        public static void FormataLinhaItem(int id, string produto, int qtd, decimal valorUnitario)
+        {
+            decimal valorTotalItem = qtd * valorUnitario;
+
+            // Trunca nome do produto se for muito grande
+            if (produto.Length > 35) produto = produto.Substring(0, 32) + "...";
+
+            string linha = string.Format("| {0, -4} | {1, -35} | {2, -5} | {3, -12} | {4, -12}",
+                                         id,
+                                         produto,
+                                         qtd,
+                                         valorUnitario.ToString("C"),
+                                         valorTotalItem.ToString("C"));
+
+            Console.WriteLine(linha.PadRight(LarguraPadrao - 1) + "|");
+        }
+
+        public static void ExibirItensDaVenda(Venda venda)
+        {
+            Console.WriteLine();
+            Console.WriteLine("   ITENS DESTA VENDA:");
+            Console.WriteLine("   " + new string('-', 70)); // Linha menorzinha decorativa
+
+            // Cabeçalho dos Itens
+            // QTD | PRODUTO | V.UNIT | TOTAL
+            string cabecalho = string.Format("   | {0, -4} | {1, -30} | {2, -12} | {3, -12} |",
+                                             "QTD", "PRODUTO", "V.UNIT", "TOTAL");
+            Console.WriteLine(cabecalho);
+            Console.WriteLine("   " + new string('-', 70));
+
+            // Loop dos Itens
+            foreach (var item in venda.ListaItensVenda)
+            {
+                // NOTA: Estou assumindo que seu objeto 'item' tem a propriedade 'QuantidadeComprada'.
+                // Se na sua classe Produto a propriedade for apenas 'Quantidade', ajuste abaixo.
+
+                decimal totalItem = item.Valor * item.QuantidadeComprada;
+
+                string linha = string.Format("   | {0, -4} | {1, -30} | {2, -12} | {3, -12} |",
+                                             item.QuantidadeComprada,
+                                             item.Descricao.Length > 30 ? item.Descricao.Substring(0, 27) + "..." : item.Descricao,
+                                             item.Valor.ToString("C"),
+                                             totalItem.ToString("C"));
+
+                Console.WriteLine(linha);
+            }
+            Console.WriteLine("   " + new string('-', 70));
+            Console.WriteLine();
+        }
     }
 }

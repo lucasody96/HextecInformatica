@@ -1,27 +1,29 @@
 ﻿using HextecInformatica.Entities;
+using HextecInformatica.Entities.Core;
+using HextecInformatica.Repositories;
 
 namespace HextecInformatica.Services
 {
     public class VendaService
     {       
-        private readonly Venda Venda = new();
-
-        public void ImprimeNotaFiscal(Cliente Cliente, CarrinhoService Carrinho)
+        public void ImprimeNotaFiscal(Cliente Cliente, CarrinhoService Carrinho, VendaRepository vendaRepo)
         {
+            Venda novaVenda = new();
+
             Console.Clear();
             //Cabeçalho da nota
             Utils.ImprimeLinhaSeparadora('=');
             Console.WriteLine($"| {"NOTA FISCAL DE VENDA AO CONSUMIDOR",-77}|");
             Console.WriteLine($"| {"HEXTEC INFORMÁTICA LTDA",-77}|");
-            Console.WriteLine($"| NÚMERO DA NOTA FISCAL: {Venda.NumeroNotaFiscal,-54}|");
-            Console.WriteLine($"| Data: {Venda.DataVenda,-71}|"); //hora atual
+            Console.WriteLine($"| NÚMERO DA NOTA FISCAL: {novaVenda.NumeroNotaFiscal,-54}|");
+            Console.WriteLine($"| Data: {novaVenda.DataVenda,-71}|"); //hora atual
             Utils.ImprimeLinhaSeparadora('=');
 
             // Dados do cliente
             Console.WriteLine($"| DADOS DO CLIENTE: {new string(' ', 59)}|");
             Console.WriteLine($"| {new string(' ', 77)}|");
             Console.WriteLine($"| Nome: {Cliente.Nome,-71}|");
-
+            
             if (Cliente.TipoPessoa == "F")
                 Console.WriteLine($"| CPF: {Cliente.Cpf,-72}|");
             else
@@ -37,6 +39,13 @@ namespace HextecInformatica.Services
             {
                 decimal totalItem = itensComprados.Valor * itensComprados.QuantidadeComprada;
                 Console.WriteLine($"| {itensComprados.QuantidadeComprada,-4} | {itensComprados.Descricao,-37} | {itensComprados.Valor,-13:C} | {totalItem,-13:C} |");
+               
+                // Corrigido: instanciando corretamente o Produto itemHistorico
+                Produto itemHistorico = new(itensComprados.Descricao, itensComprados.Valor, 0);
+                itemHistorico.QuantidadeComprada = itensComprados.QuantidadeComprada;
+                
+                novaVenda.AdicionaItemVenda(itemHistorico);
+            
             }
             Utils.ImprimeLinhaSeparadora('-');
 
@@ -94,6 +103,9 @@ namespace HextecInformatica.Services
                 Console.WriteLine(msgValor.PadLeft(40 + msgValor.Length / 2));
                 Console.WriteLine("********************************************************************************");
             }
+
+            novaVenda.SalvarVenda(Cliente.Nome, Carrinho.TotalNotaFiscal, Carrinho.Frete, Carrinho.DescontoCupom + Carrinho.DescontoCashback);
+            vendaRepo.Adiciona(novaVenda);
 
             Console.WriteLine("\n\nPressione qualquer tecla para voltar ao menu inicial...");
             Console.ReadKey();

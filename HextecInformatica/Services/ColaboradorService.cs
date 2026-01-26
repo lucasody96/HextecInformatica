@@ -50,12 +50,15 @@ namespace HextecInformatica.Services
             return colaboradorLogado;
         }
 
-        public void CarregarMenus(ProdutoRepository prodRepo, ClienteRepository ClienteRepo, ColaboradorRepository ColabRepo)
+        public void CarregarMenus(ProdutoRepository prodRepo, 
+                                  ClienteRepository ClienteRepo, 
+                                  ColaboradorRepository ColabRepo, 
+                                  VendaRepository vendaRepos)
         {
             ListaMenus =
             [
                 new MenuGerenciaEstoque(prodRepo),
-                new MenuVisualizaVendas(prodRepo),
+                new MenuVisualizaVendas(vendaRepos),
                 new MenuCadastroCliente(ClienteRepo),
                 new MenuCadastroColaborador(ColabRepo),
             ];  
