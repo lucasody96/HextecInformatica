@@ -6,7 +6,7 @@ namespace HextecInformatica.Services
 {
     public class VendaService
     {       
-        public void ImprimeNotaFiscal(Cliente Cliente, CarrinhoService Carrinho, VendaRepository vendaRepo)
+        public static void ImprimeNotaFiscal(Cliente Cliente, CarrinhoService Carrinho, VendaRepository vendaRepo)
         {
             Venda novaVenda = new();
 
@@ -39,11 +39,13 @@ namespace HextecInformatica.Services
             {
                 decimal totalItem = itensComprados.Valor * itensComprados.QuantidadeComprada;
                 Console.WriteLine($"| {itensComprados.QuantidadeComprada,-4} | {itensComprados.Descricao,-37} | {itensComprados.Valor,-13:C} | {totalItem,-13:C} |");
-               
+
                 // Corrigido: instanciando corretamente o Produto itemHistorico
-                Produto itemHistorico = new(itensComprados.Descricao, itensComprados.Valor, 0);
-                itemHistorico.QuantidadeComprada = itensComprados.QuantidadeComprada;
-                
+                Produto itemHistorico = new(itensComprados.Descricao, itensComprados.Valor, 0)
+                {
+                    QuantidadeComprada = itensComprados.QuantidadeComprada
+                };
+
                 novaVenda.AdicionaItemVenda(itemHistorico);
             
             }
@@ -70,7 +72,7 @@ namespace HextecInformatica.Services
             Console.WriteLine($"| {new string(' ', 77)}|");
             foreach (var formaPagamento in Carrinho.HistoricoPagamentos)
             {
-                Console.WriteLine($"| {formaPagamento.PadRight(76)} |");
+                Console.WriteLine($"| {formaPagamento,-76} |");
             }
 
             // troco se houver

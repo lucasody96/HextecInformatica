@@ -163,7 +163,7 @@
             // Monta a linha usando os mesmos tamanhos do cabeçalho
             string linha = string.Format("| {0, -4} | {1, -30} | {2, -4} | {3, -18} |",
                                          id,
-                                         nome.Length > 30 ? nome.Substring(0, 27) + "..." : nome, // Corta nome longo
+                                         nome.Length > 30 ? string.Concat(nome.AsSpan(0, 27), "...") : nome, // Corta nome longo
                                          tipo,
                                          docExibir);
 
@@ -191,12 +191,12 @@
             // Tratamento Nome (Truncar)
             string nomeExibir = nome ?? "";
             if (nomeExibir.Length > 30)
-                nomeExibir = nomeExibir.Substring(0, 27) + "...";
+                nomeExibir = string.Concat(nomeExibir.AsSpan(0, 27), "...");
 
             // Tratamento Login (Truncar)
             string loginExibir = login ?? "";
             if (loginExibir.Length > 15)
-                loginExibir = loginExibir.Substring(0, 12) + "...";
+                loginExibir = string.Concat(loginExibir.AsSpan(0, 12), "...");
 
             // REMOVI a barra "|" do final aqui também.
             string linha = string.Format("| {0, -6} | {1, -30} | {2, -15} | {3, -16}",
@@ -225,7 +225,7 @@
 
             // Tratamento do Cliente (Preenche o resto da linha)
             int espacoRestante = LarguraPadrao - parte1.Length - 5; // -5 para bordas e espaços
-            string clienteExibir = cliente.Length > espacoRestante ? cliente.Substring(0, espacoRestante - 3) + "..." : cliente;
+            string clienteExibir = cliente.Length > espacoRestante ? string.Concat(cliente.AsSpan(0, espacoRestante - 3), "...") : cliente;
 
             string linha1 = string.Format("|{0} | CLIENTE: {1}", parte1, clienteExibir);
 
@@ -262,7 +262,7 @@
             decimal valorTotalItem = qtd * valorUnitario;
 
             // Trunca nome do produto se for muito grande
-            if (produto.Length > 35) produto = produto.Substring(0, 32) + "...";
+            if (produto.Length > 35) produto = string.Concat(produto.AsSpan(0, 32), "...");
 
             string linha = string.Format("| {0, -4} | {1, -35} | {2, -5} | {3, -12} | {4, -12}",
                                          id,
@@ -290,14 +290,12 @@
             // Loop dos Itens
             foreach (var item in venda.ListaItensVenda)
             {
-                // NOTA: Estou assumindo que seu objeto 'item' tem a propriedade 'QuantidadeComprada'.
-                // Se na sua classe Produto a propriedade for apenas 'Quantidade', ajuste abaixo.
-
+                
                 decimal totalItem = item.Valor * item.QuantidadeComprada;
 
                 string linha = string.Format("   | {0, -4} | {1, -30} | {2, -12} | {3, -12} |",
                                              item.QuantidadeComprada,
-                                             item.Descricao.Length > 30 ? item.Descricao.Substring(0, 27) + "..." : item.Descricao,
+                                             item.Descricao.Length > 30 ? string.Concat(item.Descricao.AsSpan(0, 27), "...") : item.Descricao,
                                              item.Valor.ToString("C"),
                                              totalItem.ToString("C"));
 

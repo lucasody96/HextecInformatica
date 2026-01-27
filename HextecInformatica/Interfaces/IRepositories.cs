@@ -1,6 +1,4 @@
-﻿using HextecInformatica.Entities;
-
-namespace HextecInformatica.Interfaces
+﻿namespace HextecInformatica.Interfaces
 {
     public interface IRepositories <T>
     {

@@ -6,10 +6,10 @@
 
         public abstract void AcionaMenu();
 
-        protected void ExibirCabecalho(string descricao)
+        protected static void ExibirCabecalho(string descricao)
         {
             Console.Clear();
-            Utils.FormataCabecalho(Descricao!);
+            Utils.FormataCabecalho(descricao);
         }
     }
 }

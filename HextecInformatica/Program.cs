@@ -1,5 +1,4 @@
 ﻿using HextecInformatica.Entities;
-using HextecInformatica.Entities.Core;
 using HextecInformatica.Repositories;
 using HextecInformatica.Services;
 
@@ -7,7 +6,6 @@ namespace HextecInformatica
 {
     class Program
     {
-
         private static void Main()
         {
             //Repositórios
@@ -67,7 +65,8 @@ namespace HextecInformatica
             //================================================================
             static void IniciarVenda(ProdutoRepository produtoRepo, ClienteRepository clienteRepo, VendaRepository vendaRepo) 
             {
-
+                Console.Clear();
+                Utils.FormataCabecalho("DADOS DO CLIENTE");
                 Console.Write("\nDigite seu nome: ");
                 string? nomeCliente = Console.ReadLine();
 
@@ -113,11 +112,10 @@ namespace HextecInformatica
                     //Seleção de produtos e soma do valor total de pagamento
                     carrinhoService.FormaPagamentoSelecionada(ClienteLoja!);
 
-                    var vendaService = new VendaService();
                     Console.Clear();
                     //Simular uma nota fiscal simples - em texto no terminal.
                     //campos disponíveis, nome da loja, nome usuario/cliente, lista de produtos, valor frete e desconto e total de pagamento
-                    vendaService.ImprimeNotaFiscal(ClienteLoja!, carrinhoService, vendaRepo);
+                    VendaService.ImprimeNotaFiscal(ClienteLoja!, carrinhoService, vendaRepo);
 
                     // Limpa a lista do carrinho, os pagamentos e totais
                     carrinhoService.LimpaCarrinho();

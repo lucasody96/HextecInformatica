@@ -1,10 +1,4 @@
 ﻿using HextecInformatica.Entities;
-using HextecInformatica.Entities.Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HextecInformatica.Repositories
 {
@@ -22,9 +16,20 @@ namespace HextecInformatica.Repositories
             return ListaVendas.FirstOrDefault(venda => venda.NumeroNotaFiscal == numNotaFiscal);
         }
 
-        public Venda? BuscaVendaNomeCliente(string nomeCliente)
+        public List<Venda> BuscaVendaNomeCliente(string nomeCliente)
         {
-            return ListaVendas.FirstOrDefault(venda => venda.ClienteNota == nomeCliente);
+            List<Venda> vendasEncontradas = [];
+
+            for (var i = 0; i < ListaVendas.Count; i++)
+            {
+                Venda? vendaAtual = ListaVendas[i];
+
+                if (vendaAtual.ClienteNota.Contains(nomeCliente, StringComparison.CurrentCultureIgnoreCase))
+                {
+                    vendasEncontradas.Add(vendaAtual);
+                }
+            }
+            return vendasEncontradas;
         }
     }
 }

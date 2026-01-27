@@ -1,6 +1,5 @@
 ﻿using HextecInformatica.Entities.Core;
 using HextecInformatica.Repositories;
-using HextecInformatica.Entities;
 
 namespace HextecInformatica.Entities.MenusColaborador
 {
@@ -54,7 +53,7 @@ namespace HextecInformatica.Entities.MenusColaborador
 
         }
 
-        public void BuscaNumeroNota(VendaRepository vendaRepos)
+        public static void BuscaNumeroNota(VendaRepository vendaRepos)
         {
             Console.Clear();
             Utils.FormataCabecalho("BUSCA DE VENDAS POR NÚMERO DA NOTA FISCAL");
@@ -75,6 +74,7 @@ namespace HextecInformatica.Entities.MenusColaborador
                 );
 
                 Utils.ExibirItensDaVenda(vendaEncontrada);
+                Console.WriteLine("Pressione alguma tecla para continuar...");
                 Console.ReadKey();
             }
             else
@@ -83,26 +83,30 @@ namespace HextecInformatica.Entities.MenusColaborador
             }
         }
 
-        public void BuscarClienteNota(VendaRepository vendaRepos)
+        public static void BuscarClienteNota(VendaRepository vendaRepos)
         {
             Console.Clear();
             Utils.FormataCabecalho("BUSCA DE VENDAS POR CLIENTE DA NOTA FISCAL");
             Console.Write("Digite o nome do cliente que deseja buscar: ");
             string? nomeCliente = Console.ReadLine();
-            var vendasEncontradas = vendaRepos.BuscaVendaNomeCliente(nomeCliente!);
 
-            if (vendasEncontradas != null)
+            var listaVendasEncontradas = vendaRepos.BuscaVendaNomeCliente(nomeCliente!);
+
+            if (listaVendasEncontradas.Count > 0)
             {
                 Utils.FormataCabecalhoVendas();
+                foreach (var vendas in listaVendasEncontradas)
                 Utils.FormataLinhaVenda(
-                    vendasEncontradas.NumeroNotaFiscal,
-                    vendasEncontradas.DataVenda,
-                    vendasEncontradas.ClienteNota,
-                    vendasEncontradas.ValorTotalVenda,
-                    vendasEncontradas.ValorFrete,
-                    vendasEncontradas.ValorDesconto
+                    vendas.NumeroNotaFiscal,
+                    vendas.DataVenda,
+                    vendas.ClienteNota,
+                    vendas.ValorTotalVenda,
+                    vendas.ValorFrete,
+                    vendas.ValorDesconto
                 );
-                Utils.ImprimeLinhaSeparadora('-');
+
+                Console.WriteLine("Pressione alguma tecla para continuar...");
+                Console.ReadKey();
             }
             else
             {
@@ -110,7 +114,7 @@ namespace HextecInformatica.Entities.MenusColaborador
             }
         }
 
-        public void Visualizar(VendaRepository vendaRepos)
+        public static void Visualizar(VendaRepository vendaRepos)
         {
             Console.WriteLine();
 
@@ -128,9 +132,6 @@ namespace HextecInformatica.Entities.MenusColaborador
                     notaFiscal.ValorFrete,
                     notaFiscal.ValorDesconto
                 );
-
-                // Opcional: Se quiser mostrar os itens logo abaixo de cada venda:
-                // ExibirItensDaVenda(notaFiscal); 
             }
         }
     }
